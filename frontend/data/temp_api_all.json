@@ -1,0 +1,1 @@
+﻿"\u003c?php\r\n// Simple front controller so requests to /api/* execute api.php\r\nrequire __DIR__ . \u0027/api.php\u0027;\r\n"

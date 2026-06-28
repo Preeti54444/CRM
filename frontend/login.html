@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funding Sathi CRM – Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/login.css">
+<script>
+  const isFileProtocol = window.location.protocol === 'file:'
+  const host = window.location.hostname || 'localhost'
+  const port = window.location.port ? ':' + window.location.port : ''
+  const origin = window.location.protocol + '//' + host + port
+  const currentPath = window.location.pathname.toLowerCase()
+
+  const storedBase = (() => {
+    try { 
+      // Clear cached API base to force using current origin for LAN access
+      localStorage.removeItem('crm_api_base')
+      return null 
+    } catch (e) { return null }
+  })();
+
+  function normalizeApiBase(value) {
+    if (!value) return null
+    const trimmed = String(value).trim().replace(/\/$/, '')
+    if (!trimmed) return null
+    try {
+      const url = new URL(trimmed)
+      // Only force port 8085 for localhost access
+      // For LAN access, preserve the actual port
+      const isLocalhost = url.hostname === 'localhost' || url.hostname === '127.0.0.1'
+      if (isLocalhost && (url.port === '8000' || url.port === '8001' || url.port === '8085')) {
+        url.port = '8085'
+      }
+      return url.origin
+    } catch {
+      return null
+    }
+  }
+
+  const normalizedStoredBase = normalizeApiBase(storedBase)
+  const normalizedEnvBase = normalizeApiBase(window.CRM_API_BASE)
+  const normalizedWindowBase = normalizeApiBase(window.API_BASE)
+  const shouldUseLocalBackend = isFileProtocol || host === 'localhost' || host === '127.0.0.1'
+  
+  // For LAN access, use the same host as frontend but with backend port 8085
+  const lanBackendBase = window.location.protocol + '//' + host + ':8085'
+  const localBackendBase = 'http://localhost:8085'
+
+  if (normalizedEnvBase) {
+    window.API_BASE = normalizedEnvBase
+  } else if (normalizedWindowBase) {
+    window.API_BASE = normalizedWindowBase
+  } else if (normalizedStoredBase) {
+    window.API_BASE = normalizedStoredBase
+  } else if (shouldUseLocalBackend) {
+    // Use backend URL for local development
+    window.API_BASE = localBackendBase
+  } else {
+    // For LAN access, use same host with backend port
+    window.API_BASE = lanBackendBase
+  }
+
+  function renderApiBaseDebug() {
+    const debug = document.createElement('div')
+    debug.style.position = 'fixed'
+    debug.style.bottom = '12px'
+    debug.style.right = '12px'
+    debug.style.zIndex = '999999'
+    debug.style.padding = '10px 14px'
+    debug.style.background = 'rgba(0,0,0,0.72)'
+    debug.style.color = 'white'
+    debug.style.fontSize = '12px'
+    debug.style.lineHeight = '1.4'
+    debug.style.borderRadius = '10px'
+    debug.style.maxWidth = '320px'
+    debug.textContent = `PAGE: ${window.location.pathname} | API_BASE: ${window.API_BASE}`
+    document.body?.appendChild(debug)
+  }
+
+  window.addEventListener('DOMContentLoaded', renderApiBaseDebug)
+
+  console.debug('CRM API base selected:', window.API_BASE)
+
+  try {
+    if (window.API_BASE) {
+      localStorage.setItem('crm_api_base', window.API_BASE)
+    }
+  } catch (e) {
+    console.warn('Unable to persist CRM API base:', e)
+  }
+
+  const USE_BACKEND_AUTH = true; // Enable backend authentication
+
+  function getCRMApiBase() {
+    if (window.API_BASE) {
+      return String(window.API_BASE).replace(/\/$/, '');
+    }
+    if (storedBase) {
+      return String(storedBase).replace(/\/$/, '');
+    }
+    return origin;
+  }
+
+  async function tryBackendLogin(email, password) {
+    const endpoint = getCRMApiBase() + '/auth/login';
+    console.log('[tryBackendLogin] Endpoint:', endpoint);
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
+      });
+
+      console.log('[tryBackendLogin] Response status:', response.status);
+      const json = await response.json();
+      console.log('[tryBackendLogin] Response JSON:', json);
+      
+      if (!response.ok) {
+        const isServerError = response.status >= 500
+        const offline = isServerError || /SQLSTATE|Base table or view not found/i.test(json?.detail || json?.message || '')
+        return {
+          success: false,
+          error: json?.detail || json?.message || 'Login failed',
+          status: response.status,
+          offline
+        };
+      }
+
+      if (!json?.access_token) {
+        console.error('[tryBackendLogin] Missing access token in response');
+        return { success: false, error: 'Login failed: missing access token', status: response.status };
+      }
+
+      const token = json.access_token;
+      console.log('[tryBackendLogin] Got token, user data:', json.user);
+      
+      // Use user data from backend response
+      const user = json.user || { email, full_name: email, id: 'unknown', role: 'employee' };
+      
+      console.log('[tryBackendLogin] Returning success');
+      return { success: true, token, user };
+    } catch (error) {
+      console.error('[tryBackendLogin] Exception:', error);
+      return { success: false, error: 'Backend unavailable', offline: true };
+    }
+  }
+</script>
+</head>
+<body>
+<div class="loading-bar" id="loadBar"></div>
+<div class="page">
+  <div class="left">
+    <div class="auth-card">
+      <h1>Welcome back</h1>
+      <p class="right-sub">Sign in to access your CRM dashboard</p>
+    <div id="errorMsg" class="error-msg">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errorText"></span>
+    </div>
+
+    <div class="form-group">
+      <label>Email Address</label>
+      <div class="input-wrap">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2" ry="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <input type="email" id="email" placeholder="you@fundingsathi.in" autocomplete="email" oninput="validateEmail()" onblur="validateEmail()" autofocus>
+      </div>
+      <div class="input-hint" id="emailHint"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <div class="input-wrap">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="password" placeholder="Enter your password" onkeydown="if(event.key==='Enter')doLogin()" oninput="validatePassword()">
+        <button class="eye-btn" id="pwToggle" aria-label="Toggle password visibility" onclick="togglePw();return false;">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="input-hint" id="passwordHint"></div>
+    </div>
+
+    <div class="form-options">
+      <div class="remember-wrap">
+        <input type="checkbox" id="rememberMe" checked>
+        <label for="rememberMe">Remember me</label>
+      </div>
+      <a href="#" class="forgot-link" onclick="showForgotToast();return false;">Forgot password?</a>
+    </div>
+
+    <button class="btn-submit" id="loginBtn" onclick="doLogin()">
+      <span class="btn-text">Sign In</span>
+      <span class="btn-spinner"></span>
+    </button>
+    <p class="secure-note">Sign in securely using your corporate email.</p>
+
+    <div class="signup-prompt">
+      <p>Don't have an account? <a href="mailto:admin@fundingsathi.com?subject=CRM Access Request" class="signup-link">Request access</a></p>
+    </div>
+    </div><!-- /.auth-card -->
+  </div>
+
+  <div class="right">
+    <div class="brand">
+      <div class="brand-icon">
+        <img src="logo.69793bbbefb277f660f7.png" alt="Funding Sathi logo" style="width:100%;height:100%;object-fit:contain;">
+      </div>
+      <div><div class="brand-name">Funding Sathi</div><div class="brand-sub">AI Sales CRM</div></div>
+    </div>
+    <div class="right-body">
+      <h2>Manage your sales pipeline with precision</h2>
+      <p>Daily SOD reports, lead tracking, AI scoring, and full team visibility — all in one place.</p>
+      <ul class="features">
+        <li><div class="feat-dot"></div>Start and End of Day reporting made simple</li>
+        <li><div class="feat-dot"></div>Track leads from first contact to closure</li>
+        <li><div class="feat-dot"></div>Schedule meetings with automated reminders</li>
+        <li><div class="feat-dot"></div>Role-based access for Admin and Sales team</li>
+        <li><div class="feat-dot"></div>Export reports to CSV anytime</li>
+      </ul>
+    </div>
+    <div class="right-footer">© 2026 Funding Sathi. All rights reserved.</div>
+  </div>
+</div>
+
+<div id="toast" class="toast">
+  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+  <span id="toastMsg">Credentials filled</span>
+</div>
+
+<script>
+// Fallback to local authentication only. Firebase auth modules are not available in this project.
+const USERS = {
+  'shree.rathod@fundingsathi.in': {password:'shree.admin@2026',role:'admin',name:'Shree Rathod',title:'Admin',initials:'SR'},
+  'vaibhav.borge@fundingsathi.in': {password:'vaibhav.emp@01',role:'sales_executive',name:'Vaibhav Borge',title:'Sales Executive',initials:'VB'},
+  'saleem.k@fundingsathi.in':  {password:'saleem.emp@03',role:'sales_executive',name:'Saleem Khan',title:'Sales Executive',initials:'SK'},
+  'roshan.chavan@fundingsathi.in':  {password:'roshan.emp@02',role:'sales_executive',name:'Roshan Chawan',title:'Sales Executive',initials:'RC'},
+  'corporate@fundingsathi.in':  {password:'emp789',role:'employee',name:'',title:'Sales Executive',initials:'RC'},
+};
+
+const LOCAL_USERS_KEY = 'crm_users';
+
+function getUsers() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(LOCAL_USERS_KEY) || '{}');
+    const normalizedDefault = Object.keys(USERS).reduce((acc, key) => {
+      acc[key.toLowerCase()] = USERS[key];
+      return acc;
+    }, {});
+    const normalizedStored = Object.keys(stored).reduce((acc, key) => {
+      acc[key.toLowerCase()] = stored[key];
+      return acc;
+    }, {});
+    return {...normalizedStored, ...normalizedDefault};
+  } catch (e) {
+    console.warn('Unable to parse stored CRM users', e);
+    return Object.keys(USERS).reduce((acc, key) => {
+      acc[key.toLowerCase()] = USERS[key];
+      return acc;
+    }, {});
+  }
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast'), tm=document.getElementById('toastMsg');
+  tm.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+function showForgotToast(){showToast('Contact admin@fundingsathi.com for password reset');}
+function validateEmail(){
+  const e=document.getElementById('email'), h=document.getElementById('emailHint');
+  const v=e.value.trim();
+  const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!v){h.textContent='';h.className='input-hint';return false;}
+  if(!re.test(v)){h.textContent='Please enter a valid email address';h.className='input-hint error';return false;}
+  h.textContent='✓ Valid email';h.className='input-hint success';return true;
+}
+function validatePassword(){
+  const p=document.getElementById('password'), h=document.getElementById('passwordHint');
+  const v=p.value;
+  if(!v){h.textContent='';h.className='input-hint';return false;}
+  if(v.length<6){h.textContent='Password must be at least 6 characters';h.className='input-hint error';return false;}
+  h.textContent='';h.className='input-hint';return true;
+}
+function togglePw(){
+  const pw=document.getElementById('password'),icon=document.getElementById('eyeIcon')
+  pw.type=pw.type==='password'?'text':'password'
+  icon.innerHTML=pw.type==='text'?'<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>':'<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>'
+}
+
+async function doLogin(){
+  const email=document.getElementById('email').value.trim().toLowerCase()
+  const password=document.getElementById('password').value
+  const btn=document.getElementById('loginBtn')
+  
+  // Clear previous errors
+  document.getElementById('errorMsg').classList.remove('show')
+  
+  // Validate inputs
+  if(!email){showFieldError('email', 'Email is required'); return}
+  if(!password){showFieldError('password', 'Password is required'); return}
+  
+  btn.disabled=true;btn.classList.add('loading');
+  document.getElementById('loadBar').style.width='60%'
+
+  const rememberMe=document.getElementById('rememberMe').checked;
+  const saveRememberEmail = () => {
+    if(rememberMe){localStorage.setItem('crm_remember_email',email);}else{localStorage.removeItem('crm_remember_email');}
+  };
+
+  const users = getUsers();
+  const user = users[email];
+
+  const saveSession = (sessionData) => {
+    saveRememberEmail();
+    // Only save session if it has a real JWT token from backend
+    if (!sessionData.access_token) {
+      console.error('[saveSession] No access token provided, cannot save session');
+      throw new Error('No access token provided');
+    }
+    const sessionWithToken = {
+      ...sessionData,
+      token: sessionData.access_token
+    };
+    localStorage.setItem('crm_session',JSON.stringify(sessionWithToken));
+
+    try {
+      const users = JSON.parse(localStorage.getItem('crm_users') || '{}');
+      const emailKey = (sessionData.email || '').toLowerCase();
+      const existing = users[emailKey] || {};
+      users[emailKey] = {
+        ...existing,
+        email: sessionData.email,
+        displayName: sessionData.displayName || sessionData.name || sessionData.email,
+        role: sessionData.role || existing.role || 'sales_executive',
+        title: sessionData.title || existing.title || (sessionData.role === 'admin' ? 'Admin' : 'Sales Executive'),
+        initials: sessionData.initials || existing.initials || ((sessionData.displayName || sessionData.email || '').split(' ').map(part => part.charAt(0)).join('').toUpperCase()),
+        loginTime: sessionData.loginTime || new Date().toISOString(),
+        lastActive: new Date().toLocaleString(),
+        workSeconds: existing.workSeconds || 0,
+        callSeconds: existing.callSeconds || 0,
+        breakSeconds: existing.breakSeconds || 0,
+        meetingSeconds: existing.meetingSeconds || 0,
+        callCount: existing.callCount || 0
+      };
+      localStorage.setItem('crm_users', JSON.stringify(users));
+    } catch (ex) {
+      console.warn('Unable to save user login metrics:', ex);
+    }
+  };
+
+
+  const redirectToCRM = () => {
+    document.getElementById('loadBar').style.width='100%'
+    sessionStorage.removeItem('crm_api_synced');
+    console.log('[redirectToCRM] Redirecting to crm1.html');
+    // Use absolute path to avoid proxy issues
+    const crmUrl = window.location.origin + '/crm1.html';
+    console.log('[redirectToCRM] Full URL:', crmUrl);
+    setTimeout(()=>{window.location.href=crmUrl},400)
+  };
+
+  if (window.API_BASE && USE_BACKEND_AUTH) {
+    console.log('[Login] Attempting backend login...');
+    const backendResult = await tryBackendLogin(email, password);
+    console.log('[Login] Backend result:', backendResult);
+    if (backendResult.success) {
+      const user = backendResult.user;
+      // Backend returns role as "Admin", "Manager", or "Employee" (from UserRole enum)
+      const backendRole = String(user.role || 'employee').toLowerCase();
+      // Normalize to frontend role format
+      const normalizedRole = backendRole === 'admin' ? 'admin' : backendRole === 'manager' ? 'manager' : 'employee';
+      const displayName = user.full_name || user.name || user.displayName || user.email || '';
+      console.log('[Login] Backend role:', user.role, 'Normalized:', normalizedRole);
+      console.log('[Login] Saving session for user:', displayName);
+      saveSession({
+        email: user.email,
+        uid: user.id,
+        name: displayName,
+        displayName,
+        role: normalizedRole,
+        title: normalizedRole === 'admin' ? 'Admin' : normalizedRole === 'manager' ? 'Manager' : 'Sales Executive',
+        initials: ((displayName || user.email || '').split(' ').map(part => part.charAt(0)).join('') || '').toUpperCase(),
+        loginTime: new Date().toISOString(),
+        backendAuth: true,
+        access_token: backendResult.token,
+        token_type: 'bearer'
+      });
+      
+      console.log('[Login] Redirecting to CRM...');
+      redirectToCRM();
+      return;
+    }
+
+    console.error('[Login] Backend auth failed:', backendResult.error);
+    showErr(backendResult.error || 'Incorrect email or password.');
+    shakeButton();
+    btn.disabled=false;btn.classList.remove('loading');
+    document.getElementById('loadBar').style.width='0%';
+    return;
+  }
+
+  // Backend auth is required - no local fallback
+  console.error('[Login] Backend authentication is required');
+  showErr('Backend authentication is required. Please ensure the backend server is running.');
+  shakeButton();
+  btn.disabled=false;btn.classList.remove('loading');
+  document.getElementById('loadBar').style.width='0%';
+  return
+}
+function showErr(msg){
+  const el=document.getElementById('errorMsg'),et=document.getElementById('errorText')
+  et.textContent=msg
+  el.classList.add('show')
+  shakeElement(el)
+  setTimeout(()=>el.classList.remove('show'),5000)
+}
+
+function showFieldError(fieldId, msg){
+  const field=document.getElementById(fieldId)
+  field.style.borderColor='#dc2626'
+  field.style.boxShadow='0 0 0 3px rgba(220,38,38,.1)'
+  showErr(msg)
+  setTimeout(()=>{
+    field.style.borderColor=''
+    field.style.boxShadow=''
+  },3000)
+}
+
+function shakeElement(el){
+  el.style.animation='shake 0.5s ease'
+  setTimeout(()=>el.style.animation='',500)
+}
+
+function shakeButton(){
+  const btn=document.getElementById('loginBtn')
+  btn.classList.add('shake')
+  setTimeout(()=>btn.classList.remove('shake'),500)
+}
+
+// Check for remembered email
+document.addEventListener('DOMContentLoaded',()=>{
+  const remembered=localStorage.getItem('crm_remember_email');
+  if(remembered){document.getElementById('email').value=remembered;validateEmail();}
+});
+</script>
+</body>
+</html>
+

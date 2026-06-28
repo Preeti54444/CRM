@@ -1,0 +1,440 @@
+[
+  {
+    "path": "/api/openapi.json",
+    "methods": [
+      "GET",
+      "HEAD"
+    ],
+    "name": "openapi"
+  },
+  {
+    "path": "/api/docs",
+    "methods": [
+      "GET",
+      "HEAD"
+    ],
+    "name": "swagger_ui_html"
+  },
+  {
+    "path": "/docs/oauth2-redirect",
+    "methods": [
+      "GET",
+      "HEAD"
+    ],
+    "name": "swagger_ui_redirect"
+  },
+  {
+    "path": "/redoc",
+    "methods": [
+      "GET",
+      "HEAD"
+    ],
+    "name": "redoc_html"
+  },
+  {
+    "path": "/auth/register",
+    "methods": [
+      "POST"
+    ],
+    "name": "register_user"
+  },
+  {
+    "path": "/auth/login",
+    "methods": [
+      "POST"
+    ],
+    "name": "login"
+  },
+  {
+    "path": "/auth/me",
+    "methods": [
+      "GET"
+    ],
+    "name": "read_current_user"
+  },
+  {
+    "path": "/users",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_users"
+  },
+  {
+    "path": "/users/{user_id}",
+    "methods": [
+      "GET"
+    ],
+    "name": "read_user"
+  },
+  {
+    "path": "/users",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_user_endpoint"
+  },
+  {
+    "path": "/users/{user_id}",
+    "methods": [
+      "PUT"
+    ],
+    "name": "update_user_endpoint"
+  },
+  {
+    "path": "/users/available/for-assignment",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_users_for_assignment"
+  },
+  {
+    "path": "/users/{user_id}",
+    "methods": [
+      "DELETE"
+    ],
+    "name": "delete_user_endpoint"
+  },
+  {
+    "path": "/leads",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_lead_endpoint"
+  },
+  {
+    "path": "/leads",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_leads"
+  },
+  {
+    "path": "/leads/{lead_id}",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_lead"
+  },
+  {
+    "path": "/leads/{lead_id}",
+    "methods": [
+      "PUT"
+    ],
+    "name": "update_lead_endpoint"
+  },
+  {
+    "path": "/leads/{lead_id}",
+    "methods": [
+      "DELETE"
+    ],
+    "name": "delete_lead_endpoint"
+  },
+  {
+    "path": "/leads/{lead_id}/assign",
+    "methods": [
+      "POST"
+    ],
+    "name": "assign_lead_endpoint"
+  },
+  {
+    "path": "/customers",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_customer"
+  },
+  {
+    "path": "/customers/{customer_id}",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_customer"
+  },
+  {
+    "path": "/customers/{customer_id}",
+    "methods": [
+      "PUT"
+    ],
+    "name": "update_customer_endpoint"
+  },
+  {
+    "path": "/followups",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_followup_endpoint"
+  },
+  {
+    "path": "/followups",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_followups"
+  },
+  {
+    "path": "/followups/{followup_id}",
+    "methods": [
+      "PUT"
+    ],
+    "name": "update_followup_endpoint"
+  },
+  {
+    "path": "/followups/{followup_id}/complete",
+    "methods": [
+      "POST"
+    ],
+    "name": "complete_followup_endpoint"
+  },
+  {
+    "path": "/timeline",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_timeline_event"
+  },
+  {
+    "path": "/timeline/lead/{lead_id}",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_lead_timeline"
+  },
+  {
+    "path": "/timeline/customer/{customer_id}",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_customer_timeline"
+  },
+  {
+    "path": "/dashboard/admin",
+    "methods": [
+      "GET"
+    ],
+    "name": "admin_dashboard"
+  },
+  {
+    "path": "/dashboard/manager",
+    "methods": [
+      "GET"
+    ],
+    "name": "manager_dashboard"
+  },
+  {
+    "path": "/dashboard/employee",
+    "methods": [
+      "GET"
+    ],
+    "name": "employee_dashboard"
+  },
+  {
+    "path": "/sod",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_sod"
+  },
+  {
+    "path": "/eod",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_eod"
+  },
+  {
+    "path": "/wod",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_wod"
+  },
+  {
+    "path": "/sod",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_sod_reports"
+  },
+  {
+    "path": "/eod",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_eod_reports"
+  },
+  {
+    "path": "/wod",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_wod_reports"
+  },
+  {
+    "path": "/work-sessions/start",
+    "methods": [
+      "POST"
+    ],
+    "name": "start_work_session_route"
+  },
+  {
+    "path": "/work-sessions/stop",
+    "methods": [
+      "POST"
+    ],
+    "name": "stop_work_session_route"
+  },
+  {
+    "path": "/work-sessions/active",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_active_work_session_route"
+  },
+  {
+    "path": "/work-sessions",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_work_sessions_route"
+  },
+  {
+    "path": "/timer/early-logout/request",
+    "methods": [
+      "POST"
+    ],
+    "name": "request_early_logout"
+  },
+  {
+    "path": "/timer/early-logout/pending",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_pending_early_logout_request"
+  },
+  {
+    "path": "/timer/early-logout/requests",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_early_logout_requests_route"
+  },
+  {
+    "path": "/timer/early-logout/review",
+    "methods": [
+      "POST"
+    ],
+    "name": "review_early_logout_request_route"
+  },
+  {
+    "path": "/tasks",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_task_endpoint"
+  },
+  {
+    "path": "/tasks",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_tasks_endpoint"
+  },
+  {
+    "path": "/tasks/{task_id}",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_task_endpoint"
+  },
+  {
+    "path": "/tasks/{task_id}",
+    "methods": [
+      "PUT"
+    ],
+    "name": "update_task_endpoint"
+  },
+  {
+    "path": "/tasks/{task_id}/status",
+    "methods": [
+      "PATCH"
+    ],
+    "name": "update_task_status_endpoint"
+  },
+  {
+    "path": "/tasks/summary",
+    "methods": [
+      "GET"
+    ],
+    "name": "get_task_summary_endpoint"
+  },
+  {
+    "path": "/notifications",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_notifications"
+  },
+  {
+    "path": "/notifications/unread-count",
+    "methods": [
+      "GET"
+    ],
+    "name": "unread_count"
+  },
+  {
+    "path": "/notifications/{notification_id}/read",
+    "methods": [
+      "POST"
+    ],
+    "name": "mark_read"
+  },
+  {
+    "path": "/notifications/read-all",
+    "methods": [
+      "POST"
+    ],
+    "name": "mark_all_read"
+  },
+  {
+    "path": "/notifications/{notification_id}",
+    "methods": [
+      "DELETE"
+    ],
+    "name": "delete_notification"
+  },
+  {
+    "path": "/lender",
+    "methods": [
+      "POST"
+    ],
+    "name": "create_lender"
+  },
+  {
+    "path": "/lender",
+    "methods": [
+      "GET"
+    ],
+    "name": "list_lenders"
+  },
+  {
+    "path": "/debug/notify",
+    "methods": [
+      "POST"
+    ],
+    "name": "debug_notify"
+  },
+  {
+    "path": "/health",
+    "methods": [
+      "GET"
+    ],
+    "name": "health_check"
+  },
+  {
+    "path": "/openapi.json",
+    "methods": [
+      "GET"
+    ],
+    "name": "legacy_openapi"
+  }
+]

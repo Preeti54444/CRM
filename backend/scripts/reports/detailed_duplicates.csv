@@ -1,0 +1,659 @@
+lead_id,lead_name,company_name,email,mobile,assigned_to,raw_rows_count,first_raw,last_raw,timeline_count
+5072,Mahesh waghmare:- 9881334418 / Dharmendra goyel:- 9881665391,Dana anand india pvt Ltd,akshayborge647@gmail.com,9881665391,13d48fa2-d846-40ef-903a-310bbff2de55,3714,2025-07-21T00:00:00+05:30,2026-02-14T00:00:00+05:30,3858
+5075,Mahesh Kumar Agarwal,Hira power & steel ltd,khansaleem232003@gmail.com,9099906516,,2460,2025-07-28T00:00:00+05:30,2025-12-19T00:00:00+05:30,2461
+5569,Pratibha Kothari,ITL Industries Ltd,skkhan34002@gmail.com,9300055681,13d48fa2-d846-40ef-903a-310bbff2de55,2245,2026-01-03T00:00:00+05:30,2026-05-07T00:00:00+05:30,2026
+5297,Shiva Ram Krishna,Vidya herbs pvt Ltd,vaibhavborge39@gmail.com,8008402619,13d48fa2-d846-40ef-903a-310bbff2de55,2225,2025-09-20T00:00:00+05:30,2026-05-16T00:00:00+05:30,2113
+5614,Ameet Gadhoke,Roadway solution india infra ltd,roshanchawan23@gmail.com,9822979450,,2083,2026-02-23T00:00:00+05:30,2026-05-15T00:00:00+05:30,2018
+5607,Mukesh Gupta,Vishwanath paper & boards pvt Ltd,harifkhan864@gmail.com,7210166636,,51,2026-02-10T00:00:00+05:30,2026-02-10T00:00:00+05:30,34
+5345,Dharmendra Gupta,Haldiram snacks pvt Ltd,dkumargupta.noida@haldiram.com,9818869995,13d48fa2-d846-40ef-903a-310bbff2de55,32,2025-09-25T00:00:00+05:30,2025-11-25T00:00:00+05:30,42
+5450,Abhijit majumdar,Neuland labrotories ltd,abhijitmajumdar@neulandlabs.com,9820892616,13d48fa2-d846-40ef-903a-310bbff2de55,25,2025-10-11T00:00:00+05:30,2026-03-12T00:00:00+05:30,26
+5550,Girwar bhattad,Blue Star Ltd,girwarbhattad@bluestarindia.com,9930321246,13d48fa2-d846-40ef-903a-310bbff2de55,24,2025-11-05T00:00:00+05:30,2025-12-09T00:00:00+05:30,19
+5353,Sandeep Agarwal,Insecticide india ltd,sandeep@insectiidesindia.com,9818682201,13d48fa2-d846-40ef-903a-310bbff2de55,22,2025-09-26T00:00:00+05:30,2026-05-16T00:00:00+05:30,25
+5084,Ashwin ram,Nike india pvt Ltd,ashwin.ram@nike.com,9632092412,13d48fa2-d846-40ef-903a-310bbff2de55,22,2025-08-02T00:00:00+05:30,2026-01-02T00:00:00+05:30,22
+5090,Jatin chande,Sanathan textile ltd,jatin_chande@sanathan.com,9820109409,13d48fa2-d846-40ef-903a-310bbff2de55,21,2025-08-05T00:00:00+05:30,2026-05-14T00:00:00+05:30,20
+5089,Ajay kumar Desai,Alembic pharmaceutical ltd,ajay.desai@alembic.co.in,9920010700,13d48fa2-d846-40ef-903a-310bbff2de55,21,2025-08-05T00:00:00+05:30,2025-10-29T00:00:00+05:30,20
+5546,Vishal Jain,Deepak nitrite limited,vjain@godeepak.com,9327912458,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-11-10T00:00:00+05:30,2025-12-02T00:00:00+05:30,24
+5451,Mukesh surana,Granules india ltd,mukesh.surana@aranulesindia.com,9833031889,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-10-11T00:00:00+05:30,2026-04-17T00:00:00+05:30,20
+5525,Gopal patki,P&G,patki.gp@pg.com,9008223003,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-11-05T00:00:00+05:30,2025-11-17T00:00:00+05:30,21
+5083,N. Srinivasan,Suguna food's Ltd,srinivasann@sugunafoods.com,9686454690,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-08-02T00:00:00+05:30,2026-04-20T00:00:00+05:30,18
+5207,Gaurav goel,Mahadhan agritech ltd,gaurav.goel@dfcl.com,9823515576,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-09-02T00:00:00+05:30,2025-12-03T00:00:00+05:30,20
+5321,Tapan kulshrestha,Trent hyper Star bazaar,tapan.kulshrestha@trenthyper-tata.com,9920352911,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-09-23T00:00:00+05:30,2025-11-17T00:00:00+05:30,22
+5171,Gaurav bhartiya,Procter and gamble,bhartia.g@pg.com,8884112337,13d48fa2-d846-40ef-903a-310bbff2de55,20,2025-08-25T00:00:00+05:30,2025-10-31T00:00:00+05:30,20
+5137,Mahesh ladia,Universal cables ltd,mahesh.ladia@unistar.co.in,7045277573,13d48fa2-d846-40ef-903a-310bbff2de55,19,2025-08-20T00:00:00+05:30,2026-03-07T00:00:00+05:30,16
+5251,Nitin tulyani,RSWM LTD,nitin.tulyani@injbhilwara.com,9810665540,13d48fa2-d846-40ef-903a-310bbff2de55,19,2025-08-25T00:00:00+05:30,2026-02-25T00:00:00+05:30,14
+5441,Binu paulose,Rasi seeds pvt Ltd,binupaulose@raiseeds.com,9600633188,13d48fa2-d846-40ef-903a-310bbff2de55,19,2025-10-09T00:00:00+05:30,2026-03-07T00:00:00+05:30,19
+5071,Vaibhav,Fs,skhhakbsn@1238.com,7900122256,,18,2025-07-21T00:00:00+05:30,2025-07-27T00:00:00+05:30,11
+5121,Satindra Arora,Parag milk food ltd,satinder.arora@parag.com,8668203875,13d48fa2-d846-40ef-903a-310bbff2de55,17,2025-08-16T00:00:00+05:30,2026-01-02T00:00:00+05:30,20
+5257,Pavan trivedi,Episilon carban pvt Ltd,pavan.trrivedie@episiloncarbon.com,9223511842,13d48fa2-d846-40ef-903a-310bbff2de55,17,2025-09-11T00:00:00+05:30,2026-05-14T00:00:00+05:30,18
+5093,Somsekhar nanda,Deepak nitrite ltd,snanda@godeepak.com,9898084712,13d48fa2-d846-40ef-903a-310bbff2de55,17,2025-07-28T00:00:00+05:30,2026-03-27T00:00:00+05:30,13
+5081,Amit tyagi,Rajkrupa textile india pvt Ltd,amit@rajkrupa.com,9099973801,13d48fa2-d846-40ef-903a-310bbff2de55,17,2025-07-31T00:00:00+05:30,2026-01-02T00:00:00+05:30,18
+5288,Mangesh tare,Gabriel india ltd,mangesh.tare@gabriel.co.in,8600085553,13d48fa2-d846-40ef-903a-310bbff2de55,17,2025-08-05T00:00:00+05:30,2025-12-11T00:00:00+05:30,14
+5136,Sanjeev churiwala,TATA power,sanjeev.churiwala@tatapower.com,9930177777,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-08-20T00:00:00+05:30,2025-12-03T00:00:00+05:30,16
+5427,Manoj Pandey,Haldiram snacks pvt Ltd,manoj.pandey@haldirams.com,9873149396,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-10-03T00:00:00+05:30,2025-12-02T00:00:00+05:30,17
+5188,Shubham Rathi,Solar industries Ltd,shubham.rathi@solargroup.com,9766990199,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-08-30T00:00:00+05:30,2025-12-15T00:00:00+05:30,20
+5575,chirag shah,Bhagwati spherocast pvt ltd,chiragshah@bhagwati.com,9898642915,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-08-26T00:00:00+05:30,2026-01-19T00:00:00+05:30,18
+5365,Mayur gangawal,Coromandal international ltd,gangawalm@coromandal.muruguppa.com,9866103298,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-09-29T00:00:00+05:30,2025-10-15T00:00:00+05:30,16
+5337,Pratik shah,Transpek industries Ltd,pratik-shah@transpek.com,7600027399,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-08-30T00:00:00+05:30,2025-10-03T00:00:00+05:30,17
+5567,Raghupati Mishra,Liberty steel group,raghupatim@solutionsu.in,8802070000,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-12-31T00:00:00+05:30,2026-01-19T00:00:00+05:30,21
+5430,Shashank gupta,Garware technical fibers ltd,sgupta@garwarefibers.com,9560222500,13d48fa2-d846-40ef-903a-310bbff2de55,16,2025-10-08T00:00:00+05:30,2026-02-05T00:00:00+05:30,16
+5176,Mahesh waghmare,Dana anand india pvt Ltd,mahesh.waghmare@dana.com,9881334418,13d48fa2-d846-40ef-903a-310bbff2de55,15,2025-08-28T00:00:00+05:30,2026-03-05T00:00:00+05:30,16
+5281,Sanjay parnerkar,Graphite india ltd,swp@graphiteindia.com,9372484578,13d48fa2-d846-40ef-903a-310bbff2de55,15,2025-09-16T00:00:00+05:30,2026-03-02T00:00:00+05:30,14
+5435,Manish Bhatia,Indo count industries limited,manishbhstia@indocount.com,9810659817,13d48fa2-d846-40ef-903a-310bbff2de55,15,2025-08-19T00:00:00+05:30,2026-02-27T00:00:00+05:30,10
+5144,Indoco remedies ltd,Indoco remedies ltd,pramod.ghorpade@indoco.com,9619883225,,15,2025-08-20T00:00:00+05:30,2026-03-12T00:00:00+05:30,14
+5085,Nigan shah,Arvind ltd,nigam.shah@arvind.in,9898599756,13d48fa2-d846-40ef-903a-310bbff2de55,14,2025-08-04T00:00:00+05:30,2026-04-11T00:00:00+05:30,14
+5112,Darmesh dattani,Vishal fabrics ltd,dharmeshdattani@chiripalgroup.com,9727768048,13d48fa2-d846-40ef-903a-310bbff2de55,14,2025-08-13T00:00:00+05:30,2025-11-19T00:00:00+05:30,14
+5412,Anil chadda,Hpl additives ltd,anil.chada@hpladditives.com,9910486217,13d48fa2-d846-40ef-903a-310bbff2de55,14,2025-10-07T00:00:00+05:30,2026-05-13T00:00:00+05:30,14
+5560,Manoj Kumar,Surya Roshni Ltd,mkumar@surya.in,9811053493,13d48fa2-d846-40ef-903a-310bbff2de55,14,2025-12-29T00:00:00+05:30,2026-04-27T00:00:00+05:30,16
+5256,Rahul tiwari,Orbit exports ltd,rahult@orbitexports.com,9826354166,,14,2025-09-11T00:00:00+05:30,2026-04-18T00:00:00+05:30,14
+5103,Prakash dhameja,Ipl biologics ltd,prakash.dhameja@iplbiological.com,9899814489,,13,2025-08-12T00:00:00+05:30,2026-03-02T00:00:00+05:30,10
+5102,Sudhir jain,Ukb electronics pvt Ltd,sudhirjain@ukbindia.com,9717939039,,13,2025-08-12T00:00:00+05:30,2026-03-11T00:00:00+05:30,11
+5593,VIKRAM LALWANI,Shree Pomani Metals And Alloys Ltd,ka468cascing@gmail.com,8668373525,13d48fa2-d846-40ef-903a-310bbff2de55,13,2026-01-20T00:00:00+05:30,2026-04-27T00:00:00+05:30,15
+5146,Vimal katta,Ratnamani metal and tubes Ltd,vimal.katta@ratnamani.com,9879556602,13d48fa2-d846-40ef-903a-310bbff2de55,13,2025-08-05T00:00:00+05:30,2025-10-07T00:00:00+05:30,10
+5082,Deeksha S kumar,Sparsh foods india pvt Ltd,md_deeksha@sparshmasala.com,9538108313,13d48fa2-d846-40ef-903a-310bbff2de55,13,2025-08-01T00:00:00+05:30,2025-11-22T00:00:00+05:30,14
+5094,Nitin gupta,Cremica food industries Ltd,nitin.gupta@cremica.com,9034290047,13d48fa2-d846-40ef-903a-310bbff2de55,13,2025-08-06T00:00:00+05:30,2026-01-02T00:00:00+05:30,12
+5423,Soumen ray,HUL ltd,soume.nray@uniliver.com,9004391210,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-08-28T00:00:00+05:30,2025-10-07T00:00:00+05:30,8
+5272,Atul Jain,Nestle India Ltd,atul.jain@in.nestle.com,9971090874,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-09-15T00:00:00+05:30,2025-10-04T00:00:00+05:30,14
+5549,Rupesh kondawar,Atul Ltd,rupesh_kondawar@atul.co.in,9920926886,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-12-05T00:00:00+05:30,2025-12-06T00:00:00+05:30,10
+5360,9892272136,Bayer corp science ltd,rajesh.sinha@bayer.com,9892272136,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-09-27T00:00:00+05:30,2025-10-01T00:00:00+05:30,12
+5468,Chetan khandelwal,Apl Appolo tubes ltd,chetankhandelwal@aplapollo.com,9971660234,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-10-10T00:00:00+05:30,2026-05-06T00:00:00+05:30,10
+5376,Ankit Gupta,Whirlpool corporation ltd,ankit_gupta@whirlpool.com,1410040236,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-09-29T00:00:00+05:30,2025-10-01T00:00:00+05:30,12
+5476,Dr sunder saini,Digvijay cement ltd,sunder.saini@digvijaycement.com,8058186999,,12,2025-10-24T00:00:00+05:30,2025-10-27T00:00:00+05:30,12
+5280,Rakesh Kothari,Sadhan Nitro chem Ltd,rakesh@sncl.com,9820111117,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-09-16T00:00:00+05:30,2025-10-04T00:00:00+05:30,12
+5274,Smitha vaisha,PTC industries ltd,smita@ptcl.com,9335811494,,12,2025-09-15T00:00:00+05:30,2026-05-11T00:00:00+05:30,14
+5526,Harshil Soni,Arvind Ltd,harshil.soni@arvind.in,9824974244,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-11-07T00:00:00+05:30,2025-11-10T00:00:00+05:30,9
+5524,Gopal moondra,Grasim industries Ltd,gopal.m@adityabirla.com,9702285977,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-11-04T00:00:00+05:30,2025-11-10T00:00:00+05:30,10
+5305,Santosh Rai,Hi-tech pipes Ltd,santosh.rai@hitechpipes.in,9910398952,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-09-22T00:00:00+05:30,2025-10-15T00:00:00+05:30,12
+5346,Virat Sharma,Zepto,virat.sharma@zeptonow.com,9820300923,13d48fa2-d846-40ef-903a-310bbff2de55,12,2025-09-25T00:00:00+05:30,2025-11-18T00:00:00+05:30,14
+5184,Amit marwala,DRRk foods pvt Ltd,amawaha@crownrice.com,9872014791,13d48fa2-d846-40ef-903a-310bbff2de55,11,2025-08-29T00:00:00+05:30,2026-04-17T00:00:00+05:30,12
+5287,Jinendra Jain,ZF steering gear india ltd,jinendra.jain@zfindia.com,9326654847,13d48fa2-d846-40ef-903a-310bbff2de55,11,2025-09-17T00:00:00+05:30,2026-02-16T00:00:00+05:30,11
+5109,Anand Krishna,Food &inns ltd,anand@foodsandinns.com,9870003811,13d48fa2-d846-40ef-903a-310bbff2de55,11,2025-08-13T00:00:00+05:30,2026-05-14T00:00:00+05:30,12
+5596,Ashish Sharma,Simpolo Vitrified Private Limited,ashish.sharma@simpolo.com,9879367222,13d48fa2-d846-40ef-903a-310bbff2de55,11,2026-01-23T00:00:00+05:30,2026-03-02T00:00:00+05:30,10
+5330,Ashish Goenka,Tata consumer products ltd,ashish.goenka@tataconsumer.com,9930266409,13d48fa2-d846-40ef-903a-310bbff2de55,11,2025-08-28T00:00:00+05:30,2026-02-26T00:00:00+05:30,8
+5606,Vikash Agarwal,Rupa & company Ltd,vikash@rupa.co.in,9830079119,13d48fa2-d846-40ef-903a-310bbff2de55,10,2026-02-05T00:00:00+05:30,2026-04-27T00:00:00+05:30,8
+5158,Randeep bhattacharya,Albert David ltd,r.bhatacharya@albertdavidindia.com,9874270004,13d48fa2-d846-40ef-903a-310bbff2de55,10,2025-08-22T00:00:00+05:30,2026-03-14T00:00:00+05:30,10
+5348,Pritesh gori,Jsw energy ltd,pritesh.vinay@jsw.in,9866868800,,10,2025-09-26T00:00:00+05:30,2026-03-12T00:00:00+05:30,10
+5099,Deepak jain,Ather energy Ltd,deepak.jain@atherenergy.com,9686230263,,10,2025-08-12T00:00:00+05:30,2025-08-12T00:00:00+05:30,8
+5586,prakash jain,"Paushak Ltd , Alembic Ltd",jain.prakash@paushak.com,9872600008,13d48fa2-d846-40ef-903a-310bbff2de55,10,2026-01-12T00:00:00+05:30,2026-05-15T00:00:00+05:30,11
+5107,Nikhil mathur,Dfm foods Ltd,nikhil.mathur@dfmfoods.com,9811353142,,10,2025-08-13T00:00:00+05:30,2025-08-13T00:00:00+05:30,8
+5132,Siddharth Desai,Hindustan electric motors,s.desai@hindustanmotors.com,9820083250,,10,2025-08-18T00:00:00+05:30,2025-08-18T00:00:00+05:30,6
+5246,Darshan Rampariya,Anuh pharma ltd,darshan.r@anuhpharma.com,9821506807,,10,2025-09-10T00:00:00+05:30,2026-05-07T00:00:00+05:30,10
+5122,Senthil nathan,Natraj oil mills Pvt Ltd,nathan@anjalifood.com,9994406000,,10,2025-08-16T00:00:00+05:30,2025-08-16T00:00:00+05:30,10
+5100,Vinod madan,Skh metal ltd,vinodmadan@skhgroup.co.in,9810450514,,10,2025-08-12T00:00:00+05:30,2025-08-12T00:00:00+05:30,8
+5201,Nirmal shah,Chembond chemicals ltd,nirmalshah@chembondindia.com,9324251122,13d48fa2-d846-40ef-903a-310bbff2de55,10,2025-09-01T00:00:00+05:30,2026-05-15T00:00:00+05:30,11
+5129,Anil gupta,Nikhil adhesives ltd,anil.gupta@nikhiladhesives.com,7600781524,,10,2025-08-18T00:00:00+05:30,2025-08-18T00:00:00+05:30,8
+5276,Vinay Jain,MLM India Ltd,vinay@mlmindialtd.com,9830765267,,10,2025-09-16T00:00:00+05:30,2026-04-13T00:00:00+05:30,8
+5273,Sumit Sharma,Pratap snacks ltd,sumit@yellowdaiamond.in,9702777110,13d48fa2-d846-40ef-903a-310bbff2de55,10,2025-09-15T00:00:00+05:30,2026-04-28T00:00:00+05:30,10
+5104,Suresh Reddy,Kennametals india ltd,suresh.reddy@kennametal.com,9916991914,,10,2025-08-12T00:00:00+05:30,2025-08-12T00:00:00+05:30,6
+5124,Shobit agarwal,Gemini edible & fats india ltd,shobhit@gefindia.net,9873937203,,10,2025-08-16T00:00:00+05:30,2025-08-16T00:00:00+05:30,10
+5332,Anand,Sarveshwar overseas ltd,cfo@sarveshwarrice.com,9930450988,13d48fa2-d846-40ef-903a-310bbff2de55,10,2025-09-24T00:00:00+05:30,2026-03-05T00:00:00+05:30,11
+5133,Ashish Modak,Seedworks international pvt Ltd,ashish.modak@seedworks.com,9892301030,,10,2025-08-18T00:00:00+05:30,2025-08-18T00:00:00+05:30,6
+5437,Raghav kumar Agarwal,Hp cotton textiles mills ltd,rka@hpthreads.com,9891111670,,10,2025-10-08T00:00:00+05:30,2026-05-13T00:00:00+05:30,10
+5091,Samarth patel,Scoda tubes ltd,samarth.patel@scodatubes.com,8141113001,,10,2025-08-05T00:00:00+05:30,2025-08-05T00:00:00+05:30,10
+5130,Jeet malhotra,Sunshield chemicals ltd,jeet@sunshieldchemicals.com,9820302686,,10,2025-08-18T00:00:00+05:30,2025-08-18T00:00:00+05:30,8
+5200,Alok Rathi,Rishi fibc solutions pvt Ltd,alok.rathi@rishifibc.com,9328452991,13d48fa2-d846-40ef-903a-310bbff2de55,10,2025-08-30T00:00:00+05:30,2026-05-08T00:00:00+05:30,10
+5172,T ravindra,Gtn group of companies,ravindran@gtntextiles.com,9388999212,13d48fa2-d846-40ef-903a-310bbff2de55,10,2025-08-25T00:00:00+05:30,2026-05-15T00:00:00+05:30,12
+5096,Kushal sharma,Kia india,kushal.sharma@kiaindia.net,8800500389,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-08T00:00:00+05:30,2026-01-02T00:00:00+05:30,8
+5128,Jinen ghelani,Prime fresh ltd,info@primefresh.com,9909032633,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-18T00:00:00+05:30,2026-01-02T00:00:00+05:30,12
+5179,Manav bansal,Beekay industries ltd,manav@beekaysteel.com,9830093994,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-28T00:00:00+05:30,2026-04-16T00:00:00+05:30,8
+5095,Santosh yadav,Astral Ltd,santosh.yadav@astralltd.com,7600861650,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-07T00:00:00+05:30,2025-09-23T00:00:00+05:30,10
+5361,9810162037,Dhanuka agritech ltd,rahul.dhanuka@dhanuka.com,9810162037,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-08T00:00:00+05:30,2025-09-27T00:00:00+05:30,6
+5074,Sunil jha,Chambal fertilisers & chemicals ltd,sunil.jha@chambal.in,9810930305,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-07-28T00:00:00+05:30,2026-01-02T00:00:00+05:30,12
+5123,Anand dhoot,Govind milk & milk products pvt Ltd,anand.dhoot@govindmilk.com,7350017870,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-16T00:00:00+05:30,2025-08-23T00:00:00+05:30,10
+5125,Ramesh chander,Modi naturals ltd,ramesh@modinaturals.com,9810879268,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-16T00:00:00+05:30,2025-08-30T00:00:00+05:30,10
+5266,Mahesh Gupta,Swaraj engine ltd,gupta.mahesh@mahindraswaraj.com,9878766466,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-12T00:00:00+05:30,2025-09-12T00:00:00+05:30,6
+5145,Arun julasaria,Century plyboards india ltd,arun@centuryply.com,9830292192,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-07-31T00:00:00+05:30,2025-08-20T00:00:00+05:30,6
+5113,Nagaraju,Aparna enterprises Ltd,nagaraju.guvs@aparnaenterprisesltd.com,9620155678,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-13T00:00:00+05:30,2026-01-13T00:00:00+05:30,8
+5078,Kailash Goya,Mpil structure steel ltd,kailash.goyal@mpil.in,8767759533,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-07-30T00:00:00+05:30,2025-11-13T00:00:00+05:30,10
+5106,Nitesh suri,Kayem food industries pvt Ltd,nitesh@kayemfoods.com,9910097593,,9,2025-08-13T00:00:00+05:30,2025-12-01T00:00:00+05:30,8
+5076,Radheshyam Rathi,Akar auto industries Ltd,radheshyam.rathi@akarauto.com,9421332789,,9,2025-07-28T00:00:00+05:30,2025-10-07T00:00:00+05:30,10
+5098,Sunil Ranka,Shree renuka sugars ltd,sunilranka@renukasugars.com,9820000181,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-08-11T00:00:00+05:30,2026-02-04T00:00:00+05:30,8
+5079,Deepak Agarwal,K R pulp & paper ltd,deepak.agarwal@bblko.com,9936105574,13d48fa2-d846-40ef-903a-310bbff2de55,9,2025-07-31T00:00:00+05:30,2026-05-15T00:00:00+05:30,10
+5554,Himanshu Gupta,Reliance retail limited,himanshu.s.gupta@ril.com,8454041825,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-12-02T00:00:00+05:30,2025-12-11T00:00:00+05:30,8
+5559,Ca Preeti Goel,Ambica Steel Limited,preeti.anjna@gamil.com,9958341086,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-12-17T00:00:00+05:30,2025-12-18T00:00:00+05:30,8
+5439,Sumit pant,Page industries ltd,sumit.pant@jockeyindia.com,8049474710,,8,2025-10-09T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5153,Sourav daga,Celesto group,sdaga@celestogroup.com,9748002026,,8,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,8
+5233,Deepak sawant,Bliss gvs pharmaceuticals ltd,deepak.sawant@blissgvs.com,9987313097,,8,2025-09-09T00:00:00+05:30,2026-05-12T00:00:00+05:30,10
+5449,Anurag bhagania,Onesourced pharma ltd,anurag.bhagania@onsourcedmo.com,2066084676,,8,2025-10-11T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5267,Yashwant Mishra,Mangalam cement Ltd,yaswant@mangalamcement.com,9830025589,,8,2025-09-12T00:00:00+05:30,2026-01-22T00:00:00+05:30,8
+5464,Ashok soni,Maharashtra seamless ltd,ashok@mahaseam.com,9490160165,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-10-14T00:00:00+05:30,2026-01-31T00:00:00+05:30,8
+5151,Sandeep agrawal,Emami agrotech ltd,sandeep.agarwal@emamiagrotech.com,9727790012,,8,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,8
+5417,Veera raghavaivh panchgnula,Samkg pistons and rings ltd,veera.panchangnula@myklaticete.com,9959999388,,8,2025-10-07T00:00:00+05:30,2026-01-16T00:00:00+05:30,8
+5571,Shivani nadkarni,Embbi industries ltd,shivani.nadkarni@emmbiindustries.com,9820016490,,8,2025-11-29T00:00:00+05:30,2026-01-05T00:00:00+05:30,6
+5140,Vipin raheja,Napino auto & electronics ltd,md@nspino.com,9810005926,,8,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,8
+5564,Sandeep Sachdeva,Ambrane india pvt Ltd,sandeep.sachdeva@ambraneindia.com,9810397063,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-12-30T00:00:00+05:30,2026-01-12T00:00:00+05:30,10
+5578,Nitesh sharma,Aeroflex Enterprises ltd,nitesh.sharma@satgroup.in,9920693983,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-01-09T00:00:00+05:30,2026-01-09T00:00:00+05:30,9
+5271,Pankaj Prabhakar,Yatharth hospital,pankaj.prabhakar@yatharthahospitals.com,9910622804,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-15T00:00:00+05:30,2025-10-04T00:00:00+05:30,8
+5592,priyaranjan shrivatstava,manaksia coated metals & industries ltd,priyaranjan.shrivastava@mcmil.in,9923453591,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-01-20T00:00:00+05:30,2026-05-04T00:00:00+05:30,11
+5322,Shekhar Anand,Steel authority of India Ltd,shekar.anand@sail.in,7782084060,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-23T00:00:00+05:30,2025-11-06T00:00:00+05:30,8
+5149,Samarth agarwal,Greenlam industries Ltd,samarth.agarwal@greenlam.com,9871118515,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-21T00:00:00+05:30,2025-12-31T00:00:00+05:30,10
+5588,Nikhil Chande,Print Genius LLP,printgeniusllp@gmail.com,9821938020,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-01-16T00:00:00+05:30,2026-01-20T00:00:00+05:30,10
+5196,Uttam kumar bhageria,Sandur manganese &iron ores ltd,uttam.bhageria@sandurgroup.com,7829999020,,8,2025-09-01T00:00:00+05:30,2025-09-30T00:00:00+05:30,8
+5148,Nishant arya,Jbm cadmium pvt Ltd,nishant.aryajbmt@.co.in,9811322078,,8,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,6
+5198,Vijay dodia,Ramdev Food products pvt Ltd,vijay@ramdev.co.in,9601667273,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-28T00:00:00+05:30,2025-09-01T00:00:00+05:30,6
+5418,Jaison Joseph,Astrotech steel pvt Ltd,johney@astrotechsteels.com,9677135599,,8,2025-10-07T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5342,Rajesh kumar,Jindal Aluminium ltd,rksoni@jindalaluminum.com,9611195305,,8,2025-09-25T00:00:00+05:30,2025-10-01T00:00:00+05:30,8
+5197,R.k sharma,Jai balaji industries ltd,sharmarks@gmail.com,9831013091,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-01T00:00:00+05:30,2025-10-10T00:00:00+05:30,8
+5386,Arvind kumar,Bhagiradha chemicals & industries ltd,arvind.a@bhagirad.com,7202920341,,8,2025-10-01T00:00:00+05:30,2025-12-03T00:00:00+05:30,8
+5191,Naveen kumar,Olam agri,naveen.kumar@olamagri.com,9811750433,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-30T00:00:00+05:30,2025-11-21T00:00:00+05:30,10
+5387,G.s chahal,Meghami organics ltd,gs.chahal@meghmani.com,9099009945,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-10-01T00:00:00+05:30,2025-10-14T00:00:00+05:30,8
+5178,Meenakshi,Lenovo,mdagar@lenovo.com,9663376581,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-26T00:00:00+05:30,2025-08-28T00:00:00+05:30,6
+5334,Suresh Reddy,CCL product india ltd,suresh.a@continental.coffee,9581270610,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-25T00:00:00+05:30,2025-10-01T00:00:00+05:30,8
+5323,Vaibhav chandak,Adani Power Ltd,vaibhav.chandak@adani.com,9213401657,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-24T00:00:00+05:30,2025-10-09T00:00:00+05:30,10
+5328,Bishnu Agarwal,Hindalco industries ltd,bishnu.agarwal@adityabirla.com,9594020904,,8,2025-09-24T00:00:00+05:30,2025-09-26T00:00:00+05:30,8
+5457,Ravi jattap,Aastrid life sciences Pvt Ltd,ravi.jagtap@strid.com,9867890077,,8,2025-10-11T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5483,Fanish singh,Varun beverages ltd,fanish.singh@rjcorp.in,9044099175,,8,2025-10-25T00:00:00+05:30,2025-10-27T00:00:00+05:30,8
+5303,Chintan vasa,Pace power pvt Ltd,chintanvasa@powerinternational.in,9619062121,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-22T00:00:00+05:30,2025-09-23T00:00:00+05:30,12
+5591,DK Bansal,v-marc india limited,cfo@v-marc.in,9690200060,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-01-19T00:00:00+05:30,2026-01-20T00:00:00+05:30,8
+5209,Ajit Sharma,Adidas marketing Pvt Ltd,ajit.sharma@adidasgroup.com,9811288004,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-03T00:00:00+05:30,2025-09-04T00:00:00+05:30,8
+5600,Avinash choudhari,Altra tech cement Ltd,avinash.choudhari@adityabirla.com,8422971469,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-10-30T00:00:00+05:30,2026-01-28T00:00:00+05:30,8
+5319,Santosh g,Meesho,santosh.ganthade@meesho.com,9503616144,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-23T00:00:00+05:30,2025-09-25T00:00:00+05:30,8
+5320,Sandeep parkhi,Reliance retail,sandeep.parkhi@ril.com,7977658679,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,8
+5442,Srinivas vajha,Raymond ltd,srinivas.vajha@raymond.in,9820230942,,8,2025-10-09T00:00:00+05:30,2025-12-11T00:00:00+05:30,8
+5316,Vikrant pandey,Meesho,vikrant.pandey@meesho.com,9803091594,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-23T00:00:00+05:30,2025-09-25T00:00:00+05:30,8
+5101,Vishal Rastogi,Sumitomo techno tools pvt Ltd,vishal@motherson.com,9899485275,,8,2025-08-12T00:00:00+05:30,2026-02-26T00:00:00+05:30,6
+5572,Shipriya Srivastava,GRM Overseas Ltd,marketing@marutiagrofoods.com,9310005453,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-01-08T00:00:00+05:30,2026-01-19T00:00:00+05:30,12
+5553,Ca RaviRaj rajput,Belrise industries Ltd,rdrajput@belriseindustries.com,9588642752,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-12-11T00:00:00+05:30,2025-12-30T00:00:00+05:30,12
+5448,Ravi mitra,Gland pharma ltd,"ravi.mitra@,glandpharma.com",7506440994,,8,2025-10-10T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5285,Manish Aggarwal,Bikanerwala Fooda pvt Ltd,manish.aggarwal@bikarno.com,9871590607,,8,2025-08-30T00:00:00+05:30,2025-09-17T00:00:00+05:30,6
+5208,Dharmender tuteja,Dalmia bharat ltd,dtuteja@dalmiacement.com,9958011660,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-02T00:00:00+05:30,2026-03-25T00:00:00+05:30,8
+5292,Neha kumari,Sarla performance fibers ltd,vinayrathi@glostercable.com,9831003806,,8,2025-09-19T00:00:00+05:30,2025-09-19T00:00:00+05:30,8
+5408,Ashok chavla,Avtar steel ltd,ashokchavla@avtarsteel.com,9810048562,,8,2025-10-07T00:00:00+05:30,2026-01-06T00:00:00+05:30,8
+5139,Deepak g prabhu,Neelamalai agro industries Ltd,deepak.g@neelamalaiagro.com,9446416777,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-20T00:00:00+05:30,2026-01-16T00:00:00+05:30,8
+5580,Manoj shukla,seal solar p6 private.ltd,manoj.shukla@seal.co,9889009451,,8,2025-12-18T00:00:00+05:30,2026-01-13T00:00:00+05:30,6
+5232,Rajesh Lawande,NGL Fine Chem Ltd,rajesh@nglfinechem.com,9820355118,,8,2025-09-09T00:00:00+05:30,2026-05-12T00:00:00+05:30,8
+5491,Amit khurana,Anupam Rasayan india ltd,amit.khurana@anupamrasayan.com,9099900675,,8,2025-08-19T00:00:00+05:30,2025-10-28T00:00:00+05:30,7
+5336,Amit pendse,Godrej agrovet Ltd,amit.pendse@godrejagrovet.com,9920063565,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-25T00:00:00+05:30,2025-10-11T00:00:00+05:30,8
+5177,Nitin garg,Nitin goodluck india ltd,nitin@goodluckindia.com,9910496306,,8,2025-08-28T00:00:00+05:30,2025-09-24T00:00:00+05:30,10
+5307,Sandeep Kumar,LG electronics limited,sandeep3.kumar@lge.com,9953554890,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-23T00:00:00+05:30,2025-10-11T00:00:00+05:30,10
+5604,Utsav gupta,Velan inc.,utsav.gupta@velan.com,8447649434,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-02-05T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5194,Sharad saluja,Sterling agro industries Ltd,sharad.saluja@gmail.com,9811345050,,8,2025-08-30T00:00:00+05:30,2025-08-30T00:00:00+05:30,6
+5480,Ajay Dang,Ultratech cement ltd,ajay.dang@adityabirla.com,9720313634,,8,2025-10-25T00:00:00+05:30,2025-10-27T00:00:00+05:30,8
+5279,Hariharan venkataraman,Sundaram Clayton Ltd,vh@scl.co.in,9840355133,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-16T00:00:00+05:30,2025-10-04T00:00:00+05:30,8
+5479,Chirtan chatterjee,Usha martin ltd,chirantan@ushamartin.co.in,9331059013,,8,2025-10-25T00:00:00+05:30,2025-10-27T00:00:00+05:30,8
+5482,Aswin jaikanth,Bajaj auto Ltd,ajaikanth@bajajauto.co.in,8600108023,,8,2025-10-25T00:00:00+05:30,2025-10-27T00:00:00+05:30,8
+5419,Mukund kandoi,Purple products pvt Ltd,mukund@purpleproduct.com,9022802722,,8,2025-10-07T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5478,Ragesh Rawat,Ultratech cement ltd,ragesh.rawat@adityabirla.com,8108332228,,8,2025-10-24T00:00:00+05:30,2025-11-01T00:00:00+05:30,8
+5222,Manoj dhoot,Voltas Ltd,manojdhoot@voltas.com,9748435752,,8,2025-09-05T00:00:00+05:30,2025-09-05T00:00:00+05:30,10
+5456,Ramesh arisetti,Cohance life sciences ltd,ramesh.arisetti@cohance.com,9989011224,,8,2025-10-11T00:00:00+05:30,2026-02-05T00:00:00+05:30,10
+5477,Ritesh Sharma,Usha martin ltd,ritesh_sharma@ushamartin.co.in,7507998198,,8,2025-10-24T00:00:00+05:30,2025-10-24T00:00:00+05:30,8
+5610,Nitin Aggarwal,Alken laboratories Ltd,nitin.agrawal@alkem.com,9004598237,,8,2026-02-23T00:00:00+05:30,2026-03-12T00:00:00+05:30,6
+5587,Arvind Godara,natureland organics pvt ltd / agribolo,arvind@naturelandorganics.com,9549200005,13d48fa2-d846-40ef-903a-310bbff2de55,8,2026-01-16T00:00:00+05:30,2026-01-16T00:00:00+05:30,8
+5155,Lalit kumar khetan,Ramakrishna forging ltd,ramkrishna@forging.com,9836263211,,8,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,8
+5333,Dilip Jha,Adani interprises ltd,dilip.jha@adani.com,9909949723,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-25T00:00:00+05:30,2025-10-01T00:00:00+05:30,12
+5505,Jilledumukudi kesava rao,Rashtriya ispat nigam ltd,jrao@vizagsteel.com,9866173137,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-24T00:00:00+05:30,2025-11-01T00:00:00+05:30,6
+5193,Kalyani Kumar,Kirloskar ferrous industries limited,kalyankumar.deshpande@kfil.com,9371848548,,8,2025-08-30T00:00:00+05:30,2025-08-30T00:00:00+05:30,6
+5189,Praveen Gupta,Sporting india ltd,ca.sob@sportking.co.in,9815676177,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-30T00:00:00+05:30,2025-09-25T00:00:00+05:30,10
+5381,Rupesh gupta,Upl ltd,rupesh.gupta@upl-ltd.com,9769910501,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-17T00:00:00+05:30,2025-09-30T00:00:00+05:30,6
+5335,Ajay nagar,Lux industries Ltd,ajay.nagar@luxindustries.com,7700012123,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-09-25T00:00:00+05:30,2025-10-01T00:00:00+05:30,8
+5443,Vinay baliga,Hilka ltd,vinay_baliga@hilkal.com,9820417943,,8,2025-10-09T00:00:00+05:30,2026-02-05T00:00:00+05:30,8
+5168,Rohit nanda,Sona blw precision forging ltd,rohit.nanda@sonacomstar.com,9810704696,13d48fa2-d846-40ef-903a-310bbff2de55,8,2025-08-25T00:00:00+05:30,2025-12-12T00:00:00+05:30,8
+5073,shreerathor95@gmail.com,,shreerathor95@gmail.com,,,7,,,4
+5291,Raj Kumar chachani,Manomay tex india ltd,raj@manomaytexindia.com,9462239847,,7,2025-09-19T00:00:00+05:30,2026-03-04T00:00:00+05:30,6
+5118,Sabu Raman,Pps motors pvt Ltd,saburaman2@gmail.com,9946105656,13d48fa2-d846-40ef-903a-310bbff2de55,7,2025-08-14T00:00:00+05:30,2026-05-15T00:00:00+05:30,9
+5324,Ashok Verma,PDS LTD,ashok.verma@pdsltd.com,9004825101,13d48fa2-d846-40ef-903a-310bbff2de55,7,2025-09-24T00:00:00+05:30,2026-03-06T00:00:00+05:30,6
+5543,N Srinivasan,Saguna food's Ltd,srinivasann@sagunafoods.com,8870444101,13d48fa2-d846-40ef-903a-310bbff2de55,7,2025-11-14T00:00:00+05:30,2026-02-23T00:00:00+05:30,9
+5185,Kanha agarwal,Prakash pipes ltd,kanha@prakash.com,9810032818,13d48fa2-d846-40ef-903a-310bbff2de55,7,2025-08-29T00:00:00+05:30,2026-02-11T00:00:00+05:30,6
+5368,Aurodeep Mishra,Vedanta ltd,aurodeep.mishra@vedanta.co.in,8895623520,,7,2025-09-29T00:00:00+05:30,2026-03-06T00:00:00+05:30,6
+5516,Ec prasad,Bajaj electriccals ltd,ec.prasad@bajajelectricals.com,9819057734,,7,2025-11-06T00:00:00+05:30,2026-03-12T00:00:00+05:30,6
+5352,Deepak natrajan,Coramandel international ltd,deepaknatrajan@coromandel.muruguppa.com,9971110537,,7,2025-09-26T00:00:00+05:30,2026-02-23T00:00:00+05:30,6
+5452,Sumeet Sood,Akums drugs & pharmaceuticals ltd,sumeet.sood@akums.net,9871798044,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-10-11T00:00:00+05:30,2026-05-11T00:00:00+05:30,6
+5162,Rahul ganu,Belrise industries Ltd,rsganu@belriseindustries.com,9881150659,,6,2025-08-23T00:00:00+05:30,2026-03-20T00:00:00+05:30,8
+5411,Karab palta,Amber enterprises India Ltd,karan@ambergroupindia.com,9711411011,,6,2025-10-07T00:00:00+05:30,2026-05-14T00:00:00+05:30,6
+5458,Vijay bhat,FDC ltd,vinay.bhatt@fdcindia.com,9820433205,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-10-13T00:00:00+05:30,2026-03-20T00:00:00+05:30,6
+5582,Surendhar Nelluri,Deccan fine Chemicals pvt ltd,surendhar.nelluri@deccanchemicals.com,9036562728,13d48fa2-d846-40ef-903a-310bbff2de55,6,2026-01-13T00:00:00+05:30,2026-04-28T00:00:00+05:30,8
+5492,Satish Gupta,Saraswati agro chemicals ltd,satishgupta@saraswatigroup.com,9988099090,,6,2025-10-28T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5245,Ajay Agarwal,Ajanta Pharma Ltd,arvind.agarwal@ajantapharma.com,8600075959,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-09-10T00:00:00+05:30,2026-05-11T00:00:00+05:30,9
+5224,Kaustav sil,Rieter india pvt Ltd,kaustav.sil@rieter.com,7799717242,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-09-05T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5565,Sanal kumar,Vishnusurya project and infra limited,sanal@vishnusurya.com,9941382747,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-12-31T00:00:00+05:30,2026-04-30T00:00:00+05:30,6
+5214,Amit raniwala,Mahavir steel industries ltd,amit@mahavirsteel.com,9820150675,,6,2025-09-04T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5595,Sivaram DV,My home industries pvt Ltd,dvs@myhomeindustries.in,9949239462,,6,2026-01-21T00:00:00+05:30,2026-05-12T00:00:00+05:30,6
+5603,Varun nanavaty,Advait energy transition limited,varun.nanavaty@advaitgroup.co.in,9426567725,13d48fa2-d846-40ef-903a-310bbff2de55,6,2026-01-28T00:00:00+05:30,2026-04-27T00:00:00+05:30,8
+5247,Bharat Bhushan,Bal pharma ltd,bharatbhushan@balpharma.com,9886841120,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-09-10T00:00:00+05:30,2026-05-11T00:00:00+05:30,7
+5396,Harsh agnihotri,Khaitan chemicals & fertilisers ltd,harshagnihotri@kcfl.in,9810156603,,6,2025-10-04T00:00:00+05:30,2026-04-30T00:00:00+05:30,6
+5568,Naman Shah,JB ecotex Ltd,namanshah@jbecotex.com,9879530039,,6,2026-01-03T00:00:00+05:30,2026-03-21T00:00:00+05:30,8
+5240,Janakirman,Jenburkat pharmaceutical ltd,janakiranman@jenburkt.com,9930004231,,6,2025-09-10T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5556,Ganesh bhandari,Rashtriya chemicals & fertilizer Ltd,gmbhandari@rcfltd.com,8898558749,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-12-15T00:00:00+05:30,2026-04-28T00:00:00+05:30,8
+5213,Ca  Rameshwar jaiswal,Paramount product pvt Ltd,rameshwar@paramountproducts.in,8432641194,,6,2025-09-04T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5225,Gursharn aswhney,Uttam Galva steel ltd,gursharn@uttamgalva.com,9820094930,,6,2025-09-05T00:00:00+05:30,2026-04-20T00:00:00+05:30,6
+5269,Amit Pathak,Shalby ltd,cfo@shalby.org,9748036190,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-09-13T00:00:00+05:30,2026-05-08T00:00:00+05:30,6
+5270,Kamlesh Baheti,Raj Rayan industries ltd,kamlesh.baheti@rayan.com,9928855600,,6,2025-09-15T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5218,Nikhil doshi,Tit- bits foods pvt Ltd,nikhil@titbitspices.com,9821386358,,6,2025-09-04T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5278,Vishal palriwal,Palriwal industries ltd,vishalpalriwal@palriwal.com,9308688644,13d48fa2-d846-40ef-903a-310bbff2de55,6,2025-09-16T00:00:00+05:30,2026-05-13T00:00:00+05:30,9
+5220,Rajgopal kanabiran,Steel infra solution pvt Ltd,k.rajgopal@sisol.in,8130700433,,6,2025-09-04T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5258,Ashok Agarwal,Doner industries ltd,adhok@doner.com,8657599145,,6,2025-09-11T00:00:00+05:30,2026-05-13T00:00:00+05:30,6
+5241,Divyesh Maru,Heater biosciences ltd,divyesh.maru@hester.in,9909002859,,6,2025-09-10T00:00:00+05:30,2026-04-22T00:00:00+05:30,8
+5077,Suresh Kumar bandi,Steel exchange india ltd,suresh@seil.co.in,9848190781,,5,2025-07-29T00:00:00+05:30,2025-07-29T00:00:00+05:30,8
+5127,Anil kudal,Kalyani technoforge ltd,anil.kudal@kalyanitechnoforge.com,9822926687,,5,2025-08-18T00:00:00+05:30,2025-08-18T00:00:00+05:30,6
+5126,Pradeep arya,Gulshan polyols ltd,arya@gulshanindia.com,9506321019,13d48fa2-d846-40ef-903a-310bbff2de55,5,2025-08-16T00:00:00+05:30,2025-08-16T00:00:00+05:30,4
+5116,John Verghese,Popular vehicle & service ltd,john.verghese@kuttukaran.in,7144535033,,5,2025-08-14T00:00:00+05:30,2025-08-14T00:00:00+05:30,4
+5117,Subhajit Roy,Amar car pvt Ltd,subhajit.roy@amarcars.com,9830353919,,5,2025-08-14T00:00:00+05:30,2025-08-14T00:00:00+05:30,4
+5092,Anuj bansal,Kalika steel alloys Pvt Ltd,anuj.bansal@kalikasteel.com,9552255551,,5,2025-08-05T00:00:00+05:30,2025-08-05T00:00:00+05:30,4
+5608,Dheeraj Jain,Pagariya food products pvt Ltd,dheeraj@kwalityspices.com,9844008757,13d48fa2-d846-40ef-903a-310bbff2de55,5,2026-02-11T00:00:00+05:30,2026-04-28T00:00:00+05:30,4
+5080,Muzaffer ahmed,Suryadev alloys & power pvt Ltd,cfo@suryadev.in,9381850006,,5,2025-07-31T00:00:00+05:30,2025-07-31T00:00:00+05:30,4
+5097,Ranjit Lala  per inke jagah koi ledy baat kar rahi thi,Aerzen machines india pvt Ltd,india@aerzen.com,9558825034,13d48fa2-d846-40ef-903a-310bbff2de55,5,2025-08-08T00:00:00+05:30,2025-08-08T00:00:00+05:30,4
+5105,Vishal jain,Deepak nitrite ltd,vjain@deepaknitrite.com,9904709870,,5,2025-08-12T00:00:00+05:30,2025-08-12T00:00:00+05:30,4
+5115,Makrand appalwar,Maithili agrotech pvt Ltd,makrand.appalwar@emmbi.com,9821114521,,5,2025-08-14T00:00:00+05:30,2025-08-14T00:00:00+05:30,4
+5114,Uday Singh,Namdhari Seeds pvt Ltd,u.singh@namdhariseeds.com,9881846664,,5,2025-08-14T00:00:00+05:30,2025-08-14T00:00:00+05:30,4
+5111,Kaushik shah,Brilliant polymers Pvt Ltd,kaushik.shah@brilliantpolymer.com,9930812828,,5,2025-08-13T00:00:00+05:30,2025-08-13T00:00:00+05:30,4
+5108,Rinku appalwar,Emmbi industries Ltd,rinku.appalwar@emmbi.com,2267845555,,5,2025-08-13T00:00:00+05:30,2025-08-13T00:00:00+05:30,4
+5120,Atul Garg,GRM overseas Ltd,atul.garg@grmrice.com,9729647000,13d48fa2-d846-40ef-903a-310bbff2de55,5,2025-08-14T00:00:00+05:30,2025-08-14T00:00:00+05:30,4
+5119,Manish Dawar,Devyani international ltd,m.dawar@dil-rjcorp.com,981199900,,5,2025-08-14T00:00:00+05:30,2025-08-14T00:00:00+05:30,4
+5086,Ritvighya bansal,Shakun polymers ltd,ritvighya@shakunpolymer.com,9825025919,,5,2025-08-04T00:00:00+05:30,2025-08-04T00:00:00+05:30,4
+5088,G.s chahal,Meghamani organics ltd,gs.chahal@meghamani.com,9212717883,,5,2025-08-05T00:00:00+05:30,2025-08-05T00:00:00+05:30,4
+5131,Aditya biyani,Damodar industries Ltd,adityabiyani@damodagroup.com,9321840005,,5,2025-08-18T00:00:00+05:30,2025-08-18T00:00:00+05:30,4
+5087,Manan shah,Nirma ltd,manan@nirma.co.in,9825412858,,5,2025-08-05T00:00:00+05:30,2025-08-05T00:00:00+05:30,4
+5110,Chirag namani,Vimal agro products pvt Ltd,chirag@vimalagro.com,8780429146,,5,2025-08-13T00:00:00+05:30,2025-08-13T00:00:00+05:30,4
+5563,Sandeep Jain,All e technologies pvt Ltd,sjain@alletec.com,8800224747,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-30T00:00:00+05:30,2025-12-30T00:00:00+05:30,4
+5187,Bharat singla,Surya roshni ltd,bbsingal@surya.in,9810123337,,4,2025-08-30T00:00:00+05:30,2025-08-30T00:00:00+05:30,4
+5415,Amit sharma,Agro tech food ltd,amit.sharma@atfoods.com,9871290760,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5161,Anil vanjani,Jagatjit industries Ltd,anil.vanjani@jagatjit.com,9810085777,,4,2025-08-23T00:00:00+05:30,2025-08-23T00:00:00+05:30,6
+5511,Mukesh Gupta,BKT ltd,mukesh.gupta@bkt-tites.com,9022394919,,4,2025-11-05T00:00:00+05:30,2025-11-05T00:00:00+05:30,4
+5327,Sushant Ranjan,Marico ltd,sushant.ranjan@marico.com,9199733888,,4,2025-09-24T00:00:00+05:30,2025-09-24T00:00:00+05:30,4
+5373,Ankit Gupta,Marico ltd,ankit.gupta@marico.con,9871911566,,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5264,Ca kunj agrawal,Max healthcare,ca.agrawal@maxhealthcare.in,9717100508,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-12T00:00:00+05:30,2025-09-12T00:00:00+05:30,4
+5513,Madhvi vashisht,Sail ltd,madhvi.vashisht@sail.com,9968605311,,4,2025-11-05T00:00:00+05:30,2025-11-05T00:00:00+05:30,4
+5165,Sumit Gupta,Alstone manufacturing pvt Ltd,sumit@alstoneindia.com,9810422401,,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5594,Shashi Ranjan,danone india ltd.,shashi.ranjan@jnj.com,9923080980,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-21T00:00:00+05:30,2026-01-21T00:00:00+05:30,6
+5242,Sachin patel,Themis medicare ltd,sachin@themismedicare.co.,9820288254,,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5212,Kunal Shah,Suraj ltd,kunal@surajgroup.com,7927540721,,4,2025-09-04T00:00:00+05:30,2025-09-04T00:00:00+05:30,4
+5317,Arijit Chatterjee,Hindalco industries ltd,arijit.c@adityabirla.com,9111006152,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5577,Raju dharma,Steel exchange india ltd,info@wapssteel.com,9550124513,,4,2026-01-09T00:00:00+05:30,2026-01-09T00:00:00+05:30,4
+5301,Sudipta chakrabarti,Hindalco industries ltd,sudipta.chakrabarti@adityabirla.com,9038099665,,4,2025-09-22T00:00:00+05:30,2025-09-22T00:00:00+05:30,4
+5311,Saket jain,Piaggio vehicles pvt Ltd,saket.jain@piaggio.co.in,8878637771,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5547,Maulik sahaj,Sahaj solar ltd,mbhatt@sahajsolar.com,8905242525,,4,2025-11-25T00:00:00+05:30,2025-11-25T00:00:00+05:30,4
+5589,Pawan Lohiya,Diamond power infrastructure Ltd,pawan.lohiya@dicabs.com,9979170031,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-17T00:00:00+05:30,2026-01-17T00:00:00+05:30,8
+5339,Arjun Mukherjee,Cipla pharma ltd,arjun.mukherjee@cipla.com,7506235867,,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,4
+5231,Anupam agrawal,Lohia corp ltd,anupamagarwal@lohiagroup.com,9936294031,,4,2025-09-08T00:00:00+05:30,2025-09-08T00:00:00+05:30,4
+5277,Ajay Bhalothia,Fortune Rice ltd,ajay@fortunerice.net,7014606676,,4,2025-09-16T00:00:00+05:30,2025-09-16T00:00:00+05:30,4
+5532,Ram bhaforia,Yokohama india pvt Ltd,"r.bhadoria@,yokohoms-india.com",9810322573,,4,2025-11-12T00:00:00+05:30,2025-11-12T00:00:00+05:30,4
+5498,Shankar Raman,L&t ltd,shankar.raman@larsentubro.com,9820524050,,4,2025-10-30T00:00:00+05:30,2025-10-30T00:00:00+05:30,4
+5431,Amit Agarwal,Raymond ltd,amit.agarwal@raymond.in,9765904488,,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5344,Lucky singh,Reliance retail limited,lucky.singh@ril.com,8041286314,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,4
+5318,Ashok kinra,Jk tyre & industries ltd,akinra@jkmail.com,9810259987,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5259,Adwik mertia,Gretex industries limited,adwik@gretexindustries.com,9330730002,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,4
+5154,Subhabarts gosh,Air water india pvt Ltd,subharata@awipl.co.in,8017493234,,4,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,4
+5453,Jigar Mehta,RR kables ltd,jigarmehta@rrglobal.com,9879525600,,4,2025-10-11T00:00:00+05:30,2025-10-11T00:00:00+05:30,6
+5627,"Abhay agent, ye owner se baat karte hai.",BMR comercial pvt Ltd,choureyabhay21@gmail.com,6261762189,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-05-12T00:00:00+05:30,2026-05-15T00:00:00+05:30,6
+5235,Viral shah,Immacule  life sciences pvt Ltd,viral@immacule.in,9816062744,,4,2025-09-09T00:00:00+05:30,2025-09-09T00:00:00+05:30,4
+5135,Amit chamaria,asandas and sons private limited,amit.chamaria@hyfunfood.com,9014610414,,4,2025-08-19T00:00:00+05:30,2025-08-19T00:00:00+05:30,6
+5366,Vijay pareek,Maruti suzuki ltd,vijay.parrek@maruti.co.in,8094027047,,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5465,Sunali N Alhuwalia,Adidas marketing pvt Ltd,sunali.ahluwalia@adidas.com,9810734949,,4,2025-10-14T00:00:00+05:30,2025-10-14T00:00:00+05:30,4
+5455,Yatendra Singh,Jk tyres & ltd,yatendra@jkmail.com,8349994742,,4,2025-10-11T00:00:00+05:30,2025-10-11T00:00:00+05:30,4
+5284,Bhahim Desai,Bharat Parenteral ltd,bhahim@dplindia.in,9819991792,,4,2025-09-17T00:00:00+05:30,2025-09-17T00:00:00+05:30,4
+5159,Sharad Kumar Khaitan,Tega industries Ltd,sharad.khaitan@tegaindustries.com,9748759122,,4,2025-08-22T00:00:00+05:30,2025-08-22T00:00:00+05:30,6
+5471,Gaurav Aggarwal,Luxor writing instruments Pvt Ltd,gaurav.aggrawal@luxrooffice.com,9999491033,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5446,Vinay gupta,Arcelor mittal Nippon steel India ltd,vinay.gupta@amns.in,9953482791,,4,2025-10-10T00:00:00+05:30,2025-10-10T00:00:00+05:30,4
+5237,Vyom pandya,Nido machineries ltd,vyom.p@nidoworld.com,9870546661,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5255,Sudhir goyal,Amber enterprises India Pvt Ltd,sudhirgoyal@ambergroupindia.com,9811170834,,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,4
+5389,Srikanth vetcha,Nuziveedu seeds ltd,srikanth.v@nuziveeduseed.com,8048372473,,4,2025-10-03T00:00:00+05:30,2025-10-03T00:00:00+05:30,4
+5304,Gaurav Bhargava,Amazon India ltd,bgaura@amazon.com,6584064535,,4,2025-09-22T00:00:00+05:30,2025-09-22T00:00:00+05:30,4
+5402,Pramod Dangaich,Croma infiniti Retail ltd,pramod.dangaich@croma.com,9920302912,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5192,Balram Agarwal,Ismt ltd,balram.agarwal@ismt.co.in,9763707205,,4,2025-08-30T00:00:00+05:30,2025-08-30T00:00:00+05:30,4
+5466,Deepak Goyal,Apl Appolo ltd,deepakgoyal@aplapollo.com,9999850065,,4,2025-10-14T00:00:00+05:30,2025-10-14T00:00:00+05:30,4
+5357,Vivek subramanian,Parle agro pvt Ltd,vivek.subramaniam@parleagro.com,9004419940,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5445,Vishal shah,Rpg life sciences ltd,vishal.shah@rpgls.com,1433154384,,4,2025-10-10T00:00:00+05:30,2025-10-10T00:00:00+05:30,4
+5462,Sarfaraz Ahmad,vishnu prakash r punglia ltd,info@rpvp.co.in,9587024461,,4,2025-10-13T00:00:00+05:30,2025-10-13T00:00:00+05:30,4
+5374,Ramesh Talavia,Dharmraj corp guard ltd,"ramesh.@,dharmrajcorp.com",9909976991,,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5282,Manish Bhatia,GHCL Ltd,manishbhatia@ghcl.co.in,8588813767,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-16T00:00:00+05:30,2025-09-16T00:00:00+05:30,4
+5515,Kalpana Naik,Hpcl ltd,kalpana.naik@hindustanpetroleum.com,9920812317,,4,2025-11-06T00:00:00+05:30,2025-11-06T00:00:00+05:30,4
+5506,Bibhas kumar,HUL ltd,bibhas.kumar@unliver.com,8657808030,,4,2025-11-01T00:00:00+05:30,2025-11-01T00:00:00+05:30,4
+5182,Mhod Saleem,Rustam Foods pvt Ltd,mohd.saleem@rustamfoods.com,8052221111,,4,2025-08-29T00:00:00+05:30,2025-08-29T00:00:00+05:30,4
+5181,Kuldeep sharma,Eternal ltd,kuldeep@zomato.com,8754485689,,4,2025-08-28T00:00:00+05:30,2025-08-28T00:00:00+05:30,4
+5552,Devesh gupta,Munjal showa,p.gupta@munjalshowa.net,9810734975,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-10T00:00:00+05:30,2025-12-10T00:00:00+05:30,4
+5331,Rajiv Gupta,RCI industries & technologies Ltd,rajivgupta@rciind.com,9810274765,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-24T00:00:00+05:30,2025-09-24T00:00:00+05:30,4
+5377,Pankaj kumar,BPCL,pankajkumar001@bharatpetroleum.in,9930012874,,4,2025-09-30T00:00:00+05:30,2025-09-30T00:00:00+05:30,4
+5358,Vishal tiwari,Balaji wafers pvt Ltd,vishal.tiwari@balajiwafers.com,9716002003,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5356,Sunil nair,Parle agro pvt Ltd,sunil.nair@parleagro.com,9820226835,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5531,PepsiCo holding India Pvt Ltd,Bhel Ltd,priya.gangulie@pepsico.com,9820483400,,4,2025-11-12T00:00:00+05:30,2025-11-12T00:00:00+05:30,4
+5221,Kavita gandhi,Banswara syntex ltd,kavitagandhi@banswarasyntex.com,9324803615,,4,2025-09-05T00:00:00+05:30,2025-09-05T00:00:00+05:30,6
+5428,Bijay Agarwal,Alok industries ltd,bijay.agarwal@alokind.com,2261787000,,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5401,Sukhdev jaluka,Cipla health ltd,sukhdev.jaluka@cipla.com,9833157697,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5143,Beardsell ltd,Beardsell ltd,amrith@beardsell.co.in,7667013300,,4,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,4
+5293,Neha jhun jhunwala,Sarla performance fibers ltd,neha@sarlafibers.com,9820020856,,4,2025-09-19T00:00:00+05:30,2025-09-19T00:00:00+05:30,4
+5475,Hai shukla,Vayan technologies ltd,jaishankars@vayamtech.com,8368321849,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5254,Bharat jain,Euro panel products ltd,accounts@eurobondacp.com,9022872393,,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,6
+5414,Bharat chohan,Hafele india pvt Ltd,bharatchouhan@hafeleindia.com,9313169551,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,6
+5566,Srinivas avasarala,Shirdi sai electricals Ltd,srinivas.avasarala@ssel.in,9398373000,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-02T00:00:00+05:30,2026-01-02T00:00:00+05:30,4
+5152,Santosh agrawal,Tarsons product ltd,sagarwal@tarson.com,9836064973,,4,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,4
+5551,Shashikant  ameria,Ginza industries Ltd,shashikant.ameria@ginzalimited.com,8171112668,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-10T00:00:00+05:30,2025-12-10T00:00:00+05:30,6
+5481,Varun sharma,PepsiCo holding India Pvt Ltd,varun.sharma@pepsico.co.,9958987542,,4,2025-10-25T00:00:00+05:30,2025-10-25T00:00:00+05:30,4
+5463,Vikram marwaha,DRRK foods pvt Ltd,vmarwaha@crownrice.com,9876220791,,4,2025-10-14T00:00:00+05:30,2025-10-14T00:00:00+05:30,4
+5388,Raj Kumar khetan,Ultratech cement ltd,raj.khetan@adityabirla.com,9300128560,,4,2025-10-01T00:00:00+05:30,2025-10-01T00:00:00+05:30,4
+5472,Raj pin jani,Rasna pvt Ltd,raj@rasnainternational.com,9560055677,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5173,Navneet Kumar,Dabar india ltd,naveen.kumar@dabur.com,9760282549,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5300,Ajay Goel,Vedanta ltd,ajay.goel@vedanta.co.in,9667318886,,4,2025-09-22T00:00:00+05:30,2025-09-22T00:00:00+05:30,4
+5504,Prateek gupta,PepsiCo holding India Pvt Ltd,prateek.gupta@pepsico.com,8874822223,,4,2025-10-31T00:00:00+05:30,2025-10-31T00:00:00+05:30,4
+5354,Amit jain,Gharda chemicals ltd,amit.jain@gharda.com,9819661604,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5500,Madhusudan mundhra,Coal india ltd,mmundhara@coalindia.in,9051423863,,4,2025-10-31T00:00:00+05:30,2025-10-31T00:00:00+05:30,4
+5383,Vikas sharma,Zepto,vikas@zeptonow.com,9717922581,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-10-01T00:00:00+05:30,2025-10-01T00:00:00+05:30,6
+5562,Rakesh Mehrotra,Krbl Ltd,mehrotra@krblindia.com,9873687721,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-29T00:00:00+05:30,2025-12-29T00:00:00+05:30,4
+5367,Dipesh acharya,Marico ltd,dipesh.acharya@marico.com,9819538649,,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5299,Mukesh Shah,Allana consumer products ltd,mshah@allana.com,9223398233,,4,2025-09-20T00:00:00+05:30,2025-09-20T00:00:00+05:30,4
+5226,Ali kasusar siddiqui,Zomato ltd,ali@zomato.com,9971803355,,4,2025-09-05T00:00:00+05:30,2025-09-05T00:00:00+05:30,4
+5186,Vijay chopra,Parle agro pvt Ltd,vijay.chopra@parleagro.com,9820227031,,4,2025-08-29T00:00:00+05:30,2025-08-29T00:00:00+05:30,4
+5229,Sushil batra,Relaxo footwears ltd,sushil.batra@relaxcofootwear.con,9810458568,,4,2025-09-08T00:00:00+05:30,2025-09-08T00:00:00+05:30,4
+5375,Sunil poojari,Cipla ltd,sunil.poojari@cipla.com,9720203584,,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5163,Sourabh dasgupta,Emami agrotech ltd,saurabh.dasgupta@emamiagrotech.com,9358666563,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-08-23T00:00:00+05:30,2025-08-23T00:00:00+05:30,4
+5398,Nishant Dalal,Zuari industries ltd,nishant.dalal@adventz.com,9911737733,,4,2025-10-04T00:00:00+05:30,2025-10-04T00:00:00+05:30,4
+5382,Ashish jain,Krlb ltd,ashishj@bhsrti.in,9910012450,,4,2025-09-30T00:00:00+05:30,2025-09-30T00:00:00+05:30,4
+5341,Prem T,Tata consumer products ltd,prem.thakur@tataconsumer.com,9717299008,,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,4
+5584,hardik vasa,savani Financial limited,hardikvasa99@gmail.com,9819830079,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-14T00:00:00+05:30,2026-01-14T00:00:00+05:30,8
+5343,Jyoti saraph,Abbott,jyoti.saraph@abbott.com,9930004695,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,4
+5426,Manish shah,HUL ltd,mansish.shah@uniliver.com,7738375795,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5410,Bhargavi yerneni,Amara Raja batteries ltd,yb@amararaja.com,9100593006,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5440,Nitin Bansal,Vardhman textiles ltd,nitin@vardhmanthreads.in,9310715420,,4,2025-10-09T00:00:00+05:30,2025-10-09T00:00:00+05:30,4
+5392,Vishal bakshi,Maruti suzuki ltd,vishal.bakshi@mariti.co.in,9899799924,,4,2025-10-03T00:00:00+05:30,2025-10-03T00:00:00+05:30,4
+5359,Nirbhay mehta,Precision wire india ltd,nirbhay@pwil.net,9820367633,,4,2025-09-27T00:00:00+05:30,2025-09-27T00:00:00+05:30,4
+5211,Atul Kumar jain,Ikio lighting ltd,atul.jain@injb.com,9999035040,,4,2025-09-03T00:00:00+05:30,2025-09-03T00:00:00+05:30,4
+5558,Vivek Chauhan,Preet tractors & combines,vivekkumar@preet.co,9812867161,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-16T00:00:00+05:30,2025-12-16T00:00:00+05:30,6
+5390,Srinivas kamoji,Nova agritech ltd,srinivas.gunupudi.@novaagri.in,9949410090,,4,2025-10-03T00:00:00+05:30,2025-10-03T00:00:00+05:30,4
+5561,Gaurav kalra,Panasonic india ltd,gaurav.kalra@in.panasonic.com,9205994560,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-29T00:00:00+05:30,2025-12-29T00:00:00+05:30,6
+5175,Naveen sorot,Strips wheels ltd,naveen.sorot@swlindia.com,8437707555,,4,2025-08-26T00:00:00+05:30,2025-08-26T00:00:00+05:30,4
+5469,Sandeep divekar,Inox air products ltd,sandeep.divekar@inoxap.com,9819116548,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5400,Ashish adukia,Cipla pharma ltd,adukia@cipla.com,9820055425,,4,2025-10-06T00:00:00+05:30,2025-10-06T00:00:00+05:30,4
+5529,Pranshu sahini,PepsiCo holding India Pvt Ltd,pranshu.sahini@pepsico.com,9823258742,,4,2025-11-11T00:00:00+05:30,2025-11-11T00:00:00+05:30,4
+5438,Prasad thakur,Raymond ltd,prasad.thakur@raymond.in,9821643043,,4,2025-10-09T00:00:00+05:30,2025-10-09T00:00:00+05:30,4
+5599,Krishna singh,Tega industries Ltd,krishna.singh@tegaindustries.com,9051466627,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-27T00:00:00+05:30,2026-01-27T00:00:00+05:30,6
+5265,Abhishek Sharma,Global health ltd,abhishek.sharma@medanta.org,8800309953,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-12T00:00:00+05:30,2025-09-12T00:00:00+05:30,6
+5371,Hemlata chaudhary,Colgate Palmolive india ltd,hemlata_chaudhary@colpal.com,7767801274,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5488,Manish marathe,Air products ltd,manish.marathe@inoxap.com,9765409978,,4,2025-10-28T00:00:00+05:30,2025-10-28T00:00:00+05:30,4
+5420,Ruchi Agarwal,Lupin pharma ltd,ruchiagrwal@lupin.com,9619130649,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5538,Sachin Arti,Toyota Kirloskar motor pvt Ltd,s.arti@toyotabharat.com,9740900865,,4,2025-11-13T00:00:00+05:30,2025-11-13T00:00:00+05:30,4
+5174,Ankur patwa,Sun mark stainless steel pvt Ltd,ankur@sunmarkstainless.com,7940021220,,4,2025-08-26T00:00:00+05:30,2025-08-26T00:00:00+05:30,4
+5409,Amitava Mukherjee,NMDC ltd,amitavamukherjee@nmdc.co.in,4023538713,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5147,Raman malhotra,NRB bearings ltd,r.malhotra@nrbbearings.com,9930114182,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,4
+5195,Aditya manaktala,Kumar metal industries pvt Ltd,am@kumarmetal.com,9415306624,,4,2025-09-01T00:00:00+05:30,2025-09-01T00:00:00+05:30,4
+5236,Ghanshyam chechani,Batliboi ltd,ghanshyam.chechani@batliboi.com,8108017330,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-09T00:00:00+05:30,2025-09-09T00:00:00+05:30,6
+5548,Gauraw Singh,Gujrat fluoro chemicals ltd,gaurawsingh.82@gamil.com,9871540069,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-06T00:00:00+05:30,2025-12-06T00:00:00+05:30,4
+5294,Pranal Modani,Sangam India ltd,pmodani@sangamgroup.com,9001204009,,4,2025-09-19T00:00:00+05:30,2025-09-19T00:00:00+05:30,4
+5406,Bhavin jethva,Neelam linens & garments india pvt Ltd,bhavin@neelamgarments.com,7021347012,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5219,Dk Sharma,Shri paraamanand steel industries pvt Ltd,dksharma@sps.in,9818933431,,4,2025-09-04T00:00:00+05:30,2025-09-04T00:00:00+05:30,4
+5228,Siddharth Chowdhary,Riddhi Siddhi Gluco biols ltd,siddharth@riddhisidhhi.co.in,2717298600,,4,2025-09-08T00:00:00+05:30,2025-09-08T00:00:00+05:30,4
+5349,Rahul shukla,Lupin pharma ltd,rahulshukla@lupin.com,9873716002,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5487,Saurabh jain,Inox aur products ltd,saurabhjain@inoxap.com,9999596550,,4,2025-10-28T00:00:00+05:30,2025-10-28T00:00:00+05:30,4
+5507,Ankit verma,Apl Appolo tubes ltd,ankitverma@aplapollo.com,8291925576,,4,2025-11-01T00:00:00+05:30,2025-11-01T00:00:00+05:30,4
+5379,Anshul marwah,Zomato ltd,anshul.marwah@zomato.com,7838300766,,4,2025-09-30T00:00:00+05:30,2025-09-30T00:00:00+05:30,4
+5164,Ajay bedmutha,Bedmutha industries Ltd,ajay.vedmutha@bedmutha.com,9370022202,,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5413,Rajendra pareek,Hindalco industries ltd,rajendra.pareek@adityabirla.com,9702030120,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5461,Gopal mishra,Fabindia ltd,gopal.mishra@fabindia.com,9703250543,,4,2025-10-13T00:00:00+05:30,2025-10-13T00:00:00+05:30,4
+5497,P Ramakrishna,L&T ltd,p.ramakrishnan@larsenturbo.com,9820321084,,4,2025-10-29T00:00:00+05:30,2025-10-29T00:00:00+05:30,4
+5555,Gopalakrishnan k,P&G,gopalakrishnan.k@pg.com,9884428774,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-12-13T00:00:00+05:30,2025-12-13T00:00:00+05:30,6
+5302,Abhishek gupta,Myntra pvt Ltd,vt.35591@myntra.com,8130834433,,4,2025-09-22T00:00:00+05:30,2025-09-22T00:00:00+05:30,4
+5238,Desai jignesh,Senores pharmaceuticals ltd,jigneshdesai@senorespharma.com,9825431450,,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,6
+5134,Chander,Skipperseil ltd,ca.chander@skipperseil.com,9560956889,,4,2025-08-19T00:00:00+05:30,2025-08-19T00:00:00+05:30,4
+5502,Mahesh Nagda,Avenue supermart ltd,mahesh.nagda@dmartindia.com,9833001110,,4,2025-10-31T00:00:00+05:30,2025-10-31T00:00:00+05:30,4
+5429,Prashant charlu,Grasim industries Ltd,prashant.charlu@adityabirla.com,9920812954,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5306,Yash mehta,Rajputana stainless steel ltd,yash.mehta@rajputanastainless.com,8160443509,,4,2025-09-22T00:00:00+05:30,2025-09-22T00:00:00+05:30,4
+5350,9769211967,Cipla pharma ltd,siddharth.agarwal@cipla.com,9769211967,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5205,Gaurav saraswat,shree ceramic fibers pvt. ltd,g.saraswat@shreeceramic.com,9819579178,,4,2025-09-02T00:00:00+05:30,2025-09-02T00:00:00+05:30,4
+5308,Rupinder kaur,Whirlpool electronics limited,rupinder.kaur@whirpool.com,8820509702,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5470,Vikas kumar,Shree Digvijay cement ltd,vikas.kumar@digvijaycement.com,9099037887,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5424,Ashish goyal,BPCL ltd,goyalashish@bharatpetrolium.com,9911503075,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5250,Aditya patel,Dinesh mills limited,aditya@dineshmills.com,9909950580,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,4
+5202,Sanjay Mittal,Surya Roshni ltd,smitta@bgh.surya.in,9582224169,,4,2025-09-01T00:00:00+05:30,2025-09-01T00:00:00+05:30,4
+5542,anil sachdeva,Parijat industries india pvt Ltd,anil.s@psrijat.in,9873707481,,4,2025-11-14T00:00:00+05:30,2025-11-14T00:00:00+05:30,4
+5394,Kamesh jindal,Chambal fertilisers & chemicals ltd,kk.jindal@chambal.in,9950996071,,4,2025-10-04T00:00:00+05:30,2025-10-04T00:00:00+05:30,4
+5249,Ayush haldia,St telemedia global data centre india,ayush.haldia@sttelemediagdc.com,9223348128,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5459,Vikas goyal,Sambhav steels & tubes ltd,vikasgoyal@sambhav.com,8076333682,,4,2025-10-13T00:00:00+05:30,2025-10-13T00:00:00+05:30,4
+5598,Ashish bajoria,JSW cement Ltd,ashish.bajoria@jsw.in,9937093281,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-23T00:00:00+05:30,2026-01-23T00:00:00+05:30,6
+5362,Hitesh patel,Dharmraj corp chem ltd,hitesh.patel@dharmrajcorp.chem,9978929004,,4,2025-09-27T00:00:00+05:30,2025-09-27T00:00:00+05:30,4
+5309,Saurabh parikh,AWL agri business ltd,saurabh.parikh@awl.in,9727705092,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5576,Govardhan dhoot,Mangalam drugs & organics ltd,gmd@mangalamdrugs.com,9820089035,,4,2026-01-09T00:00:00+05:30,2026-01-09T00:00:00+05:30,4
+5425,Dhiraj umredkar,ONGC ltd,umredkar_dhiraj@ongc.com,1123310156,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5393,Shree puskar,Shree puskar chemicals & fertilisers ltd,punit@shreepushkar.com,9324524272,,4,2025-10-04T00:00:00+05:30,2025-10-04T00:00:00+05:30,4
+5252,Gaurav Malhotra,Maruti suzuki ltd,gaurav.malhotra@maruti.co.in,9820018523,,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,4
+5620,Ankush jain,Dabur India Ltd,ankushkjain15@yahoo.com,9910345422,,4,2026-03-13T00:00:00+05:30,2026-04-13T00:00:00+05:30,5
+5535,Praveen upadhyay,Parle biscuit pvt Ltd,praveen.upadhayaye@parle.biz,9920792244,,4,2025-11-13T00:00:00+05:30,2025-11-13T00:00:00+05:30,4
+5312,Gaurav Joshi,Avenue supermart ltd,gaurav.doshi@dmartindia.com,,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5519,Saurabh nemani,Finolex pipes ltd,spn@finolexind.com,8433967401,,4,2025-11-07T00:00:00+05:30,2025-11-07T00:00:00+05:30,4
+5493,Vishal domadia,Dharmraj corp guard ltd,"vishal@,dharmajcorp.com",7567326200,,4,2025-10-28T00:00:00+05:30,2025-10-28T00:00:00+05:30,4
+5523,Deepak Chaudhary,Goodyear tire & rubber company ltd,deepak_chaudhary@goodyear.com,7738242232,,4,2025-11-08T00:00:00+05:30,2025-11-08T00:00:00+05:30,4
+5534,Manish verma,Goodyear india ltd,manish_verma@goodyear.com,9871426942,,4,2025-11-12T00:00:00+05:30,2025-11-12T00:00:00+05:30,4
+5150,Pankaj jha,Vedanta ltd,p.jha@vedantalimited.com,7738181780,,4,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,4
+5489,Amit chugh,HPM Chemicals & Fertilizers ltd,amit.chug@hpmindia.com,9873914755,,4,2025-10-28T00:00:00+05:30,2025-10-28T00:00:00+05:30,4
+5138,Sanjeev Kumar,Madhu jayanti international pvt Ltd,sanjeev.natha@jaytea.com,9831174257,,4,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,6
+5404,Gautam kalra,Madurai industrial textile ltd,gautam.kalra@maduratex.com,9820700070,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5583,Ram babu,Lakshmi farmachem pvt ltd,ram@lakshmifarmachem.com,9550886476,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-14T00:00:00+05:30,2026-01-14T00:00:00+05:30,4
+5399,Amit Dhoot,HUL ltd,amit.dhoote@unilever.com,7738389184,,4,2025-10-06T00:00:00+05:30,2025-10-06T00:00:00+05:30,4
+5485,Abhishek dhanuka,Dhanuka agritech ltd,abhishekdhanuka@dhanuka.com,9848030122,,4,2025-10-27T00:00:00+05:30,2025-10-27T00:00:00+05:30,4
+5325,Manish Bajoria,Bigbasket commerce pvt Ltd,manish.bajaria@bigbasket.com,8861006053,,4,2025-09-24T00:00:00+05:30,2025-09-24T00:00:00+05:30,4
+5141,Nadia chauhan,Parle agro pvt Ltd,nadia.chauhan@parleagro.com,9833638775,,4,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,4
+5296,9814748972,Ab cotspin india ltd,info@abcotspin.in,9814748972,,4,2025-09-19T00:00:00+05:30,2025-09-19T00:00:00+05:30,4
+5473,Harish khanduri,Sandesh ltd,harish.khanuri@sandesh.com,9820566408,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5536,Kiran seghal,ITC Ltd,karan.seghal@itc.in,9997798000,,4,2025-11-13T00:00:00+05:30,2025-11-13T00:00:00+05:30,4
+5283,Ankur Kothari,Kusumgar ltd,ankur.kothari@kusumgar.com,8980005248,,4,2025-09-17T00:00:00+05:30,2025-09-17T00:00:00+05:30,4
+5183,Sameer chopra,Noise tech company,sameer.chpra@nexbase.com,9899985226,,4,2025-08-29T00:00:00+05:30,2025-08-29T00:00:00+05:30,4
+5380,Sachin gupta,Lt foods ltd,sachin.gupta@tgroup.in,9818200727,,4,2025-09-30T00:00:00+05:30,2025-09-30T00:00:00+05:30,4
+5227,Rohit wahal,Zomato ltd,rohit.wahal@zomato.com,9999949237,,4,2025-09-08T00:00:00+05:30,2025-09-08T00:00:00+05:30,4
+5338,Deepak mutreja,Suzuki motorcycle india pvt Ltd,mutreja_deepak@suzukimotorcycle.in,9821898927,,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,4
+5260,Manoj Kumar shah,Baheti recycling industries Ltd,manoj@wahetiindustries.com,9898098168,,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,4
+5340,Saurabh pal,Mankind Pharma ltd,saurabh.pal@mankindpharma.com,9051764981,,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,4
+5447,Bhavesh modi,Arcelor mittal Nippon steel India ltd,bhavesh.modi@amns.in,9879101765,,4,2025-10-10T00:00:00+05:30,2025-10-10T00:00:00+05:30,4
+5243,Fredun medhora,Fredun pharmaceuticals ltd,fredun.medhora@fredenpharma.com,9321211498,,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5623,Neeraj pal,Jagsonpal pharmaceuticals ltd,neeraj.pal@jagsonpal.com,9816662201,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-03-23T00:00:00+05:30,2026-04-29T00:00:00+05:30,5
+5522,Akshay antony,Nestle India Ltd,akshay.antony@in.nestle.com,9966543549,,4,2025-11-08T00:00:00+05:30,2025-11-08T00:00:00+05:30,4
+5234,Ujjwal kothari,Kothari agritech pvt Ltd,ujwal@kotharigroupindia.com,9372070140,,4,2025-09-09T00:00:00+05:30,2025-09-09T00:00:00+05:30,6
+5557,Sudhir barik,Cremica industries ltd,sudhir@cremica.com,9999301157,,4,2025-12-16T00:00:00+05:30,2025-12-16T00:00:00+05:30,4
+5351,9818891101,Dabur India Ltd,rehan.hasan@dabur.com,9818891101,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5545,Muhammed mukhtar,Olectra green tech ltd,mukhtar.m@olectra.com,9008939711,,4,2025-11-15T00:00:00+05:30,2025-11-15T00:00:00+05:30,4
+5263,Krishnan akhileshwaran,Apollo hospital,krishnan.a@apollohospitals.com,9840055664,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-12T00:00:00+05:30,2025-09-12T00:00:00+05:30,4
+5261,Shard singhal,Philips,sharad.singla@philips.com,8527794219,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,8
+5490,Mukesh Choudhary,Usha martin ltd,mukesh_choudhary@usha.com,9058380036,,4,2025-10-28T00:00:00+05:30,2025-10-28T00:00:00+05:30,4
+5403,Pragnesh shah,Vijay sales India Pvt Ltd,pragneshshah@vijaysales.com,9820210765,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5539,Atul parulekar,Haier Aplilance india pvt Ltd,atul@haierindia.com,9820079751,,4,2025-11-14T00:00:00+05:30,2025-11-14T00:00:00+05:30,4
+5369,Nikhil sharma,Upl ltd,nikhil.sharma@upl.com,9619617675,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5597,Manoj agrawal,Star cement Ltd,magarwal@starcement.co.in,9903309079,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-23T00:00:00+05:30,2026-01-23T00:00:00+05:30,4
+5454,Rishab.jain@maruti.co.in,Maruti Suzuki ltd,rishab.jain@maruti.co.in,9811707639,,4,2025-10-11T00:00:00+05:30,2025-10-11T00:00:00+05:30,6
+5501,Niraj maheshwari,Ultratech cement ltd,niraj.maheshwari@adityabirla.com,9820754642,,4,2025-10-31T00:00:00+05:30,2025-10-31T00:00:00+05:30,4
+5216,Anuj Agarwal,Bhagawati steel cast pvt Ltd,anujagarwal@bhagawatisteel.com,9769571689,,4,2025-09-04T00:00:00+05:30,2025-09-04T00:00:00+05:30,4
+5160,Pankaj rote,Spectrum electricals industries Ltd,pankaj.rote@spectrum-india.com,7588687339,,4,2025-08-23T00:00:00+05:30,2025-08-23T00:00:00+05:30,6
+5199,Viral bhakhada,Weikfield products co ltd,"veeral.bakhada@,weikfield.com",9650752127,,4,2025-09-01T00:00:00+05:30,2025-09-01T00:00:00+05:30,4
+5444,Pankaj jain,Jk tyres & ltd,pankaj.jain@jkman.com,7874824672,,4,2025-10-10T00:00:00+05:30,2025-10-10T00:00:00+05:30,4
+5217,Manish Mundra,JCB India Ltd,manish.mundhra@jcb.com,9910333248,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-04T00:00:00+05:30,2025-09-04T00:00:00+05:30,4
+5520,Biplab mohanty,HLL Lifecare ltd,biplabmohantry@lifecarehll.com,9999369634,,4,2025-11-07T00:00:00+05:30,2025-11-07T00:00:00+05:30,4
+5499,NBCC ltd,,hirishikesh.kumar@nbccindia.co.,8527554769,,4,2025-10-30T00:00:00+05:30,2025-10-30T00:00:00+05:30,4
+5244,Anish gantara,Navin flouring international ltd,anish.gantara@nfil.com,9820094513,,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5421,Prasad prabhu,Sun pharma ltd,prasad.prabhu@sunpharma.com,981918996,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5579,Krishna Kumar goswamy,Sri kannapiran mills ltd,gkk@kannapiran.co.in,9360555442,,4,2026-01-10T00:00:00+05:30,2026-01-10T00:00:00+05:30,4
+5509,Neha Sharma,Hul ltd,neha.sharma@uniliver.com,9717810473,,4,2025-11-03T00:00:00+05:30,2025-11-03T00:00:00+05:30,4
+5544,Swapnesh Maru,Tyota Kirloskar motor pvt Ltd,srmaru@toyota-kirloskar.co.in,9740900825,,4,2025-11-15T00:00:00+05:30,2025-11-15T00:00:00+05:30,4
+5314,Dinesh Thapar,Bajaj auto ltd,"dthapar@,bajajauto.ci.in",9819175000,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5495,Ravichandran mocherla,Voltas Ltd,ravichandramoherla@voltas.com,9167555133,,4,2025-10-29T00:00:00+05:30,2025-10-29T00:00:00+05:30,4
+5601,Biswajit parida,Amrit cement Ltd,biswajit.parida@amrik.co.in,8585014468,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-28T00:00:00+05:30,2026-01-28T00:00:00+05:30,6
+5290,Omkar nath,Maruti suzuki ltd,omkar.nath@maruti.co.in,8586971149,,4,2025-09-19T00:00:00+05:30,2025-09-19T00:00:00+05:30,4
+5310,Balaji mani,Amazon India retail Pvt Ltd,balajima@amazon.com,7618776369,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5315,Deepak Gulati,Vedanta ltd,deepak.gulati@vedanta.co.in,9650111217,,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5514,Vijay kumar,Eicher motors Ltd,kumar.v@royalfield.com,7042176622,,4,2025-11-06T00:00:00+05:30,2025-11-06T00:00:00+05:30,4
+5347,Sandip khetawat,Zepto,sandip@zeptonow.com,9742388855,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-25T00:00:00+05:30,2025-09-25T00:00:00+05:30,6
+5295,99250 15102,Vineet ployfab pvt Ltd,sarvesh@vineetpolyfab.com,9825113561,,4,2025-09-19T00:00:00+05:30,2025-09-19T00:00:00+05:30,4
+5527,Aditya Singh,PepsiCo holding India Pvt Ltd,aditya.sinha@pepsico.com,9999028378,,4,2025-11-10T00:00:00+05:30,2025-11-10T00:00:00+05:30,4
+5298,Shravan kumar Goyal,Bajrang power And ispat ltd,skgoyal@goelgroup.co.in,9826422320,,4,2025-09-20T00:00:00+05:30,2025-09-20T00:00:00+05:30,4
+5432,Rajeev thapar,Vardhman textiles ltd,rajeevthapar@vardhman.com,8146625201,,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5474,Saumya knoria,Kanoria chemicals & industries ltd,saumya.kanoria@kanoriachem.com,9873688239,,4,2025-10-15T00:00:00+05:30,2025-10-15T00:00:00+05:30,4
+5166,Jayant jain,G.R Metalloys pvt Ltd,jayant@grmetal.in,7940801211,,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5510,Ankush bajaj,Avenue supermart ltd,ankush.bajaj@dmartindia.com,9867148581,,4,2025-11-03T00:00:00+05:30,2025-11-03T00:00:00+05:30,4
+5540,Sachin Mishra,Kia motors india pvt Ltd,sachin.mishra@inhcs.com,7976231578,,4,2025-11-14T00:00:00+05:30,2025-11-14T00:00:00+05:30,4
+5460,Amit Khotari,H&M,amit.kothari@hm.com,9560555396,,4,2025-10-13T00:00:00+05:30,2025-10-13T00:00:00+05:30,4
+5248,Bhupinder Malik,Isgec heavy engineering ltd,bhupinder@isgec.com,9810291345,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5313,Ankit Agarwal,Flipkart,agarwal.ankit@flipkart.com,9831121738,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-23T00:00:00+05:30,2025-09-23T00:00:00+05:30,4
+5422,Archema chemicals india pvt Ltd,,shrikant.rao@arkema.com,9967861263,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5326,Gopal Khotari,Tata  consumer products ltd,gopal.kothari@tataconsumer.com,7506027743,,4,2025-09-24T00:00:00+05:30,2025-09-24T00:00:00+05:30,4
+5286,Honey Agrawal,Sarala foods pvt Ltd,cahoney@saralafoods.com,9032217582,,4,2025-09-17T00:00:00+05:30,2025-09-17T00:00:00+05:30,4
+5521,Dinesh Pandey,Bridgestone india pvt Ltd,dinesh-pandey@bridgestone.co.in,9552524345,,4,2025-11-08T00:00:00+05:30,2025-11-08T00:00:00+05:30,4
+5530,Ramakant,Bhel ltd,ramakanth@bhel.in,8835195811,,4,2025-11-12T00:00:00+05:30,2025-11-12T00:00:00+05:30,4
+5602,Neha yadav,Simran feeds ltd,neha.yadav@simranfeeds.com,8889848887,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-28T00:00:00+05:30,2026-01-28T00:00:00+05:30,4
+5206,Amitabh Bhargav,Kalyani steel ltd,amitabh.bhargava@dfpcl.com,9004669583,,4,2025-09-02T00:00:00+05:30,2025-09-02T00:00:00+05:30,4
+5384,Sumit Agarwal,Spencer retail limited,sumit.agarwal@rpsg.in,7042001079,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-10-01T00:00:00+05:30,2025-10-01T00:00:00+05:30,6
+5203,Chirag shah,Yasho industries Ltd,chirag@yashoindustries.com,9867788563,,4,2025-09-02T00:00:00+05:30,2025-09-02T00:00:00+05:30,4
+5170,Anuoop garg,Gravity bathway fittings,anoop@gravityhome.in,9911993112,,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5391,Mohmmad baqer,Shivalik rasayan ltd,baqer.m@shivalikrasayan.com,9999601610,,4,2025-10-03T00:00:00+05:30,2025-10-03T00:00:00+05:30,4
+5433,Sakthivel e.k,KPR mill ltd,sakhivel@kprmill.com,9842921166,,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5370,Niranjan mohnot,Reliance retail limited,niranjan.mohnot@ril.com,7710045441,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5605,Ramkumar sunder,Pepe jeans india ltd,ramkumars@pepejeansindia.com,8600260541,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-02-05T00:00:00+05:30,2026-02-05T00:00:00+05:30,4
+5230,Krishnakumar srinivasan,Shriram pistons & rings ltd,krishnakumar@shrirampistons.com,9765401310,,4,2025-09-08T00:00:00+05:30,2025-09-08T00:00:00+05:30,4
+5363,Ketan sharma,Balaji wafers pvt Ltd,cfo@balajiwafers.com,9824031004,,4,2025-09-27T00:00:00+05:30,2025-09-27T00:00:00+05:30,6
+5434,Vikas Malhotra,Siyaram silk mill ltd,vikas.malhotra@siyaram.com,9322599937,,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5204,Ashwin trinidad,Sekhmet pharmaventures pvt Ltd,ashwin.trinidad@sekhmetpharma.com,9821637589,,4,2025-09-02T00:00:00+05:30,2025-09-02T00:00:00+05:30,4
+5405,Rajiv lakhotia,Shree karni fabcom ltd,rajiv@skfindia.com,9831444184,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5503,Ramkanta baheti,Avenue supermart ltd,ramkant@dmartindia.com,9821042385,,4,2025-10-31T00:00:00+05:30,2025-10-31T00:00:00+05:30,4
+5541,Aditya Sharma,Kia motors india pvt Ltd,aditya.sharma@kia.com,9990000358,,4,2025-11-14T00:00:00+05:30,2025-11-14T00:00:00+05:30,4
+5533,Sagar vijan,Ceat ltd,saagar.vijan@ceat.com,9892699228,,4,2025-11-12T00:00:00+05:30,2025-11-12T00:00:00+05:30,4
+5253,Vijay lathi,Arfin India ltd,vijay.lathi@arfin.co.in,9974198926,,4,2025-09-11T00:00:00+05:30,2025-09-11T00:00:00+05:30,4
+5581,Abhijit kale,Anshgenex industry Inc,abhijit@anshgenex.com,9820611471,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-13T00:00:00+05:30,2026-01-13T00:00:00+05:30,4
+5537,Mrityunjay Kumar,ITC Ltd,mrityunjay.kumar@itcportal.com,1128750565,,4,2025-11-13T00:00:00+05:30,2025-11-13T00:00:00+05:30,4
+5528,Yokohama india pvt Ltd,,ritesh.bhansali@yokohama.com,9818599095,,4,2025-11-10T00:00:00+05:30,2025-11-10T00:00:00+05:30,4
+5167,Kartik shah,Shah foils ltd,krshah@shahfoils.com,9376168794,,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5378,Suranjit mishra,Tata power ltd,suranjit.mishra@tatapower--ddl.com,9810147924,,4,2025-09-30T00:00:00+05:30,2025-09-30T00:00:00+05:30,4
+5508,Brijgopal jaju,Welspun india ltd,brijgopal_jaju@welspun.com,9870777656,,4,2025-11-01T00:00:00+05:30,2025-11-01T00:00:00+05:30,4
+5397,Dr Rahul mirchandoni,Aries agro ltd,rahul@ariesagro.com,9082523101,,4,2025-10-04T00:00:00+05:30,2025-10-04T00:00:00+05:30,4
+5486,Ashish saraf,Dhanuka agritech ltd,ashish@dhanuka.com,9811644355,,4,2025-10-27T00:00:00+05:30,2025-10-27T00:00:00+05:30,4
+5494,Binoy shah,Sulphar mills ltd,b.shah@sulphurmills.com,9820939410,,4,2025-10-29T00:00:00+05:30,2025-10-29T00:00:00+05:30,4
+5395,Bijay Kumar biswal,Pradeep phosphates ltd,b.biswal@zauri.co.in,7338957959,,4,2025-10-04T00:00:00+05:30,2025-10-04T00:00:00+05:30,4
+5467,Ajit vikram singh,Usha martin ltd,ajit_singh@ushamartin.co.in,9934307501,,4,2025-10-14T00:00:00+05:30,2025-10-14T00:00:00+05:30,4
+5210,Kalpana garg,Kalyani steel ltd,kalpana@kalyanisteels.com,2066215115,,4,2025-09-03T00:00:00+05:30,2025-09-03T00:00:00+05:30,4
+5239,9833818366,Fermenta biotech Ltd,sumesh.gandhi@fermentabiotech.com,9833818386,,4,2025-09-10T00:00:00+05:30,2025-09-10T00:00:00+05:30,4
+5517,Anand singh,Hyundai capital india pvt Ltd,sanand@hmil.net,9654690776,,4,2025-11-06T00:00:00+05:30,2025-11-06T00:00:00+05:30,4
+5169,Manish Agarwal,Jailaxmi special steel pvt Ltd,manish@jailaxmispecialsteel.com,9325145023,,4,2025-08-25T00:00:00+05:30,2025-08-25T00:00:00+05:30,4
+5355,Mrityunjay singh,PepsiCo holding India Pvt Ltd,mrityunjay.singh@pepsico.com,8980031063,,4,2025-09-26T00:00:00+05:30,2025-09-26T00:00:00+05:30,4
+5289,Dhiraj krishana,Maruti suzuki ltd,dhiraj.krishan@maruti.com,9966538444,,4,2025-09-18T00:00:00+05:30,2025-09-18T00:00:00+05:30,4
+5512,Saikumar subarman,Dell india pvt Ltd,saikumar.subbaraman@dell.com,9845480922,,4,2025-11-05T00:00:00+05:30,2025-11-05T00:00:00+05:30,4
+5585,Damodar Agarwal,Celio retail pvt Ltd,damodar.agarwal@celio.com,9743106701,,4,2026-01-14T00:00:00+05:30,2026-01-14T00:00:00+05:30,4
+5157,Sathayan,Hastun agro Ltd,sathyan@hap.in,9840100635,,4,2025-08-22T00:00:00+05:30,2025-08-22T00:00:00+05:30,4
+5496,Rajnish sharma,Bharat electronics ltd,rajneeshsharma@bel.co.in,9632390610,,4,2025-10-29T00:00:00+05:30,2025-10-29T00:00:00+05:30,4
+5573,Abhay jain,Arham alloy and steel pvt Ltd,abhayjain@arhamalloy.com,9810293840,,4,2026-01-09T00:00:00+05:30,2026-01-09T00:00:00+05:30,4
+5262,Devendra Vyas,Vip clothing ltd,devendra.vyas@viporg.com,2228257624,,4,2025-09-12T00:00:00+05:30,2025-09-12T00:00:00+05:30,4
+5372,Sushant joshi,Bajaj auto Ltd,sushantjoshi@bajajauto.co.in,9823225994,,4,2025-09-29T00:00:00+05:30,2025-09-29T00:00:00+05:30,4
+5190,Uday kamath,Swelect energy system Ltd,uday.kamath@swelectes.com,4424679693,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-08-30T00:00:00+05:30,2025-08-30T00:00:00+05:30,4
+5215,Yash poddar,Orien Industries,y.poddar@orishots.com,9830036850,,4,2025-09-04T00:00:00+05:30,2025-09-04T00:00:00+05:30,4
+5364,Kiran furia,Trent ltd,kiran.furia@trent-tata.com,9969641400,,4,2025-09-27T00:00:00+05:30,2025-09-27T00:00:00+05:30,4
+5329,Sunil sharma,Arcelor mittal Nippon steel India ltd,sunil.sharma@amns.in,8879994167,,4,2025-09-24T00:00:00+05:30,2025-09-24T00:00:00+05:30,4
+5518,Chandan arora,V guard industries ltd,chandan.arora@vguardi.in,9891482410,,4,2025-11-06T00:00:00+05:30,2025-11-06T00:00:00+05:30,4
+5416,Bhavya vora,Marico ltd,bhavya.vora@marico.com,9768402841,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5275,Manish Bansal,Atomberg technologies pvt Ltd,manish.bansal@atomberg.com,9323609396,,4,2025-09-15T00:00:00+05:30,2025-09-15T00:00:00+05:30,4
+5574,Ashok chakraborthy,Baldota steel & power ltd,ashok.chakraborty@baldota.co.in,7022898921,,4,2026-01-09T00:00:00+05:30,2026-01-09T00:00:00+05:30,4
+5436,Lalita suri,Daikin Airconditing india pvt Ltd,lalit.suri@daikinindia.com,9911422051,,4,2025-10-08T00:00:00+05:30,2025-10-08T00:00:00+05:30,4
+5180,Sanjay Agarwal,Shayam metalics & energy Ltd,sanjay.agarwal@shyammetal.com,9831835665,,4,2025-08-28T00:00:00+05:30,2025-08-28T00:00:00+05:30,4
+5590,gopal agarwal,universal cables limited,gop_agl@yahoo.com,9051851969,13d48fa2-d846-40ef-903a-310bbff2de55,4,2026-01-19T00:00:00+05:30,2026-01-19T00:00:00+05:30,6
+5223,Pankaj sikaria,ABB india ltd,pankaj.sikaria@in.abb.com,9901424980,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-05T00:00:00+05:30,2025-09-05T00:00:00+05:30,4
+5268,Hariharaprasath gopalakrishanan,Dr.agrawal's eye hospital,hariharaprasath.gopalakrishnan@dragrawals.com,8104562818,13d48fa2-d846-40ef-903a-310bbff2de55,4,2025-09-13T00:00:00+05:30,2025-09-13T00:00:00+05:30,6
+5156,Arnab Roy,Maruti suzuki ltd,arnab.roy@maruti.co.in,9560111991,,4,2025-08-21T00:00:00+05:30,2025-08-21T00:00:00+05:30,6
+5407,Sachin muley,Ken enterprises ltd,sachin.mulay@kenindia.in,7020936955,,4,2025-10-07T00:00:00+05:30,2025-10-07T00:00:00+05:30,4
+5142,Mallika kapur,Aimil ltd,mallika@aimil.com,9141831479,,4,2025-08-20T00:00:00+05:30,2025-08-20T00:00:00+05:30,4
+5385,Deepak gupta,Eternal ltd,deepakgupta@zomato.com,9818607242,,4,2025-10-01T00:00:00+05:30,2025-10-01T00:00:00+05:30,4
+5570,Samir Matani,Nalwa Steel & Power Ltd,samir.matani@nalwa.com,9619745350,,4,2026-01-05T00:00:00+05:30,2026-01-05T00:00:00+05:30,4
+5484,Bharati pandey,Sharda corpchem ltd,bpandey@neongrgroup.com,9890879843,,4,2025-10-27T00:00:00+05:30,2025-10-27T00:00:00+05:30,4
+5616,Tushar kawedia,Irb infrasructure developers ltd,tushar.kawedia@irb.co.in,7506256863,,3,2026-02-23T00:00:00+05:30,2026-02-23T00:00:00+05:30,2
+5611,Saurabh mittal,Highway infrastructure ltd,jcfo@highwayinfrastructure.in,7974153468,,3,2026-02-23T00:00:00+05:30,2026-02-23T00:00:00+05:30,2
+5613,Rahul Desai,Unicure remedies pvt ltd,rahul.desai@unicurepharma.com,9265599502,,3,2026-02-23T00:00:00+05:30,2026-02-23T00:00:00+05:30,2
+5615,Naveen Raj r,Veritas finance ltd,naveenraj@veritasfin.in,6590280252,,3,2026-02-23T00:00:00+05:30,2026-02-23T00:00:00+05:30,2
+5609,Tomboli,Precision casting Ltd,direct1@ipcl.in,9825205050,13d48fa2-d846-40ef-903a-310bbff2de55,3,2026-02-17T00:00:00+05:30,2026-02-17T00:00:00+05:30,3
+5612,Vinayak Shirsat,Ravin cables ltd,vinayak.shirsat@ravingroup.com,9322195138,,3,2026-02-23T00:00:00+05:30,2026-02-23T00:00:00+05:30,2
+5618,Arvind gupta,Rajdhani flour mills ltd,arvind.gupta@rajdhanibesan.com,9810733228,,3,2026-03-02T00:00:00+05:30,2026-03-02T00:00:00+05:30,2
+5617,Ramesh k jha,Afcons infrastructure ltd,rameshjha@afcons.com,9930968550,,3,2026-02-23T00:00:00+05:30,2026-02-23T00:00:00+05:30,1
+5681,Imported Lead 4898,,,,,2,,,1
+5690,Imported Lead 4907,,,,,2,,,1
+5693,Imported Lead 4910,,,,,2,,,1
+5636,Imported Lead 4853,,,,,2,,,1
+5696,Imported Lead 4913,,,,,2,,,1
+5728,Imported Lead 4945,,,,,2,,,1
+5679,Imported Lead 4896,,,,,2,,,1
+5664,Imported Lead 4881,,,,,2,,,1
+5684,Imported Lead 4901,,,,,2,,,1
+5722,Imported Lead 4939,,,,,2,,,1
+5656,Imported Lead 4873,,,,,2,,,1
+5706,Imported Lead 4923,,,,,2,,,1
+5641,Imported Lead 4858,,,,,2,,,1
+5639,Imported Lead 4856,,,,,2,,,1
+5631,Imported Lead 4848,,,,,2,,,1
+5649,Imported Lead 4866,,,,,2,,,1
+5677,Imported Lead 4894,,,,,2,,,1
+5637,Imported Lead 4854,,,,,2,,,1
+5657,Imported Lead 4874,,,,,2,,,1
+5717,Imported Lead 4934,,,,,2,,,1
+5716,Imported Lead 4933,,,,,2,,,1
+5723,Imported Lead 4940,,,,,2,,,1
+5650,Imported Lead 4867,,,,,2,,,1
+5655,Imported Lead 4872,,,,,2,,,1
+5674,Imported Lead 4891,,,,,2,,,1
+5711,Imported Lead 4928,,,,,2,,,1
+5644,Imported Lead 4861,,,,,2,,,1
+5670,Imported Lead 4887,,,,,2,,,1
+5643,Imported Lead 4860,,,,,2,,,1
+5622,Abhinav kanhed,Bramhacorp ltd,abhinav.k@bramhacorp.in,8554846565,,2,2026-03-21T00:00:00+05:30,2026-03-21T00:00:00+05:30,3
+5663,Imported Lead 4880,,,,,2,,,1
+5665,Imported Lead 4882,,,,,2,,,1
+5705,Imported Lead 4922,,,,,2,,,1
+5715,Imported Lead 4932,,,,,2,,,1
+5642,Imported Lead 4859,,,,,2,,,1
+5678,Imported Lead 4895,,,,,2,,,1
+5710,Imported Lead 4927,,,,,2,,,1
+5625,Sanjay dedhia,Mitsu chem plast Ltd,finance@mitsuchem.com,9821345389,13d48fa2-d846-40ef-903a-310bbff2de55,2,2026-05-04T00:00:00+05:30,2026-05-04T00:00:00+05:30,2
+5683,Imported Lead 4900,,,,,2,,,1
+5630,Imported Lead 4847,,,,,2,,,1
+5675,Imported Lead 4892,,,,,2,,,1
+5668,Imported Lead 4885,,,,,2,,,1
+5626,Waman shete,Aeroflex industries Ltd,waman.shete@aeroflexindia.com,9420401206,13d48fa2-d846-40ef-903a-310bbff2de55,2,2026-05-07T00:00:00+05:30,2026-05-07T00:00:00+05:30,2
+5669,Imported Lead 4886,,,,,2,,,1
+5667,Imported Lead 4884,,,,,2,,,1
+5701,Imported Lead 4918,,,,,2,,,1
+5621,Vikas gupta,Kalpataru projects international ltd,vikas.gupta@kalpataru.com,8554980867,13d48fa2-d846-40ef-903a-310bbff2de55,2,2026-03-20T00:00:00+05:30,2026-03-20T00:00:00+05:30,2
+5697,Imported Lead 4914,,,,,2,,,1
+5712,Imported Lead 4929,,,,,2,,,1
+5709,Imported Lead 4926,,,,,2,,,1
+5702,Imported Lead 4919,,,,,2,,,1
+5629,Imported Lead 4846,,,,,2,,,1
+5713,Imported Lead 4930,,,,,2,,,1
+5647,Imported Lead 4864,,,,,2,,,1
+5651,Imported Lead 4868,,,,,2,,,1
+5635,Imported Lead 4852,,,,,2,,,1
+5628,Imported Lead 4845,,,,,2,,,2
+5724,Imported Lead 4941,,,,,2,,,1
+5632,Imported Lead 4849,,,,,2,,,1
+5703,Imported Lead 4920,,,,,2,,,1
+5640,Imported Lead 4857,,,,,2,,,1
+5726,Imported Lead 4943,,,,,2,,,1
+5727,Imported Lead 4944,,,,,2,,,1
+5659,Imported Lead 4876,,,,,2,,,1
+5673,Imported Lead 4890,,,,,2,,,1
+5634,Imported Lead 4851,,,,,2,,,1
+5691,Imported Lead 4908,,,,,2,,,1
+5687,Imported Lead 4904,,,,,2,,,1
+5700,Imported Lead 4917,,,,,2,,,1
+5689,Imported Lead 4906,,,,,2,,,1
+5658,Imported Lead 4875,,,,,2,,,1
+5694,Imported Lead 4911,,,,,2,,,1
+5661,Imported Lead 4878,,,,,2,,,1
+5652,Imported Lead 4869,,,,,2,,,1
+5685,Imported Lead 4902,,,,,2,,,1
+5646,Imported Lead 4863,,,,,2,,,1
+5680,Imported Lead 4897,,,,,2,,,1
+5672,Imported Lead 4889,,,,,2,,,1
+5648,Imported Lead 4865,,,,,2,,,1
+5645,Imported Lead 4862,,,,,2,,,1
+5725,Imported Lead 4942,,,,,2,,,1
+5704,Imported Lead 4921,,,,,2,,,1
+5720,Imported Lead 4937,,,,,2,,,1
+5666,Imported Lead 4883,,,,,2,,,1
+5692,Imported Lead 4909,,,,,2,,,1
+5624,Rishit Kotecha,Madhusudan Masala Limited,rishit@madhusudanmasala.com,9426466555,,2,2026-03-30T00:00:00+05:30,2026-03-30T00:00:00+05:30,3
+5638,Imported Lead 4855,,,,,2,,,1
+5708,Imported Lead 4925,,,,,2,,,1
+5671,Imported Lead 4888,,,,,2,,,1
+5718,Imported Lead 4935,,,,,2,,,1
+5654,Imported Lead 4871,,,,,2,,,1
+5676,Imported Lead 4893,,,,,2,,,1
+5721,Imported Lead 4938,,,,,2,,,1
+5660,Imported Lead 4877,,,,,2,,,1
+5619,Gagan Agarwal,Ind swift laboratories Ltd,gagan@indswiftlabs.com,9316136305,,2,2026-03-13T00:00:00+05:30,2026-03-13T00:00:00+05:30,3
+5686,Imported Lead 4903,,,,,2,,,1
+5714,Imported Lead 4931,,,,,2,,,1
+5699,Imported Lead 4916,,,,,2,,,1
+5698,Imported Lead 4915,,,,,2,,,1
+5707,Imported Lead 4924,,,,,2,,,1
+5653,Imported Lead 4870,,,,,2,,,1
+5688,Imported Lead 4905,,,,,2,,,1
+5662,Imported Lead 4879,,,,,2,,,1
+5695,Imported Lead 4912,,,,,2,,,1
+5682,Imported Lead 4899,,,,,2,,,1
+5719,Imported Lead 4936,,,,,2,,,1
+5633,Imported Lead 4850,,,,,2,,,1

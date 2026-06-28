@@ -1,0 +1,204 @@
+/* SOD Reports Module Styles */
+.sod-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+}
+
+.sod-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border-bottom: 2px solid var(--maroon);
+}
+
+.sod-toolbar-left h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 18px;
+}
+
+.sod-toolbar-left p {
+  margin: 4px 0 0;
+  color: var(--gray-500);
+  font-size: 13px;
+}
+
+.sod-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sod-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-field input,
+.filter-field select {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 13px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.filter-field input:focus,
+.filter-field select:focus {
+  outline: none;
+  border-color: var(--maroon);
+  box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+}
+
+.sod-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.summary-card {
+  background: var(--bg-secondary);
+  padding: 15px;
+  border-radius: 6px;
+  border-left: 4px solid var(--maroon);
+  text-align: center;
+}
+
+.summary-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--maroon);
+}
+
+.sod-table-container {
+  overflow-x: auto;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.sod-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-primary);
+}
+
+.sod-table thead {
+  background: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.sod-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-700);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.sod-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.sod-table tr:hover {
+  background: var(--bg-secondary);
+}
+
+.ai-score {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 40px;
+}
+
+.ai-score.high {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.ai-score.medium {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+}
+
+.ai-score.low {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 11px;
+  background: var(--maroon);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-sm:hover {
+  background: #600;
+}
+
+@media (max-width: 768px) {
+  .sod-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .sod-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sod-table {
+    font-size: 12px;
+  }
+
+  .sod-table th,
+  .sod-table td {
+    padding: 8px;
+  }
+}

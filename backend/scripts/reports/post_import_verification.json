@@ -1,0 +1,1258 @@
+{
+  "xlsx": "C:\\Users\\admin\\Downloads\\lead journey.xlsx",
+  "sheet": "Leadzz Journey FS",
+  "excel_rows": 4944,
+  "db_leads": 658,
+  "db_timeline_events": 16239,
+  "api_samples": {
+    "5728": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5727": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5726": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5725": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5724": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5723": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5722": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5721": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5720": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    },
+    "5719": {
+      "status": 401,
+      "body_preview": "{\"detail\":\"Not authenticated\"}"
+    }
+  },
+  "admin_token_present": true,
+  "admin_leads_list_status": 200,
+  "admin_leads_list_preview": [
+    {
+      "lead_name": "Vaibhav",
+      "company_name": "Fs",
+      "mobile": "7900122256",
+      "alternate_mobile": null,
+      "email": "skhhakbsn@1238.com",
+      "company_email": "akshayborge647@gmail.com",
+      "city": "gulbarga",
+      "state": "Karnataka",
+      "product_type": "Vendor Finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Proposal shared: No | Call outcome: Call Scheduled Again | Call purpose: Introduction Call | Product discussed: Vendor Finance",
+      "id": 5071,
+      "created_at": "2025-07-27T00:00:00",
+      "updated_at": "2025-07-27T00:00:00"
+    },
+    {
+      "lead_name": "Ajay kumar Desai",
+      "company_name": "Alembic pharmaceutical ltd",
+      "mobile": "9920010700",
+      "alternate_mobile": null,
+      "email": "ajay.desai@alembic.co.in",
+      "company_email": "khansaleem232003@gmail.com",
+      "city": "Mumbai Maharashtra",
+      "state": null,
+      "product_type": "Supply chain finance and tread finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": "13d48fa2-d846-40ef-903a-310bbff2de55",
+      "remarks": "Call outcome: Samne se call aya return inka batayenge bol rahe hai | Call purpose: Pitching Product/Service | Product discussed: Supply chain finance and tread finance",
+      "id": 5089,
+      "created_at": "2025-10-29T00:00:00",
+      "updated_at": "2025-10-29T00:00:00"
+    },
+    {
+      "lead_name": "Anuj bansal",
+      "company_name": "Kalika steel alloys Pvt Ltd",
+      "mobile": "9552255551",
+      "alternate_mobile": null,
+      "email": "anuj.bansal@kalikasteel.com",
+      "company_email": "khansaleem232003@gmail.com",
+      "city": "Jalna Maharashtra",
+      "state": null,
+      "product_type": "Trade finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Call outcome: Follow-up Needed | Call purpose: Pitching Product/Service | Product discussed: Trade finance",
+      "id": 5092,
+      "created_at": "2025-08-05T00:00:00",
+      "updated_at": "2025-08-05T00:00:00"
+    },
+    {
+      "lead_name": "shreerathor95@gmail.com",
+      "company_name": null,
+      "mobile": null,
+      "alternate_mobile": null,
+      "email": "shreerathor95@gmail.com",
+      "company_email": null,
+      "city": null,
+      "state": null,
+      "product_type": "Channel Finance",
+      "funding_amount": null,
+      "lead_source": null,
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Call outcome: Follow-up Needed | Call purpose: Introduction Call | Product discussed: Channel Finance",
+      "id": 5073,
+      "created_at": "2025-07-27T00:00:00",
+      "updated_at": "2025-07-27T00:00:00"
+    },
+    {
+      "lead_name": "Somsekhar nanda",
+      "company_name": "Deepak nitrite ltd",
+      "mobile": "9898084712",
+      "alternate_mobile": null,
+      "email": "snanda@godeepak.com",
+      "company_email": "khansaleem232003@gmail.com",
+      "city": "Ahemdabad gujarat",
+      "state": null,
+      "product_type": "Working Capital Demand Loan",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": "13d48fa2-d846-40ef-903a-310bbff2de55",
+      "remarks": "Call outcome: Not Interested | Call purpose: Pitching Product/Service | Product discussed: Working Capital Demand Loan",
+      "id": 5093,
+      "created_at": "2026-03-27T00:00:00",
+      "updated_at": "2026-03-27T00:00:00"
+    }
+  ],
+  "admin_search_status": 200,
+  "admin_search_preview": [
+    {
+      "lead_name": "Vaibhav",
+      "company_name": "Fs",
+      "mobile": "7900122256",
+      "alternate_mobile": null,
+      "email": "skhhakbsn@1238.com",
+      "company_email": "akshayborge647@gmail.com",
+      "city": "gulbarga",
+      "state": "Karnataka",
+      "product_type": "Vendor Finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Proposal shared: No | Call outcome: Call Scheduled Again | Call purpose: Introduction Call | Product discussed: Vendor Finance",
+      "id": 5071,
+      "created_at": "2025-07-27T00:00:00",
+      "updated_at": "2025-07-27T00:00:00"
+    },
+    {
+      "lead_name": "Vaibhav chandak",
+      "company_name": "Adani Power Ltd",
+      "mobile": "9213401657",
+      "alternate_mobile": null,
+      "email": "vaibhav.chandak@adani.com",
+      "company_email": "akshayborge647@gmail.com",
+      "city": "Delhi",
+      "state": null,
+      "product_type": "Domestic finance and tread finance",
+      "funding_amount": null,
+      "lead_source": "CP proposal follow up",
+      "lead_status": "Warm Lead",
+      "assigned_to": "13d48fa2-d846-40ef-903a-310bbff2de55",
+      "remarks": "Proposal shared: Yes email share | Call outcome: Interested hai abhi mujhe Meri team se baat karke inko pricing and praposal batana hai inko or zoom meeting arrange karvani hai inki | Call purpose: Proposal Discussion | Product discussed: Domestic finance and tread finance",
+      "id": 5323,
+      "created_at": "2025-10-09T00:00:00",
+      "updated_at": "2025-10-09T00:00:00"
+    },
+    {
+      "lead_name": "Shiva Ram Krishna",
+      "company_name": "Vidya herbs pvt Ltd",
+      "mobile": "8008402619",
+      "alternate_mobile": null,
+      "email": "vaibhavborge39@gmail.com",
+      "company_email": null,
+      "city": "Benglore karnataka",
+      "state": null,
+      "product_type": "SID PID Bill discounting ke liye baat huei inhone mujhe inke CFO ka number diya sir chahiye inko fun",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New Lead",
+      "assigned_to": "13d48fa2-d846-40ef-903a-310bbff2de55",
+      "remarks": "Call outcome: Interested | Call purpose: Pitching Product/Service | Product discussed: SID PID Bill discounting ke liye baat huei inhone mujhe inke CFO ka number diya sir chahiye inko funding",
+      "id": 5297,
+      "created_at": "2026-05-16T00:00:00",
+      "updated_at": "2026-05-16T00:00:00"
+    }
+  ],
+  "admin_filter_status": 200,
+  "admin_timeline_status": 200,
+  "admin_timeline_preview_count": 11,
+  "admin_reports_status": 200,
+  "employee_token_present": true,
+  "employee_leads_list_status": 200,
+  "employee_leads_list_preview": [
+    {
+      "lead_name": "Vaibhav",
+      "company_name": "Fs",
+      "mobile": "7900122256",
+      "alternate_mobile": null,
+      "email": "skhhakbsn@1238.com",
+      "company_email": "akshayborge647@gmail.com",
+      "city": "gulbarga",
+      "state": "Karnataka",
+      "product_type": "Vendor Finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Proposal shared: No | Call outcome: Call Scheduled Again | Call purpose: Introduction Call | Product discussed: Vendor Finance",
+      "id": 5071,
+      "created_at": "2025-07-27T00:00:00",
+      "updated_at": "2025-07-27T00:00:00"
+    },
+    {
+      "lead_name": "Ajay kumar Desai",
+      "company_name": "Alembic pharmaceutical ltd",
+      "mobile": "9920010700",
+      "alternate_mobile": null,
+      "email": "ajay.desai@alembic.co.in",
+      "company_email": "khansaleem232003@gmail.com",
+      "city": "Mumbai Maharashtra",
+      "state": null,
+      "product_type": "Supply chain finance and tread finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": "13d48fa2-d846-40ef-903a-310bbff2de55",
+      "remarks": "Call outcome: Samne se call aya return inka batayenge bol rahe hai | Call purpose: Pitching Product/Service | Product discussed: Supply chain finance and tread finance",
+      "id": 5089,
+      "created_at": "2025-10-29T00:00:00",
+      "updated_at": "2025-10-29T00:00:00"
+    },
+    {
+      "lead_name": "Anuj bansal",
+      "company_name": "Kalika steel alloys Pvt Ltd",
+      "mobile": "9552255551",
+      "alternate_mobile": null,
+      "email": "anuj.bansal@kalikasteel.com",
+      "company_email": "khansaleem232003@gmail.com",
+      "city": "Jalna Maharashtra",
+      "state": null,
+      "product_type": "Trade finance",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Call outcome: Follow-up Needed | Call purpose: Pitching Product/Service | Product discussed: Trade finance",
+      "id": 5092,
+      "created_at": "2025-08-05T00:00:00",
+      "updated_at": "2025-08-05T00:00:00"
+    },
+    {
+      "lead_name": "shreerathor95@gmail.com",
+      "company_name": null,
+      "mobile": null,
+      "alternate_mobile": null,
+      "email": "shreerathor95@gmail.com",
+      "company_email": null,
+      "city": null,
+      "state": null,
+      "product_type": "Channel Finance",
+      "funding_amount": null,
+      "lead_source": null,
+      "lead_status": "New",
+      "assigned_to": null,
+      "remarks": "Call outcome: Follow-up Needed | Call purpose: Introduction Call | Product discussed: Channel Finance",
+      "id": 5073,
+      "created_at": "2025-07-27T00:00:00",
+      "updated_at": "2025-07-27T00:00:00"
+    },
+    {
+      "lead_name": "Somsekhar nanda",
+      "company_name": "Deepak nitrite ltd",
+      "mobile": "9898084712",
+      "alternate_mobile": null,
+      "email": "snanda@godeepak.com",
+      "company_email": "khansaleem232003@gmail.com",
+      "city": "Ahemdabad gujarat",
+      "state": null,
+      "product_type": "Working Capital Demand Loan",
+      "funding_amount": null,
+      "lead_source": "Cold Calling",
+      "lead_status": "New",
+      "assigned_to": "13d48fa2-d846-40ef-903a-310bbff2de55",
+      "remarks": "Call outcome: Not Interested | Call purpose: Pitching Product/Service | Product discussed: Working Capital Demand Loan",
+      "id": 5093,
+      "created_at": "2026-03-27T00:00:00",
+      "updated_at": "2026-03-27T00:00:00"
+    }
+  ],
+  "timeline_checks_sample": {
+    "5582": {
+      "events_count": 8,
+      "raw_rows_count": 6,
+      "lead_created_at": "2026-04-28 00:00:00",
+      "events": [
+        {
+          "event_id": "303dbb03-c71d-4065-8d3c-524f96b42825",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-13 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "c92a9ea8-a6b3-43a2-b9fa-d4d778f688b4",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-13 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "7ec75b8b-6508-4633-9603-1a2e07250964",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-13 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "1fc48f93-e040-4deb-9831-ee51fc946bb5",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-13 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "dbf10797-ba6e-44e0-b9f6-dbc115ee5dbc",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-13 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "2d3a9673-a102-4298-a1d2-1a8989df6f64",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2026-01-14 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "d0c30e83-479e-485f-a29d-354867bdcd02",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2026-01-14 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "3926ad8b-b329-4067-a590-e2774ba8a22a",
+          "event_type": "Lead Imported",
+          "created_at": "2026-04-28 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5662": {
+      "events_count": 1,
+      "raw_rows_count": 2,
+      "lead_created_at": "2026-06-23 06:40:42.960772",
+      "events": [
+        {
+          "event_id": "68946ebc-aa70-4cb2-81ff-2b04ca4d8606",
+          "event_type": "Lead Imported",
+          "created_at": "2026-06-23 06:40:42.961772",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5490": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-10-28 00:00:00",
+      "events": [
+        {
+          "event_id": "30d9d5ec-8626-4e4c-9e99-df1170f14c71",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-28 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "74a5f65d-3b99-49f4-9b64-b4e8c5bdebdd",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-28 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "cede253b-0c51-4018-8503-1cc5b7464991",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-28 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "0a1d688d-9179-4598-ab2f-c7316e42c94c",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-28 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5607": {
+      "events_count": 34,
+      "raw_rows_count": 51,
+      "lead_created_at": "2026-02-10 00:00:00",
+      "events": [
+        {
+          "event_id": "933f1333-8fbe-4254-be51-a67ebe9752a3",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "e19f2fa4-d796-4243-bbc6-b6a830489c1b",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "adce463c-9e7d-4dbe-bd90-807a7e8a7b6e",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "ef117b41-abc3-43a9-ba87-81cc9f65ca05",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "57d9d895-361e-46be-8620-34dc0c1a8f34",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "8c612d67-433d-4074-91d6-cdce8819b3fc",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "bf20ddf6-7ed7-4440-9475-5e9eea78a02a",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "3169844c-8e8d-47b3-9845-f3b8b49062bd",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "af0ad767-7f3b-46fd-9167-7df1eb41b638",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a38d23eb-12b8-4b38-ae4e-978e957adacf",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "e469e918-ecd4-4730-ac4a-91a2cc2f8bc9",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "60572d9c-d5c4-424d-a6e3-0f2ef4a161a6",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "eb1e9fc6-ef48-44b6-aa4c-0362207c8eca",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "17bcba9e-d3c8-46fb-ace7-7d2fcc8f2cbb",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "8655ae0c-a662-4db4-bb1e-9214b035fb4d",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "60d80cd9-30b4-4655-8dd5-bb7f06a91231",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "c488a509-51bf-4859-b8f6-e36a07c9db03",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "77e03613-f38a-4bff-be5d-10ee52f44194",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "08c960f1-a1d1-484b-a43d-052bfc377c67",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "e5a4b8e0-0657-4796-964f-c3569010160e",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "d43d25af-230f-41a4-a0b8-c577a4274fd9",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "67ee5e13-e8a9-4e43-a6df-5dd8c7342c5a",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "34fdef21-73b2-4f7b-a865-e5a573bf72eb",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "3eb58bd7-8376-4595-8f7b-f5040c5a0454",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "cd11c38b-291e-4289-ab99-e2f706263519",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "73c20580-2e6f-4de0-afd6-78fad1d0a718",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "fe43390d-3518-42db-b46e-f78319829059",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "5f6ae0c3-642f-4e0b-8836-7cedbedbd306",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "28c3ca4d-ca8c-425e-aec2-58c137517ef3",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "90df6670-5a2d-49ce-b01d-a60a1e742d30",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "2ae2652c-2fd9-4b69-a184-646de6c808dc",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "21202ddf-362b-4425-8f5a-b40f76d27b7d",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "b443687c-1234-4bcc-840d-015192f5694d",
+          "event_type": "Lead Imported",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "1485fa67-74b2-4460-9588-0b2ecfa8a156",
+          "event_type": "Call Logged",
+          "created_at": "2026-02-10 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5496": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-10-29 00:00:00",
+      "events": [
+        {
+          "event_id": "034e4b08-e266-4e4b-85ab-48e7c8a2ae0a",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-29 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "fb5aa4b6-02dc-402e-ad8e-82ef6b70793a",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-29 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "8c141d79-8779-4f17-8031-190deabfabed",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-29 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "0ef39b03-6cd0-42d3-9f31-832e2d027576",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-29 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5122": {
+      "events_count": 10,
+      "raw_rows_count": 10,
+      "lead_created_at": "2025-08-16 00:00:00",
+      "events": [
+        {
+          "event_id": "75b520cc-14a1-46d5-9113-370da044f9b6",
+          "event_type": "Lead Imported",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "802c1783-51ae-4411-bfaa-3cbfedab3a0c",
+          "event_type": "Call Logged",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "48c7aa85-4241-4545-aa48-61000be51393",
+          "event_type": "Lead Imported",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "7bacb45b-e335-4a65-ba62-3bf4207dfbcb",
+          "event_type": "Call Logged",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a4232ac3-0267-4cbb-99f9-dccbab092a95",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "43e8384f-5285-4192-9885-17038526f86a",
+          "event_type": "Lead Imported",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a38a92dd-80db-4fc2-9dc4-3ce2c4ef8a8c",
+          "event_type": "Call Logged",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "04f11c9b-95d7-4722-aa0c-5d5eefcaf5cc",
+          "event_type": "Lead Imported",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "85b0171c-b89b-4af2-84bb-8c74681ab779",
+          "event_type": "Call Logged",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "e6d922f7-7be8-4417-ad87-709d78da8854",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2025-08-16 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5249": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-09-10 00:00:00",
+      "events": [
+        {
+          "event_id": "c6f7d49b-9868-4373-afb4-e93051ccfe83",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "ee870929-d6a0-4438-b9c1-404b69d73d88",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "37f299b7-e3eb-47d6-9ec2-fd3a5e6b311b",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-10 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "5d42e8c2-7f4a-4eec-8f51-f175a28aadb0",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-10 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5282": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-09-16 00:00:00",
+      "events": [
+        {
+          "event_id": "6b8f3100-d2f9-4be0-8532-8afcc8781eb9",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "04c446b3-174e-4d40-9901-23eada4c7cad",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "9b4f7480-ebf4-48b3-bc50-d81a78080c43",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-16 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "d4ffa93f-a042-4b8c-998f-2f03d3e88104",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-16 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5650": {
+      "events_count": 1,
+      "raw_rows_count": 2,
+      "lead_created_at": "2026-06-23 06:40:42.869758",
+      "events": [
+        {
+          "event_id": "9e1f262b-0cce-4a5c-bde7-1d45e66a9d5f",
+          "event_type": "Lead Imported",
+          "created_at": "2026-06-23 06:40:42.869758",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5302": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-09-22 00:00:00",
+      "events": [
+        {
+          "event_id": "d133d93b-3445-4f64-80a0-d9fe231864c4",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-22 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "29a558e5-8d7d-4ced-89f2-3a46a5a54ee4",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-22 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "afe092f1-6a8b-4a56-85e5-7a6a0db79787",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-22 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "36fee8e5-2da8-48ea-8c1f-6d63615c3a09",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-22 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5326": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-09-24 00:00:00",
+      "events": [
+        {
+          "event_id": "15d41b64-2e7c-4f61-b9d4-8a738f019b74",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-24 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "c0ef5a9a-f333-4295-8b13-a7b0796c2ae3",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-24 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "7d1aa524-2c56-4777-8a54-6fdba44c80a9",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-24 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "611f87f1-e82c-4069-8629-251dbb45b77e",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-24 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5549": {
+      "events_count": 10,
+      "raw_rows_count": 12,
+      "lead_created_at": "2025-12-06 00:00:00",
+      "events": [
+        {
+          "event_id": "4e0adcd0-336e-43d8-a803-362992c699fa",
+          "event_type": "Lead Imported",
+          "created_at": "2025-12-05 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "1340f049-4119-4d0e-8c10-f713474deef6",
+          "event_type": "Call Logged",
+          "created_at": "2025-12-05 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "95a51cc8-d9e3-4904-a17d-ed64fa8a2043",
+          "event_type": "Call Logged",
+          "created_at": "2025-12-05 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "8679ee58-9ab2-41ea-a6db-03862272c7c9",
+          "event_type": "Lead Imported",
+          "created_at": "2025-12-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "78e71c46-0a62-4de6-a5d8-35b52f3154f5",
+          "event_type": "Call Logged",
+          "created_at": "2025-12-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "eaae2882-9cb7-4df1-b3df-38684f6d73f6",
+          "event_type": "Lead Imported",
+          "created_at": "2025-12-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "26755f40-760c-4ecd-8be1-fcafb24d9016",
+          "event_type": "Lead Imported",
+          "created_at": "2025-12-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "25bb1b64-2313-42e2-8c23-dff992cbdba4",
+          "event_type": "Call Logged",
+          "created_at": "2025-12-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "365a44fe-120a-4b12-ba8f-97cccd44fdd5",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2025-12-08 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "36e7cd36-46d9-4c8d-9f70-33ad5d1e2ca5",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2025-12-08 00:00:00",
+          "matched_in_raw": false
+        }
+      ]
+    },
+    "5273": {
+      "events_count": 10,
+      "raw_rows_count": 10,
+      "lead_created_at": "2026-04-28 00:00:00",
+      "events": [
+        {
+          "event_id": "f206cefb-27de-4468-a528-03db2ede8988",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-15 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "de0d11be-265e-49b2-8dd1-621848126dbd",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-15 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "e11a34c5-b736-4671-8d9a-1bce0a6a68c4",
+          "event_type": "Call Logged",
+          "created_at": "2025-09-15 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "db8b03a7-328a-418e-947b-8c3644ea95db",
+          "event_type": "Lead Imported",
+          "created_at": "2025-09-15 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "ad86d3b4-6a8f-404b-9318-c7892df797f3",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "f311bb4b-28f3-4bc0-afc9-7629ff059bc4",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "8da5c5f7-2398-4bcd-998d-21fc4a0303a7",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "fc65eb7b-2f7b-48b7-b5b5-6b1a2794b7f7",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-06 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "5ff66741-fbb1-45cf-b3c2-f026141836b6",
+          "event_type": "Lead Imported",
+          "created_at": "2026-04-28 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "f1ae9b49-6ab7-4e1c-8e3c-ca8141977591",
+          "event_type": "Call Logged",
+          "created_at": "2026-04-28 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5565": {
+      "events_count": 6,
+      "raw_rows_count": 6,
+      "lead_created_at": "2026-04-30 00:00:00",
+      "events": [
+        {
+          "event_id": "a758a731-d72a-484b-9260-6396c2c7518d",
+          "event_type": "Lead Imported",
+          "created_at": "2025-12-31 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "b9ec580c-0c02-4629-9d70-cfdad5d60e4e",
+          "event_type": "Call Logged",
+          "created_at": "2025-12-31 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "8ca8c2c1-f2ea-4986-a479-e81cd3aeeaa5",
+          "event_type": "Lead Imported",
+          "created_at": "2025-12-31 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "b3466dfd-438b-4614-bd19-53e689ece100",
+          "event_type": "Call Logged",
+          "created_at": "2025-12-31 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a1b52cad-995e-4ef0-b66e-22465ecd979b",
+          "event_type": "Lead Imported",
+          "created_at": "2026-04-30 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "17161f27-5ef6-4e62-bded-8a4eaa1976af",
+          "event_type": "Call Logged",
+          "created_at": "2026-04-30 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5572": {
+      "events_count": 12,
+      "raw_rows_count": 8,
+      "lead_created_at": "2026-01-19 00:00:00",
+      "events": [
+        {
+          "event_id": "5aac90d0-7848-4303-b969-77ab716712b3",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-05 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "088de0e8-200b-466a-9c74-62a62fded289",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-05 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "95174c06-dbf3-4d16-9649-27ae9912b994",
+          "event_type": "Final Outcome Recorded",
+          "created_at": "2026-01-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "106d63f4-48c7-4160-a740-eacca5550586",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "624ca942-45e6-46f8-9dde-2b1b8307ded1",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a3ee1344-67c4-4ed4-8673-13ba7e8cf5f2",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "4fe9a1d4-130c-47f2-b759-f362f905b73f",
+          "event_type": "Call Logged",
+          "created_at": "2026-01-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a6b60fd1-e79a-47f4-bda2-ea997f0832f3",
+          "event_type": "Final Outcome Recorded",
+          "created_at": "2026-01-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "d8e43f9b-7aaa-4f55-b96e-c5354f1aa8a6",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2026-01-09 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "10f9ae83-88bd-4ead-8234-3bfa9cde583e",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2026-01-09 00:00:00",
+          "matched_in_raw": false
+        },
+        {
+          "event_id": "72a67d5f-9e7a-41c1-ab43-b411173c8308",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-19 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "a31b4af6-74be-4463-9caf-6506246cc0f6",
+          "event_type": "Lead Imported",
+          "created_at": "2026-01-19 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5433": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-10-08 00:00:00",
+      "events": [
+        {
+          "event_id": "18823af0-6b8a-431b-b26c-04a8cf46f279",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "d338ba24-b082-4128-9d4d-ea15b0618532",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "1ca29c6b-65cc-4f62-bd0c-89d915744ea3",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-08 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "130f092a-375b-4950-9956-493e36ee68fc",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-08 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5499": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-10-30 00:00:00",
+      "events": [
+        {
+          "event_id": "f35463c3-aadc-4540-8618-563adf1cfa30",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-30 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "76129b80-a5a0-443e-b4c8-ea46fc4ae652",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-30 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "3d637353-d2ea-4347-9348-cbece01b55b8",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-30 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "341a5b68-8664-48c1-8122-28b4dc76817a",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-30 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5391": {
+      "events_count": 4,
+      "raw_rows_count": 4,
+      "lead_created_at": "2025-10-03 00:00:00",
+      "events": [
+        {
+          "event_id": "3ee30a6e-7969-4edb-97b1-ebe9720fc987",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-03 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "84a11461-e935-4c38-964b-e3939111ca46",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-03 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "40ea1ab1-c228-4444-ba41-7281648a7d86",
+          "event_type": "Lead Imported",
+          "created_at": "2025-10-03 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "ec32615e-7c19-45fe-b8bd-923bd228553c",
+          "event_type": "Call Logged",
+          "created_at": "2025-10-03 00:00:00",
+          "matched_in_raw": true
+        }
+      ]
+    },
+    "5628": {
+      "events_count": 2,
+      "raw_rows_count": 2,
+      "lead_created_at": "2026-05-11 00:00:00",
+      "events": [
+        {
+          "event_id": "9a0b5d3c-31a8-46de-922c-c5ee0f2b0152",
+          "event_type": "Follow-Up Scheduled",
+          "created_at": "2026-05-11 00:00:00",
+          "matched_in_raw": true
+        },
+        {
+          "event_id": "73b8d6c9-042a-4a0d-87dd-a5af1c9e70a2",
+          "event_type": "Lead Imported",
+          "created_at": "2026-06-23 06:40:42.698722",
+          "matched_in_raw": false
+        }
+      ]
+    },
+    "5648": {
+      "events_count": 1,
+      "raw_rows_count": 2,
+      "lead_created_at": "2026-06-23 06:40:42.858360",
+      "events": [
+        {
+          "event_id": "a71ee4ef-b833-4a65-9f91-a9387993dbe1",
+          "event_type": "Lead Imported",
+          "created_at": "2026-06-23 06:40:42.858360",
+          "matched_in_raw": true
+        }
+      ]
+    }
+  },
+  "performance": {
+    "admin_leads_list": {
+      "elapsed_s": 2.0402987003326416,
+      "status": 200
+    },
+    "admin_leads_list_count": 25,
+    "admin_search": {
+      "elapsed_s": 2.0528228282928467,
+      "status": 200
+    },
+    "admin_timeline_sample": {
+      "elapsed_s": 2.0318334102630615,
+      "status": 200
+    },
+    "emp_leads_list": {
+      "elapsed_s": 2.063627243041992,
+      "status": 200
+    }
+  }
+}

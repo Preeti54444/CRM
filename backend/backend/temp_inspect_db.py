@@ -1,0 +1,11 @@
+﻿import psycopg2
+conn = psycopg2.connect(dbname='fundingsathicrm', user='fundingsathicrm', password='fundingsathicrm', host='localhost', port=5432)
+cur = conn.cursor()
+cur.execute("SELECT version_num FROM alembic_version")
+print('ALEMBIC_VERSION', cur.fetchall())
+cur.execute("SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name")
+print('TABLES', [row[0] for row in cur.fetchall()])
+cur.execute("SELECT column_name FROM information_schema.columns WHERE table_name='leads' ORDER BY ordinal_position")
+print('LEADS_COLUMNS', [row[0] for row in cur.fetchall()])
+cur.close()
+conn.close()

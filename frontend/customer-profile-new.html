@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Customer Profile</title>
+  <link rel="stylesheet" href="css/crm.css?v=2">
+  <style>
+    :root{--card-bg:#fff}
+    body{font-family:Inter, sans-serif;background:#f8fafc;padding:18px}
+    .container{max-width:1200px;margin:0 auto}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+    .title{font-size:20px;font-weight:700;color:#0f172a}
+    .sub{color:#64748b}
+    .controls{display:flex;gap:8px}
+    .profile-grid{display:grid;grid-template-columns:320px 1fr 340px;gap:18px}
+    .card{background:var(--card-bg);border:1px solid var(--gray-100);border-radius:12px;padding:18px}
+    .avatar{width:120px;height:120px;border-radius:12px;background:#eef2ff;display:flex;align-items:center;justify-content:center;font-size:36px;color:#3730a3;font-weight:700}
+    .meta{margin-left:14px}
+    .name{font-size:18px;font-weight:700;color:#0f172a}
+    .role{color:var(--gray-600);font-size:13px}
+    .lead-score{display:flex;align-items:center;gap:12px;margin-top:12px}
+    .score-circle{width:84px;height:84px;border-radius:50%;background:linear-gradient(180deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-weight:700;color:#166534}
+    .left-col .contact-list{margin-top:14px}
+    .contact-item{display:flex;gap:10px;align-items:center;color:var(--gray-700);margin-bottom:8px}
+    .section-title{font-weight:700;color:#0f172a;margin-bottom:8px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .engage-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .timeline{display:flex;flex-direction:column;gap:12px}
+    .timeline-item{display:flex;justify-content:space-between;gap:12px}
+    .pill{background:#eef2ff;color:#1e3a8a;padding:4px 8px;border-radius:999px;font-size:12px}
+    .notes{background:#fff7ed;border:1px solid #fde3bf;padding:12px;border-radius:8px}
+    .small{font-size:13px;color:var(--gray-600)}
+    @media(max-width:980px){.profile-grid{grid-template-columns:1fr;}.controls{flex-direction:column;align-items:flex-end}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div>
+        <div class="title">Customer Profile Preview</div>
+        <div class="sub">Detailed overview of lead information and engagement</div>
+      </div>
+      <div class="controls">
+        <button class="btn" onclick="downloadProfile()">Download</button>
+        <button class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <!-- LEFT -->
+      <div class="card left-col">
+        <div style="display:flex;align-items:center">
+          <div id="avatar" class="avatar">JS</div>
+          <div class="meta">
+            <div id="pName" class="name">—</div>
+            <div id="pRole" class="role">—</div>
+            <div id="pCompany" class="role" style="margin-top:6px">—</div>
+            <div id="statusPill" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="lead-score">
+            <div class="score-circle" id="leadScore">—</div>
+            <div>
+              <div class="small">Lead Score</div>
+              <div id="scoreDetail" style="font-weight:700;color:#0f766e">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-list">
+          <div class="section-title">Contact</div>
+          <div id="contactDetails"></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="section-title">Preferred Contact</div>
+          <div class="pill" id="preferredContact">Email</div>
+        </div>
+      </div>
+
+      <!-- CENTER -->
+      <div>
+        <div class="card">
+          <div class="section-title">Basic Information</div>
+          <div class="two-col">
+            <div>
+              <div class="small">Lead ID</div>
+              <div id="pId" style="font-weight:600">—</div>
+            </div>
+            <div>
+              <div class="small">Industry</div>
+              <div id="pIndustry">—</div>
+            </div>
+            <div>
+              <div class="small">Company Size</div>
+              <div id="pSize">—</div>
+            </div>
+            <div>
+              <div class="small">Location</div>
+              <div id="pLocation">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="engage-grid">
+          <div class="card">
+            <div class="section-title">Engagement Summary</div>
+            <div style="display:flex;gap:12px;flex-direction:column">
+              <div class="small">Website Visits: <strong id="visitCount">0</strong></div>
+              <div class="small">Email Opens: <strong id="emailOpens">0</strong></div>
+              <div class="small">Demo Requested: <strong id="demoReq">No</strong></div>
+              <div class="small">Last Interaction: <strong id="lastInteraction">—</strong></div>
+              <div class="small">Assigned To: <strong id="assignedTo">—</strong></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-title">Activity Timeline</div>
+            <div id="timeline" class="timeline small"></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+          <div class="card">
+            <div class="section-title">Pain Points</div>
+            <ul id="painPoints"></ul>
+          </div>
+          <div class="card">
+            <div class="section-title">Opportunities</div>
+            <ul id="opps"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="card">
+          <div class="section-title">Lead Details</div>
+          <div class="small">
+            <div>Lead Source: <strong id="leadSource">—</strong></div>
+            <div style="margin-top:6px">Lead Status: <strong id="leadStatus">—</strong></div>
+            <div style="margin-top:6px">Interested Product: <strong id="leadProduct">—</strong></div>
+            <div style="margin-top:6px">Budget Range: <strong id="leadBudget">—</strong></div>
+            <div style="margin-top:6px">Purchase Timeline: <strong id="leadTimeline">—</strong></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="section-title">Bank & Cases</div>
+          <div class="small" id="bankBlock">
+            <div>Bank: <strong id="bankName">—</strong></div>
+            <div>Bank Ref: <strong id="bankRef">—</strong></div>
+            <div style="margin-top:8px">Applications:</div>
+            <div id="appsList" style="margin-top:8px"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div class="section-title">Notes</div>
+          <div class="notes" id="notes">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/crm-data-store.js"></script>
+  <script>
+    function parseQuery(){const q={};location.search.replace(/^\?/,'').split('&').forEach(p=>{if(!p) return;const [k,v]=p.split('=');q[decodeURIComponent(k)]=decodeURIComponent(v||'')});return q}
+    function editProfile(){window.location.href='crm1.html'}
+    function downloadProfile(){
+      const el = document.querySelector('.container')
+      const text = el ? el.innerText : document.title
+      const blob = new Blob([text], {type:'text/plain'})
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a'); a.href=url; a.download='profile.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url)
+    }
+
+    function safe(val){ if(val==null || val==='') return '—'; return val }
+
+    function setText(id, val){ const el=document.getElementById(id); if(!el) return; el.textContent = safe(val) }
+
+    function initials(name){ if(!name) return 'U'; return name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase() }
+
+    function renderTimeline(items){ const el=document.getElementById('timeline'); if(!el) return; el.innerHTML=''; items.slice(0,6).forEach(it=>{ const d=document.createElement('div'); d.className='timeline-item'; d.innerHTML=`<div>${it.title || it.description || it.event || 'Activity'}</div><div style="color:var(--gray-500)">${it.when || it.timestamp || it.date || ''}</div>`; el.appendChild(d) }) }
+
+    function renderApps(apps){ const el=document.getElementById('appsList'); if(!el) return; el.innerHTML=''; apps.forEach(a=>{ const div=document.createElement('div'); div.style.padding='8px'; div.style.border='1px solid var(--gray-100)'; div.style.borderRadius='8px'; div.style.marginBottom='8px'; div.innerHTML=`<div style="font-weight:600">${a.lenderName || a.bank || a.caseLender || 'Lender' } · ${a.applicationStatus || a.status || '—'}</div><div class="small">Amount: ₹${a.appliedAmount||a.loanAmount||0} · Bank Ref: ${a.caseBankRef||a.bankRef||'—'}</div>`; el.appendChild(div) }) }
+
+    (function(){
+      const q=parseQuery(); const id=q.id || sessionStorage.getItem('profileId') || null; let profile=null; try{ const s=sessionStorage.getItem('selectedProfile'); if(s) profile=JSON.parse(s) }catch(e){}
+      if(!profile && id){ try{ const raw=localStorage.getItem('crm_leads_journey')||sessionStorage.getItem('crm_leads_journey')||'[]'; const arr=JSON.parse(raw||'[]')||[]; profile = arr.map(r=>{ try{return typeof r==='string'?JSON.parse(r):r}catch(e){return r} }).find(p=>String(p.id||p.leadId||p.customerId)===String(id)) || null }catch(e){}
+      }
+      if(!profile && id){ try{ const raw2=localStorage.getItem('crm_leads')||'[]'; const arr2=JSON.parse(raw2||'[]')||[]; profile = arr2.find(p=>String(p.id||p.leadId||p.customerId)===String(id))||null }catch(e){}
+      }
+
+      // populate basic fields
+      setText('pId', profile?.id||profile?.leadId||profile?.customerId||'—')
+      setText('pName', profile?.contactPerson||profile?.leadName||profile?.name||profile?.companyName||'—')
+      setText('pRole', profile?.designation||profile?.jobTitle||profile?.role||'—')
+      setText('pCompany', profile?.companyName||profile?.company||'—')
+      setText('pIndustry', profile?.industry||profile?.sector||'—')
+      setText('pSize', profile?.companySize||profile?.size||'—')
+      setText('pLocation', [profile?.city, profile?.state, profile?.country].filter(Boolean).join(', ')||profile?.location||'—')
+      // lead details
+      setText('leadSource', profile?.leadSource||profile?.source||'—')
+      setText('leadStatus', profile?.currentStatus||profile?.status||'—')
+      setText('leadProduct', profile?.productDiscussed||profile?.interestedProduct||'—')
+      setText('leadBudget', profile?.budgetRange||profile?.dealValue||'—')
+      setText('leadTimeline', profile?.purchaseTimeline||profile?.timeline||'—')
+
+      // contact block
+      const cd=document.getElementById('contactDetails'); if(cd){ cd.innerHTML=''; const add=(icon,txt)=>{ const d=document.createElement('div'); d.className='contact-item'; d.innerHTML=`<div style="width:28px;text-align:center">${icon}</div><div>${txt}</div>`; cd.appendChild(d) }
+      add('✉️', profile?.emailId||profile?.email||'—'); add('📞', profile?.contactNumber||profile?.phone||profile?.mobile||'—'); add('📍', profile?.location||profile?.city||profile?.address||'—') }
+
+      // avatar
+      const av=document.getElementById('avatar'); if(av){ if(profile?.avatarUrl){ av.style.backgroundImage=`url(${profile.avatarUrl})`; av.style.backgroundSize='cover'; av.textContent = '' } else { av.textContent = initials(profile?.contactPerson||profile?.leadName||profile?.name||profile?.companyName) } }
+
+      // lead score
+      const score = profile?.leadScore || profile?.score || profile?.lead_score || 0; document.getElementById('leadScore').textContent = score || '—'; setText('scoreDetail', score? `${score}/100` : '—')
+
+      // apps & bank
+      try{ if(window.DataStore){ DataStore.init && DataStore.init(); const apps = DataStore.getLoanApplications(profile?.id || profile?.leadId || profile?.customerId); renderApps(apps||[]); setText('bankName', apps?.[0]?.bank || profile?.currentBanker || profile?.bank || '—'); setText('bankRef', apps?.[0]?.caseBankRef || profile?.bankRef || '—') } }catch(e){console.warn(e)}
+
+      // timeline & engagement
+      const timeline = profile?.activity || profile?.timeline || []
+      if(Array.isArray(timeline) && timeline.length) renderTimeline(timeline)
+      else {
+        const raw = (localStorage.getItem('crm_activities') || '[]')
+        try{ const acts = JSON.parse(raw); renderTimeline((acts||[]).filter(a=>String(a.relatedId||a.leadId)===String(profile?.id||profile?.leadId)).slice(0,6)) }catch(e){}
+      }
+
+      // pain points / opps / notes
+      const pList = profile?.painPoints || profile?.pain_points || profile?.challenges || []
+      const oList = profile?.opportunities || profile?.opps || []
+      const notes = profile?.notes || profile?.summary || profile?.description || ''
+      const ppEl=document.getElementById('painPoints'); if(ppEl){ ppEl.innerHTML = (Array.isArray(pList) && pList.length) ? pList.map(i=>`<li>${i}</li>`).join('') : '<li>—</li>' }
+      const opEl=document.getElementById('opps'); if(opEl){ opEl.innerHTML = (Array.isArray(oList) && oList.length) ? oList.map(i=>`<li>${i}</li>`).join('') : '<li>—</li>' }
+      setText('notes', notes||'—')
+
+      // preferred contact
+      setText('preferredContact', profile?.preferredContact || profile?.preferred || 'Email')
+
+      // assigned to
+      setText('assignedTo', (profile?.assignedTo || profile?.owner || profile?.salesOwner) )
+    })()
+  </script>
+
+  <!-- Edit Modal -->
+  <div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:10px;padding:18px;max-width:820px;width:100%;margin:18px;box-shadow:0 6px 30px rgba(2,6,23,.2);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-weight:700">Edit Profile</div>
+        <div>
+          <button class="btn" onclick="closeEdit()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveEdit()">Save</button>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div>
+          <label>Name</label>
+          <input id="edit_name" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Company</label>
+          <input id="edit_company" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Job Title</label>
+          <input id="edit_role" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Lead Score</label>
+          <input id="edit_score" type="number" min="0" max="100" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Email</label>
+          <input id="edit_email" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input id="edit_phone" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Current Banker</label>
+          <input id="edit_bank" class="form-input-modern" />
+        </div>
+        <div>
+          <label>Bank Ref</label>
+          <input id="edit_bankRef" class="form-input-modern" />
+        </div>
+        <div style="grid-column:1 / -1">
+          <label>Notes</label>
+          <textarea id="edit_notes" rows="3" style="width:100%"></textarea>
+        </div>
+
+        <div style="grid-column:1 / -1">
+          <label>Pain Points</label>
+          <div style="display:flex;gap:8px;margin-bottom:8px"><input id="newPain" class="form-input-modern" placeholder="Add pain point" /><button class="btn" onclick="addPain()">Add</button></div>
+          <div id="painList" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+
+        <div style="grid-column:1 / -1">
+          <label>Opportunities</label>
+          <div style="display:flex;gap:8px;margin-bottom:8px"><input id="newOpp" class="form-input-modern" placeholder="Add opportunity" /><button class="btn" onclick="addOpp()">Add</button></div>
+          <div id="oppList" style="display:flex;flex-direction:column;gap:6px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let _currentProfile = null
+    function openEdit(){
+      try{ const s=sessionStorage.getItem('selectedProfile'); _currentProfile = s ? JSON.parse(s) : null }catch(e){ _currentProfile = null }
+      if(!_currentProfile){ const q=parseQuery(); const id=q.id||sessionStorage.getItem('profileId')||null; if(id){ try{ const raw=localStorage.getItem('crm_leads_journey')||sessionStorage.getItem('crm_leads_journey')||'[]'; const arr=JSON.parse(raw||'[]')||[]; _currentProfile = arr.find(p=>String(p.id||p.leadId||p.customerId)===String(id))||_currentProfile }catch(e){} } }
+
+      // populate fields
+      document.getElementById('edit_name').value = _currentProfile?.contactPerson || _currentProfile?.leadName || _currentProfile?.name || ''
+      document.getElementById('edit_company').value = _currentProfile?.companyName || _currentProfile?.company || ''
+      document.getElementById('edit_role').value = _currentProfile?.designation || _currentProfile?.jobTitle || _currentProfile?.role || ''
+      document.getElementById('edit_score').value = _currentProfile?.leadScore || _currentProfile?.score || ''
+      document.getElementById('edit_email').value = _currentProfile?.emailId || _currentProfile?.email || ''
+      document.getElementById('edit_phone').value = _currentProfile?.contactNumber || _currentProfile?.phone || _currentProfile?.mobile || ''
+      document.getElementById('edit_bank').value = _currentProfile?.currentBanker || _currentProfile?.bank || ''
+      document.getElementById('edit_bankRef').value = _currentProfile?.bankRef || _currentProfile?.caseBankRef || ''
+      document.getElementById('edit_notes').value = _currentProfile?.notes || _currentProfile?.summary || ''
+
+      // pain/opps lists
+      const painList = document.getElementById('painList'); painList.innerHTML=''
+      (Array.isArray(_currentProfile?.painPoints) ? _currentProfile.painPoints : (_currentProfile?.pain_points||[])).forEach((p,idx)=>{
+        const d=document.createElement('div'); d.style.display='flex'; d.style.justifyContent='space-between'; d.style.alignItems='center'; d.innerHTML = `<div style="flex:1">${p}</div><div style="margin-left:8px"><button class='btn' onclick='removePain(${idx})'>Remove</button></div>`; painList.appendChild(d)
+      })
+
+      const oppList = document.getElementById('oppList'); oppList.innerHTML=''
+      (Array.isArray(_currentProfile?.opportunities) ? _currentProfile.opportunities : (_currentProfile?.opps||[])).forEach((o,idx)=>{
+        const d=document.createElement('div'); d.style.display='flex'; d.style.justifyContent='space-between'; d.style.alignItems='center'; d.innerHTML = `<div style="flex:1">${o}</div><div style="margin-left:8px"><button class='btn' onclick='removeOpp(${idx})'>Remove</button></div>`; oppList.appendChild(d)
+      })
+
+      document.getElementById('editModal').style.display = 'flex'
+    }
+
+    function closeEdit(){ document.getElementById('editModal').style.display='none' }
+
+    function addPain(){ const v=document.getElementById('newPain').value.trim(); if(!v) return; const list = document.getElementById('painList'); const idx=list.children.length; const d=document.createElement('div'); d.style.display='flex'; d.style.justifyContent='space-between'; d.style.alignItems='center'; d.innerHTML=`<div style="flex:1">${v}</div><div style="margin-left:8px"><button class='btn' onclick='removePain(${idx})'>Remove</button></div>`; list.appendChild(d); document.getElementById('newPain').value=''; }
+    function removePain(i){ const list=document.getElementById('painList'); if(list.children[i]) list.children[i].remove(); }
+    function addOpp(){ const v=document.getElementById('newOpp').value.trim(); if(!v) return; const list=document.getElementById('oppList'); const idx=list.children.length; const d=document.createElement('div'); d.style.display='flex'; d.style.justifyContent='space-between'; d.style.alignItems='center'; d.innerHTML=`<div style="flex:1">${v}</div><div style="margin-left:8px"><button class='btn' onclick='removeOpp(${idx})'>Remove</button></div>`; list.appendChild(d); document.getElementById('newOpp').value=''; }
+    function removeOpp(i){ const list=document.getElementById('oppList'); if(list.children[i]) list.children[i].remove(); }
+
+    function collectList(containerId){ const el=document.getElementById(containerId); const out=[]; if(!el) return out; for(const child of Array.from(el.children)){ const text = child.firstElementChild?.textContent || child.textContent || ''; if(text && text.trim()) out.push(text.trim()) } return out }
+
+    function saveEdit(){
+      const name = document.getElementById('edit_name').value.trim();
+      const company = document.getElementById('edit_company').value.trim();
+      const role = document.getElementById('edit_role').value.trim();
+      const score = document.getElementById('edit_score').value.trim();
+      const email = document.getElementById('edit_email').value.trim();
+      const phone = document.getElementById('edit_phone').value.trim();
+      const bank = document.getElementById('edit_bank').value.trim();
+      const bankRef = document.getElementById('edit_bankRef').value.trim();
+      const notes = document.getElementById('edit_notes').value.trim();
+      const pains = collectList('painList')
+      const opps = collectList('oppList')
+
+      let profile = _currentProfile || {}
+      profile.contactPerson = name || profile.contactPerson
+      profile.companyName = company || profile.companyName
+      profile.designation = role || profile.designation
+      if(score) profile.leadScore = Number(score)
+      profile.emailId = email || profile.emailId
+      profile.contactNumber = phone || profile.contactNumber
+      if(bank) profile.currentBanker = bank
+      if(bankRef) profile.bankRef = bankRef
+      profile.notes = notes || profile.notes
+      profile.painPoints = pains
+      profile.opportunities = opps
+
+      // ensure id
+      if(!profile.id) profile.id = profile.leadId || profile.customerId || `L-${Date.now()}`
+
+      // persist to sessionStorage
+      try{ sessionStorage.setItem('selectedProfile', JSON.stringify(profile)); sessionStorage.setItem('profileId', String(profile.id)) }catch(e){ console.warn(e) }
+
+      // update crm_leads_journey in localStorage/sessionStorage
+      try{
+        const rawLocal = localStorage.getItem('crm_leads_journey') || '[]'
+        const arr = JSON.parse(rawLocal||'[]') || []
+        const idx = arr.findIndex(p => String(p.id||p.leadId||p.customerId) === String(profile.id))
+        if(idx !== -1) { arr[idx] = profile } else { arr.push(profile) }
+        localStorage.setItem('crm_leads_journey', JSON.stringify(arr))
+        sessionStorage.setItem('crm_leads_journey', JSON.stringify(arr))
+      }catch(e){ console.warn('Failed saving crm_leads_journey', e) }
+
+      // update DataStore global
+      try{
+        if(window.DataStore && typeof DataStore.getAll === 'function'){
+          const data = DataStore.getAll() || {}
+          data.leads = data.leads || []
+          const li = data.leads.findIndex(p => String(p.id) === String(profile.id))
+          if(li !== -1) data.leads[li] = profile
+          else data.leads.push(profile)
+          DataStore.saveAll && DataStore.saveAll(data)
+        }
+      }catch(e){ console.warn('Failed updating DataStore', e) }
+
+      closeEdit()
+      // refresh to reflect saved changes
+      location.reload()
+    }
+  </script>
+</body>
+</html>

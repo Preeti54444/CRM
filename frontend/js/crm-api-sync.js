@@ -2,51 +2,17 @@
 // Fetch data from FastAPI backend and populate localStorage expected by the client DataStore.
 
 (function(){
-  const isFileProtocol = window.location.protocol === 'file:'
-  const host = window.location.hostname || 'localhost'
-  const port = window.location.port ? ':' + window.location.port : ''
-  const origin = window.location.protocol + '//' + host + port
-  const candidates = []
-
-  function normalizeApiBase(value) {
-    if (!value) return null
-    const trimmed = String(value).trim().replace(/\/$/, '')
-    if (!trimmed) return null
-    try {
-      const url = new URL(trimmed)
-      if ((url.hostname === 'localhost' || url.hostname === '127.0.0.1') && (url.port === '8000' || url.port === '8001' || url.port === '8085')) {
-        url.port = '8085'
-      }
-      return url.origin
-    } catch {
-      return null
+  // Use centralized API base from config.js
+  const getApiBase = () => {
+    if (typeof window.getCRMApiBase === 'function') {
+      return window.getCRMApiBase();
     }
-  }
+    // Fallback if config.js not loaded
+    return window.API_BASE || window.location.origin;
+  };
 
-  // Force clear cached API base to fix port mismatch
-  try {
-    localStorage.removeItem('crm_api_base')
-    console.log('[crm-api-sync] Cleared cached API base')
-  } catch (e) {
-    console.warn('crm-api-sync: unable to clear crm_api_base', e)
-  }
-
-  if (window.CRM_API_BASE) candidates.push(normalizeApiBase(window.CRM_API_BASE))
-  if (window.API_BASE) candidates.push(normalizeApiBase(window.API_BASE))
-  
-  if (isFileProtocol || host === 'localhost' || host === '127.0.0.1') {
-    candidates.push('http://localhost:8085')
-    candidates.push(origin)
-  }
-  if (origin.startsWith('http://') || origin.startsWith('https://')) {
-    // For LAN access, use same host with backend port 8085 - PRIORITY
-    const lanBackendBase = window.location.protocol + '//' + host + ':8085'
-    candidates.push(lanBackendBase)
-    candidates.push(origin)
-  }
-
-  const API_BASE_CANDIDATES = [...new Set(candidates.filter(Boolean))]
-  console.log('[crm-api-sync] API base candidates:', API_BASE_CANDIDATES)
+  const API_BASE = getApiBase();
+  console.log('[crm-api-sync] Using API base:', API_BASE);
 
   async function fetchJSON(path){
     if (!path) return null;
@@ -67,49 +33,55 @@
     });
     
     const authHeader = token ? { Authorization: token.startsWith('Bearer ') ? token : `Bearer ${token}` } : {};
-    for (const base of API_BASE_CANDIDATES) {
-      const url = path.startsWith('http') ? path : base + normalizedPath;
-      try{
-        const res = await fetch(url, {
-          cache:'no-cache',
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json',
-            ...authHeader
-          }
-        });
-        if (!res.ok) {
-          if ([401, 403, 429].includes(res.status)) {
-            console.error('[crm-api-sync] Auth failure:', {
-              url,
-              status: res.status,
-              hasToken: !!token,
-              tokenLength: token ? token.length : 0,
-              userEmail: session?.email || 'none',
-              authHeader: authHeader.Authorization ? 'present' : 'missing'
-            });
-            return null;
-          }
-          throw new Error('HTTP '+res.status);
+    const url = path.startsWith('http') ? path : API_BASE + normalizedPath;
+    
+    try{
+      const res = await fetch(url, {
+        cache:'no-cache',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          ...authHeader
         }
-        return await res.json();
-      }catch(e){
-        console.error('[crm-api-sync] Fetch failed:', {
-          url,
-          error: e.message,
-          hasToken: !!token,
-          userEmail: session?.email || 'none'
-        });
+      });
+      if (!res.ok) {
+        if ([401, 403, 429].includes(res.status)) {
+          console.error('[crm-api-sync] Auth failure:', {
+            url,
+            status: res.status,
+            hasToken: !!token,
+            tokenLength: token ? token.length : 0,
+            userEmail: session?.email || 'none',
+            authHeader: authHeader.Authorization ? 'present' : 'missing'
+          });
+          return null;
+        }
+        throw new Error('HTTP '+res.status);
       }
+      return await res.json();
+    }catch(e){
+      console.error('[crm-api-sync] Fetch failed:', {
+        url,
+        error: e.message,
+        hasToken: !!token,
+        userEmail: session?.email || 'none'
+      });
+      return null;
     }
-    return null;
   }
 
   function normalizeSyncPayload(data, storageKey) {
     if (Array.isArray(data)) return data;
     if (!data || typeof data !== 'object') return [];
+    
+    // Handle paginated responses (e.g., {items: [], total: n})
+    if (data.items && Array.isArray(data.items)) return data.items;
+    
+    // Handle specific endpoint response formats
     if (storageKey === 'crm_tasks' && Array.isArray(data.tasks)) return data.tasks;
     if (storageKey === 'crm_notifications' && Array.isArray(data.notifications)) return data.notifications;
+    
+    // Handle nested arrays in response objects
     for (const value of Object.values(data)) {
       if (Array.isArray(value)) return value;
     }
@@ -141,7 +113,7 @@
       console.log('[crm-api-sync] No auth token found, skipping sync');
       return false;
     }
-    if (!force && sessionStorage.getItem('crm_api_synced') && ['crm_leads', 'crm_eod', 'crm_wod', 'crm_leads_journey', 'crm_tasks', 'crm_users', 'crm_notifications'].every(isDatasetPopulated)) {
+    if (!force && sessionStorage.getItem('crm_api_synced') && ['crm_leads', 'crm_eod', 'crm_wod', 'crm_leads_journey', 'crm_tasks', 'crm_users', 'crm_notifications', 'crm_work_sessions', 'crm_followups', 'crm_lender', 'crm_calls'].every(isDatasetPopulated)) {
       console.log('[crm-api-sync] Already synced, skipping');
       return true;
     }
@@ -153,15 +125,18 @@
 
     // Fallback: try individual endpoints for anything missing
     const fallbackEndpoints = [
-      { path: '/sod', storageKey: 'crm_leads' },
-      { path: '/leads', storageKey: 'crm_leads_journey' },
-      { path: '/leads', storageKey: 'crm_leads' },
-      { path: '/eod', storageKey: 'crm_eod' },
-      { path: '/wod', storageKey: 'crm_wod' },
+      { path: '/reports/sod', storageKey: 'crm_leads' },
+      { path: '/leads?limit=1000', storageKey: 'crm_leads_journey' },
+      { path: '/leads?limit=1000', storageKey: 'crm_leads' },
+      { path: '/reports/eod', storageKey: 'crm_eod' },
+      { path: '/reports/wod', storageKey: 'crm_wod' },
       { path: '/tasks', storageKey: 'crm_tasks' },
       { path: '/notifications', storageKey: 'crm_notifications' },
-      { path: '/lender', storageKey: 'crm_lender' },
-      { path: '/users', storageKey: 'crm_users' }
+      { path: '/lender/lender', storageKey: 'crm_lender' },
+      { path: '/users', storageKey: 'crm_users' },
+      { path: '/work_sessions', storageKey: 'crm_work_sessions' },
+      { path: '/followups', storageKey: 'crm_followups' },
+      { path: '/calls', storageKey: 'crm_calls' }
     ];
 
     for (const { path: endpoint, storageKey } of fallbackEndpoints) {

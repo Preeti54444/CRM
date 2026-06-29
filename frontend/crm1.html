@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/crm-sod-reports.css">
 <link rel="stylesheet" href="css/crm-followup-reminders.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="config.js"></script>
 <script>
   // Check authentication before loading CRM
   (function checkAuth() {
@@ -28,65 +29,9 @@
     }
   })();
 
-  const isFileProtocol = window.location.protocol === 'file:'
-  const host = window.location.hostname || 'localhost'
-  const port = window.location.port ? ':' + window.location.port : ''
-  const origin = window.location.protocol + '//' + host + port
-  const currentPath = window.location.pathname.toLowerCase()
-  const storedBase = (() => {
-    try { 
-      // Force clear cached API base to fix port 3000 vs 8085 issue
-      localStorage.removeItem('crm_api_base')
-      console.log('[CRM] Cleared cached API base to force correct backend port detection')
-      return null 
-    } catch (e) { return null }
-  })();
-
-  function normalizeApiBase(value) {
-    if (!value) return null
-    const trimmed = String(value).trim().replace(/\/$/, '')
-    if (!trimmed) return null
-    try {
-      const url = new URL(trimmed)
-      if ((url.hostname === 'localhost' || url.hostname === '127.0.0.1') && (url.port === '8000' || url.port === '8001' || url.port === '8085')) {
-        url.port = '8085'
-      }
-      return url.origin
-    } catch {
-      return null
-    }
-  }
-
-  const normalizedStoredBase = normalizeApiBase(storedBase)
-  const normalizedEnvBase = normalizeApiBase(window.CRM_API_BASE)
-  const normalizedWindowBase = normalizeApiBase(window.API_BASE)
-  const shouldUseLocalBackend = isFileProtocol || host === 'localhost' || host === '127.0.0.1'
-  
-  // For LAN access, use the same host as frontend but with backend port 8085
-  const lanBackendBase = window.location.protocol + '//' + host + ':8085'
-  const localBackendBase = 'http://localhost:8085'
-
-  if (normalizedEnvBase) {
-    window.API_BASE = normalizedEnvBase
-  } else if (normalizedWindowBase) {
-    window.API_BASE = normalizedWindowBase
-  } else if (normalizedStoredBase) {
-    window.API_BASE = normalizedStoredBase
-  } else if (shouldUseLocalBackend) {
-    // Use backend URL for local development
-    window.API_BASE = localBackendBase
-  } else {
-    // For LAN access, use same host with backend port
-    window.API_BASE = lanBackendBase
-  }
-
-  try {
-    if (window.API_BASE) {
-      localStorage.setItem('crm_api_base', window.API_BASE)
-    }
-  } catch (e) {
-    console.warn('Unable to persist CRM API base:', e)
-  }
+  // API base URL is now configured by config.js
+  // Ensure config.js is loaded before this script
+  console.log('[CRM] Using centralized API base from config.js:', window.API_BASE);
   // Auto-inject Home button if missing (to handle server caching)
   document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
@@ -118,6 +63,11 @@
     <div>
       <div class="sb-name">Funding Sathi</div>
       <div class="sb-sub">AI Sales CRM</div>
+    </div>
+    <!-- Real-time Connection Indicator -->
+    <div id="realtimeIndicator" class="realtime-indicator" style="display:none;align-items:center;gap:6px;padding:4px 8px;border-radius:12px;font-size:11px;font-weight:500;margin-left:auto;">
+      <span id="realtimeStatusDot" class="status-dot"></span>
+      <span id="realtimeStatusText">Connecting...</span>
     </div>
     <!-- Imported Data Section - Hidden as datasets are managed by backend API -->
     <section class="section" id="sec-imported-data" style="display:none;">
@@ -1483,8 +1433,20 @@
             <select class="sel-f" id="leadStatusF" onchange="renderLeads()"><option value="">All Statuses</option><option>New Lead</option><option>Contacted</option><option>Proposal Shared</option><option>Term Sheet Issued</option><option>Documentation</option><option>Disbursement</option><option>Closed Won</option><option>Closed Lost</option></select>
             <input type="date" id="leadDate" class="sel-f" onchange="renderLeads()" title="Filter by date">
             <span id="leadsCount" style="font-size:12px;color:var(--gray-400);"></span>
+            <button class="btn btn-outline" onclick="openImportCSVModal()"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Import CSV</button>
             <button class="btn btn-outline" onclick="exportData('leads')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Export</button>
           </div>
+          <script>
+            // Override renderLeads to handle async properly when called from HTML events
+            const originalRenderLeads = window.renderLeads;
+            window.renderLeads = function() {
+              if (originalRenderLeads && originalRenderLeads.constructor.name === 'AsyncFunction') {
+                originalRenderLeads().catch(err => console.error('Error in renderLeads:', err));
+              } else {
+                originalRenderLeads();
+              }
+            };
+          </script>
         </div>
         <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Executive</th><th>Company</th><th>Contact</th><th>Product</th><th>Source</th><th>Status</th><th>Follow-up</th><th>Deal Value</th><th>Action</th></tr></thead><tbody id="leadsBody"></tbody></table></div>
       </div>
@@ -4054,6 +4016,7 @@
 <script src="js/crm-utils.js"></script>
 <script src="js/crm-api-sync.js?v=20260627-v2"></script>
 <script src="js/crm-data-store.js"></script>
+<script src="js/crm-api-client.js"></script>
 <script src="js/crm-init.js?v=20260627-v3"></script>
 <script src="js/crm-session-timer.js"></script>
 <script src="js/crm-timer-guard.js?v=20260625-v4"></script>
@@ -4476,6 +4439,37 @@
   </div>
 </div>
 
+<div class="modal-ov" id="importCSVModal" style="display:none;">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <h3 class="modal-title">Import Leads from CSV</h3>
+      <button type="button" class="modal-close" aria-label="Close" onclick="closeImportCSVModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:16px;">
+        <label style="display:block;margin-bottom:8px;font-weight:500;">Select CSV File</label>
+        <input type="file" id="csvFileInput" accept=".csv" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:6px;">
+      </div>
+      <div style="margin-bottom:16px;font-size:12px;color:var(--gray-500);">
+        <p><strong>Supported CSV format:</strong></p>
+        <ul style="margin:8px 0;padding-left:20px;">
+          <li>Comma (,) or semicolon (;) delimited</li>
+          <li>Headers: lead_name, company_name, mobile, email, city, state, product_type, lead_source, lead_status, remarks</li>
+          <li>Or JSON data column with contactPerson, companyName, contactNumber, emailId, etc.</li>
+        </ul>
+      </div>
+      <div id="importProgress" style="display:none;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--gray-600);">Importing leads...</div>
+      </div>
+      <div id="importResult" style="display:none;margin-bottom:16px;padding:12px;border-radius:6px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-outline" type="button" onclick="closeImportCSVModal()">Cancel</button>
+      <button class="btn-primary" type="button" onclick="importLeadsCSV()">Import</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // Direct inline function for Create Contact modal
 function openContactModal() {
@@ -4495,12 +4489,129 @@ function closeContactModal() {
   const modal = document.getElementById('contactModal')
   const backdrop = document.getElementById('modalBackdrop')
   if (modal) modal.style.display = 'none'
-  if (backdrop) backdrop.style.display = 'none'
-  // Clear form
-  ;['contactFirstName', 'contactLastName', 'contactEmail', 'contactPhone', 'contactCompany', 'contactTitle', 'contactAddress', 'contactNotes'].forEach(id => {
-    const el = document.getElementById(id)
-    if (el) el.value = ''
-  })
+}
+
+// CSV Import Modal Functions
+function openImportCSVModal() {
+  const modal = document.getElementById('importCSVModal')
+  if (modal) {
+    modal.style.display = 'flex'
+    modal.classList.add('open')
+    // Reset form
+    document.getElementById('csvFileInput').value = ''
+    document.getElementById('importProgress').style.display = 'none'
+    document.getElementById('importResult').style.display = 'none'
+  }
+}
+
+function closeImportCSVModal() {
+  const modal = document.getElementById('importCSVModal')
+  if (modal) {
+    modal.style.display = 'none'
+    modal.classList.remove('open')
+  }
+}
+
+async function importLeadsCSV() {
+  const fileInput = document.getElementById('csvFileInput')
+  const progressDiv = document.getElementById('importProgress')
+  const resultDiv = document.getElementById('importResult')
+  
+  if (!fileInput.files || fileInput.files.length === 0) {
+    alert('Please select a CSV file to import')
+    return
+  }
+  
+  const file = fileInput.files[0]
+  if (!file.name.endsWith('.csv')) {
+    alert('Please select a CSV file')
+    return
+  }
+  
+  progressDiv.style.display = 'block'
+  resultDiv.style.display = 'none'
+  
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+    
+    // Get session token
+    let token = null
+    try {
+      const session = JSON.parse(localStorage.getItem('crm_session') || '{}')
+      token = session.access_token || session.token
+    } catch (e) {
+      console.error('[CSV Import] Failed to parse session:', e)
+    }
+    
+    // Use the same API base detection as other API calls
+    let apiBase = window.API_BASE
+    if (!apiBase && typeof getCRMApiBase === 'function') {
+      apiBase = getCRMApiBase()
+    }
+    if (!apiBase) {
+      apiBase = 'http://localhost:8085'
+    }
+    
+    console.log('[CSV Import] API Base:', apiBase)
+    console.log('[CSV Import] Full URL:', `${apiBase}/leads/import/csv`)
+    console.log('[CSV Import] Has token:', !!token)
+    
+    const headers = {}
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+    
+    const response = await fetch(`${apiBase}/leads/import/csv`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: headers,
+      body: formData
+    })
+    
+    console.log('[CSV Import] Response status:', response.status)
+    console.log('[CSV Import] Response headers:', Object.fromEntries(response.headers.entries()))
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('[CSV Import] Error response:', errorText)
+      let error = { detail: 'Import failed' }
+      try {
+        error = JSON.parse(errorText)
+      } catch (e) {
+        error.detail = errorText || 'Import failed'
+      }
+      throw new Error(error.detail || 'Import failed')
+    }
+    
+    const result = await response.json()
+    console.log('[CSV Import] Result:', result)
+    
+    progressDiv.style.display = 'none'
+    resultDiv.style.display = 'block'
+    resultDiv.style.background = result.imported > 0 ? '#d4edda' : '#f8d7da'
+    resultDiv.style.color = result.imported > 0 ? '#155724' : '#721c24'
+    
+    resultDiv.innerHTML = `
+      <strong>Import Complete</strong><br>
+      Imported: ${result.imported} leads<br>
+      Failed: ${result.failed} rows
+      ${result.errors && result.errors.length > 0 ? '<br><small>Errors: ' + result.errors.join(', ') + '</small>' : ''}
+    `
+    
+    // Refresh leads if import was successful
+    if (result.imported > 0 && typeof renderLeads === 'function') {
+      setTimeout(() => renderLeads(), 1000)
+    }
+    
+  } catch (error) {
+    console.error('[CSV Import] Error:', error)
+    progressDiv.style.display = 'none'
+    resultDiv.style.display = 'block'
+    resultDiv.style.background = '#f8d7da'
+    resultDiv.style.color = '#721c24'
+    resultDiv.innerHTML = `<strong>Import Failed</strong><br>${error.message}`
+  }
 }
 
 // Lender Query Management Functions

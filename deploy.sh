@@ -33,11 +33,24 @@ echo -e "${GREEN}✓ Docker and Docker Compose are installed${NC}"
 # Check if .env file exists
 if [ ! -f ".env" ]; then
     echo -e "${YELLOW}⚠ .env file not found${NC}"
-    echo "Creating .env from .env.example..."
-    cp .env.example .env
-    echo -e "${YELLOW}⚠ Please edit .env with your configuration${NC}"
-    exit 1
+    if [ -f ".env.production" ]; then
+        echo "Using .env.production..."
+        cp .env.production .env
+    elif [ -f ".env.example" ]; then
+        echo "Creating .env from .env.example..."
+        cp .env.example .env
+        echo -e "${YELLOW}⚠ Please edit .env with your configuration${NC}"
+        exit 1
+    else
+        echo -e "${RED}✗ No .env file found and no template available${NC}"
+        exit 1
+    fi
 fi
+
+# Stop existing services if running
+echo ""
+echo "🛑 Stopping existing services..."
+docker-compose down 2>/dev/null || true
 
 # Pull latest images
 echo ""
@@ -73,9 +86,10 @@ echo ""
 echo -e "${GREEN}✅ Deployment complete!${NC}"
 echo ""
 echo "📱 Access your application at:"
-echo "   Frontend: http://$(hostname -I | awk '{print $1}'):3000"
-echo "   Backend API: http://$(hostname -I | awk '{print $1}'):8000"
-echo "   API Docs: http://$(hostname -I | awk '{print $1}'):8000/api/docs"
+echo "   Frontend: http://$(hostname -I | awk '{print $1}')"
+echo "   Backend API: http://$(hostname -I | awk '{print $1}')/auth/login"
+echo "   API Docs: http://$(hostname -I | awk '{print $1}')/api/docs"
 echo ""
 echo "🛑 To stop services, run: docker-compose down"
 echo "📊 To view logs, run: docker-compose logs -f [service-name]"
+echo "🔄 To restart services, run: docker-compose restart"

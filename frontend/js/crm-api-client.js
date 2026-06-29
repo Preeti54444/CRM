@@ -16,7 +16,15 @@ class APIClient {
    * Detect the API base URL from various sources
    */
   detectBaseURL() {
-    // Check if explicitly set in window
+    // Use centralized API base detection from config.js
+    if (typeof window.getCRMApiBase === 'function') {
+      const apiBase = window.getCRMApiBase()
+      if (apiBase) {
+        return this.normalizeURL(apiBase)
+      }
+    }
+
+    // Fallback to window.API_BASE if set
     if (window.API_BASE) {
       return this.normalizeURL(window.API_BASE)
     }
@@ -32,18 +40,17 @@ class APIClient {
       return this.normalizeURL(window.CRM_API_BASE)
     }
 
-    // Use centralized API base detection if available
-    if (typeof getCRMApiBase === 'function') {
-      const apiBase = getCRMApiBase()
-      if (apiBase) {
-        return this.normalizeURL(apiBase)
-      }
-    }
-
     // Default for local development - use current origin to avoid CORS
     const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     if (isLocal) {
       return window.location.origin
+    }
+
+    // For LAN deployment with separate backend server
+    // Set window.CRM_BACKEND_IP to override backend IP for LAN access
+    if (window.CRM_BACKEND_IP) {
+      const protocol = window.location.protocol
+      return `${protocol}//${window.CRM_BACKEND_IP}:8085`
     }
 
     // For LAN access, use backend port 8085 if frontend is on port 3000
@@ -51,7 +58,8 @@ class APIClient {
     const port = window.location.port
     const protocol = window.location.protocol
     
-    if (port === '3000') {
+    // Default to backend on port 8085 for LAN access
+    if (port === '3000' || !port) {
       return `${protocol}//${host}:8085`
     }
 
@@ -317,7 +325,38 @@ class APIClient {
 
   async getLeads(params = {}) {
     const query = new URLSearchParams(params).toString()
-    return this.get(`/leads?${query}`)
+    console.log(`[APIClient] getLeads called with params:`, params)
+    console.log(`[APIClient] Full URL: /leads?${query}`)
+    const response = await this.get(`/leads?${query}`)
+    console.log(`[APIClient] getLeads response:`, response)
+    // Handle both old format (array) and new format (object with items and total)
+    if (Array.isArray(response)) {
+      const result = { items: response, total: response.length }
+      console.log(`[APIClient] Converted array to items format:`, result)
+      return result
+    }
+    console.log(`[APIClient] Returning response as-is:`, response)
+    return response
+  }
+
+  async getNewLeads(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    const response = await this.get(`/leads/new-leads?${query}`)
+    // Handle both old format (array) and new format (object with items and total)
+    if (Array.isArray(response)) {
+      return { items: response, total: response.length }
+    }
+    return response
+  }
+
+  async getCallManagementLeads(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    const response = await this.get(`/leads/call-management?${query}`)
+    // Handle both old format (array) and new format (object with items and total)
+    if (Array.isArray(response)) {
+      return { items: response, total: response.length }
+    }
+    return response
   }
 
   async getLead(leadId) {
@@ -334,6 +373,42 @@ class APIClient {
 
   async deleteLead(leadId) {
     return this.delete(`/leads/${leadId}`)
+  }
+
+  // ═══════════════════════════════════════════════════════════════
+  // CALLS ENDPOINTS
+  // ═══════════════════════════════════════════════════════════════
+
+  async getCalls(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    console.log(`[APIClient] getCalls called with params:`, params)
+    console.log(`[APIClient] Full URL: /calls?${query}`)
+    const response = await this.get(`/calls?${query}`)
+    console.log(`[APIClient] getCalls response:`, response)
+    // Handle both old format (array) and new format (object with items and total)
+    if (Array.isArray(response)) {
+      const result = { items: response, total: response.length }
+      console.log(`[APIClient] Converted array to items format:`, result)
+      return result
+    }
+    console.log(`[APIClient] Returning response as-is:`, response)
+    return response
+  }
+
+  async getCall(callId) {
+    return this.get(`/calls/${callId}`)
+  }
+
+  async createCall(callData) {
+    return this.post('/calls', callData)
+  }
+
+  async updateCall(callId, callData) {
+    return this.put(`/calls/${callId}`, callData)
+  }
+
+  async deleteCall(callId) {
+    return this.delete(`/calls/${callId}`)
   }
 
   // ═══════════════════════════════════════════════════════════════

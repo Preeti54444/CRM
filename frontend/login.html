@@ -6,60 +6,22 @@
 <title>Funding Sathi CRM – Sign In</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/login.css">
+<script src="config.js"></script>
 <script>
-  const isFileProtocol = window.location.protocol === 'file:'
-  const host = window.location.hostname || 'localhost'
-  const port = window.location.port ? ':' + window.location.port : ''
-  const origin = window.location.protocol + '//' + host + port
-  const currentPath = window.location.pathname.toLowerCase()
+  // API base URL is now configured by config.js
+  // Ensure config.js is loaded before this script
+  const USE_BACKEND_AUTH = true; // Enable backend authentication
 
-  const storedBase = (() => {
-    try { 
-      // Clear cached API base to force using current origin for LAN access
-      localStorage.removeItem('crm_api_base')
-      return null 
-    } catch (e) { return null }
-  })();
-
-  function normalizeApiBase(value) {
-    if (!value) return null
-    const trimmed = String(value).trim().replace(/\/$/, '')
-    if (!trimmed) return null
-    try {
-      const url = new URL(trimmed)
-      // Only force port 8085 for localhost access
-      // For LAN access, preserve the actual port
-      const isLocalhost = url.hostname === 'localhost' || url.hostname === '127.0.0.1'
-      if (isLocalhost && (url.port === '8000' || url.port === '8001' || url.port === '8085')) {
-        url.port = '8085'
-      }
-      return url.origin
-    } catch {
-      return null
+  function getCRMApiBase() {
+    // Use centralized function from config.js
+    if (typeof window.getCRMApiBase === 'function') {
+      return window.getCRMApiBase();
     }
-  }
-
-  const normalizedStoredBase = normalizeApiBase(storedBase)
-  const normalizedEnvBase = normalizeApiBase(window.CRM_API_BASE)
-  const normalizedWindowBase = normalizeApiBase(window.API_BASE)
-  const shouldUseLocalBackend = isFileProtocol || host === 'localhost' || host === '127.0.0.1'
-  
-  // For LAN access, use the same host as frontend but with backend port 8085
-  const lanBackendBase = window.location.protocol + '//' + host + ':8085'
-  const localBackendBase = 'http://localhost:8085'
-
-  if (normalizedEnvBase) {
-    window.API_BASE = normalizedEnvBase
-  } else if (normalizedWindowBase) {
-    window.API_BASE = normalizedWindowBase
-  } else if (normalizedStoredBase) {
-    window.API_BASE = normalizedStoredBase
-  } else if (shouldUseLocalBackend) {
-    // Use backend URL for local development
-    window.API_BASE = localBackendBase
-  } else {
-    // For LAN access, use same host with backend port
-    window.API_BASE = lanBackendBase
+    // Fallback if config.js not loaded
+    if (window.API_BASE) {
+      return String(window.API_BASE).replace(/\/$/, '');
+    }
+    return window.location.origin;
   }
 
   function renderApiBaseDebug() {
@@ -75,33 +37,11 @@
     debug.style.lineHeight = '1.4'
     debug.style.borderRadius = '10px'
     debug.style.maxWidth = '320px'
-    debug.textContent = `PAGE: ${window.location.pathname} | API_BASE: ${window.API_BASE}`
+    debug.textContent = `PAGE: ${window.location.pathname} | API_BASE: ${window.API_BASE || getCRMApiBase()}`
     document.body?.appendChild(debug)
   }
 
   window.addEventListener('DOMContentLoaded', renderApiBaseDebug)
-
-  console.debug('CRM API base selected:', window.API_BASE)
-
-  try {
-    if (window.API_BASE) {
-      localStorage.setItem('crm_api_base', window.API_BASE)
-    }
-  } catch (e) {
-    console.warn('Unable to persist CRM API base:', e)
-  }
-
-  const USE_BACKEND_AUTH = true; // Enable backend authentication
-
-  function getCRMApiBase() {
-    if (window.API_BASE) {
-      return String(window.API_BASE).replace(/\/$/, '');
-    }
-    if (storedBase) {
-      return String(storedBase).replace(/\/$/, '');
-    }
-    return origin;
-  }
 
   async function tryBackendLogin(email, password) {
     const endpoint = getCRMApiBase() + '/auth/login';

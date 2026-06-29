@@ -781,12 +781,44 @@ async function startNotificationPolling(intervalMs = 60000) {
 // Real-time WebSocket connection for notifications
 let _realtimeSocket = null
 let _realtimeReconnectTimer = null
+
+function updateRealtimeIndicator(status) {
+  const indicator = document.getElementById('realtimeIndicator')
+  const statusDot = document.getElementById('realtimeStatusDot')
+  const statusText = document.getElementById('realtimeStatusText')
+  
+  if (!indicator) return
+  
+  indicator.className = 'realtime-indicator'
+  indicator.style.display = 'flex'
+  
+  switch(status) {
+    case 'connected':
+      indicator.classList.add('connected')
+      statusText.textContent = 'Live'
+      break
+    case 'disconnected':
+      indicator.classList.add('disconnected')
+      statusText.textContent = 'Offline'
+      break
+    case 'connecting':
+      indicator.classList.add('connecting')
+      statusText.textContent = 'Connecting...'
+      break
+    default:
+      statusText.textContent = 'Unknown'
+  }
+}
+
 function startRealtimeSocket() {
   try {
     if (!isBackendNotificationsEnabled()) return
     const session = S || JSON.parse(localStorage.getItem('crm_session') || '{}')
     const token = session?.access_token
     if (!token) return
+    
+    updateRealtimeIndicator('connecting')
+    
     const apiBase = getCRMApiBase()
     const wsProtocol = apiBase.startsWith('https') ? 'wss' : 'ws'
     const host = apiBase.replace(/^https?:\/\//, '')
@@ -797,6 +829,7 @@ function startRealtimeSocket() {
 
     _realtimeSocket.onopen = () => {
       console.info('Realtime notifications socket connected')
+      updateRealtimeIndicator('connected')
       if (_realtimeReconnectTimer) { clearTimeout(_realtimeReconnectTimer); _realtimeReconnectTimer = null }
     }
 
@@ -822,6 +855,7 @@ function startRealtimeSocket() {
     _realtimeSocket.onclose = (ev) => {
       console.warn('Realtime socket closed', ev)
       _realtimeSocket = null
+      updateRealtimeIndicator('disconnected')
       if (!_realtimeReconnectTimer) _realtimeReconnectTimer = setTimeout(startRealtimeSocket, 5000)
     }
 
@@ -894,7 +928,9 @@ function handleDataSyncEvent(data) {
       'eod': 'crm_eod',
       'wod': 'crm_wod',
       'notification': 'crm_notifications',
-      'notifications': 'crm_notifications'
+      'notifications': 'crm_notifications',
+      'call': 'crm_calls',
+      'calls': 'crm_calls'
     }
 
     const storageKey = entityKeyMap[entity_type]
@@ -912,12 +948,13 @@ function handleDataSyncEvent(data) {
       case 'create':
       case 'update':
         // Find and replace or add the item
-        const itemId = payload.id || payload.lead_id || payload.task_id
+        const itemId = payload.id || payload.lead_id || payload.task_id || payload.call_id
         if (itemId) {
           const index = updatedData.findIndex(item => 
             item.id === itemId || 
             item.lead_id === itemId || 
-            item.task_id === itemId
+            item.task_id === itemId ||
+            item.call_id === itemId
           )
           if (index >= 0) {
             updatedData[index] = { ...updatedData[index], ...payload }
@@ -930,12 +967,13 @@ function handleDataSyncEvent(data) {
         break
 
       case 'delete':
-        const deleteId = payload.id || payload.lead_id || payload.task_id
+        const deleteId = payload.id || payload.lead_id || payload.task_id || payload.call_id
         if (deleteId) {
           updatedData = updatedData.filter(item => 
             item.id !== deleteId && 
             item.lead_id !== deleteId && 
-            item.task_id !== deleteId
+            item.task_id !== deleteId &&
+            item.call_id !== deleteId
           )
         }
         break
@@ -1440,61 +1478,12 @@ function mergeDatasetById(existing, incoming) {
 }
 
 function getCRMApiBaseCandidates() {
-  const host = window.location.hostname || 'localhost'
-  const port = window.location.port ? ':' + window.location.port : ''
-  const origin = window.location.protocol + '//' + host + port
-
-  function normalizeApiBase(value) {
-    if (!value) return null
-    const trimmed = String(value).trim().replace(/\/$/, '')
-    if (!trimmed) return null
-    try {
-      const url = new URL(trimmed)
-      // Only force port 8085 for localhost access
-      // For LAN access, preserve the actual port
-      const isLocalhost = url.hostname === 'localhost' || url.hostname === '127.0.0.1'
-      if (isLocalhost && (url.port === '8000' || url.port === '8001' || url.port === '8085')) {
-        url.port = '8085'
-      }
-      return url.origin
-    } catch {
-      return null
-    }
-  }
-
-  const candidates = []
-  if (window.CRM_API_BASE) candidates.push(normalizeApiBase(window.CRM_API_BASE))
-  if (window.API_BASE) candidates.push(normalizeApiBase(window.API_BASE))
-
-  try {
-    const storedBase = localStorage.getItem('crm_api_base')
-    const normalizedStored = normalizeApiBase(storedBase)
-    if (normalizedStored) candidates.push(normalizedStored)
-  } catch (e) {
-    console.warn('getCRMApiBaseCandidates: unable to read crm_api_base', e)
-  }
-
-  if (window.location.protocol === 'file:' || host === 'localhost' || host === '127.0.0.1') {
-    candidates.push(origin)
-  }
-
-  // For LAN access, use same host with backend port 8085
-  if (origin.startsWith('http://') || origin.startsWith('https://')) {
-    // If accessing frontend on port 3000, use backend on port 8085
-    if (window.location.port === '3000') {
-      const lanBackendBase = window.location.protocol + '//' + host + ':8085'
-      candidates.push(lanBackendBase)
-    } else if (window.location.port === '8085') {
-      // Already on backend port, use as-is
-      candidates.push(origin)
-    } else {
-      // For other ports, try both current origin and backend port 8085
-      const lanBackendBase = window.location.protocol + '//' + host + ':8085'
-      candidates.push(lanBackendBase)
-      candidates.push(origin)
-    }
-  }
-  return [...new Set(candidates.filter(Boolean))]
+  // Use centralized API base from config.js
+  const apiBase = typeof window.getCRMApiBase === 'function' 
+    ? window.getCRMApiBase() 
+    : window.API_BASE || window.location.origin;
+  
+  return [apiBase].filter(Boolean);
 }
 
 function getCRMSession() {
@@ -1637,6 +1626,8 @@ async function checkBackendHealth(forceRefresh = false) {
 async function postToCRMBackend(path, payload) {
   if (!path) throw new Error('Backend path required');
   const endpointPath = '/' + String(path).replace(/^\/+/, '');
+  console.log(`[postToCRMBackend] Requesting: ${endpointPath}`, payload);
+  
   const res = await resolveCRMApiRequest(endpointPath, {
     method: 'POST',
     headers: {
@@ -1647,7 +1638,10 @@ async function postToCRMBackend(path, payload) {
     body: JSON.stringify(payload || {})
   });
 
+  console.log(`[postToCRMBackend] Response status: ${res.status}`, res.statusText);
   const text = await res.text();
+  console.log(`[postToCRMBackend] Response body:`, text);
+  
   if (!res.ok) {
     throw new Error(`Backend save failed (${res.status}): ${text}`);
   }
@@ -1697,11 +1691,198 @@ async function refreshBackendLeadJourneyData() {
     }
 
     localStorage.setItem('crm_leads_journey', JSON.stringify(normalized))
+    console.log('[refreshBackendLeadJourneyData] Synced', normalized.length, 'leads from backend')
     return true
   } catch (err) {
     console.warn('refreshBackendLeadJourneyData failed', err)
     return false
   }
+}
+
+async function refreshBackendCallsData() {
+  if (typeof resolveCRMApiRequest !== 'function' || !getCRMApiBase() || typeof S === 'undefined' || !S || S.backendAuth !== true) {
+    return false
+  }
+
+  try {
+    const response = await resolveCRMApiRequest('/calls', {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      return false
+    }
+
+    const data = await response.json()
+    const normalized = Array.isArray(data) ? data : Object.values(data || {})
+    if (!Array.isArray(normalized) || normalized.length === 0) {
+      return false
+    }
+
+    localStorage.setItem('crm_calls', JSON.stringify(normalized))
+    console.log('[refreshBackendCallsData] Synced', normalized.length, 'calls from backend')
+    return true
+  } catch (err) {
+    console.warn('refreshBackendCallsData failed', err)
+    return false
+  }
+}
+
+async function refreshBackendFollowUpsData() {
+  if (typeof resolveCRMApiRequest !== 'function' || !getCRMApiBase() || typeof S === 'undefined' || !S || S.backendAuth !== true) {
+    return false
+  }
+
+  try {
+    const response = await resolveCRMApiRequest('/followups', {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      return false
+    }
+
+    const data = await response.json()
+    const normalized = Array.isArray(data) ? data : Object.values(data || {})
+    if (!Array.isArray(normalized) || normalized.length === 0) {
+      return false
+    }
+
+    localStorage.setItem('crm_followups', JSON.stringify(normalized))
+    console.log('[refreshBackendFollowUpsData] Synced', normalized.length, 'follow-ups from backend')
+    return true
+  } catch (err) {
+    console.warn('refreshBackendFollowUpsData failed', err)
+    return false
+  }
+}
+
+async function refreshBackendTasksData() {
+  if (typeof resolveCRMApiRequest !== 'function' || !getCRMApiBase() || typeof S === 'undefined' || !S || S.backendAuth !== true) {
+    return false
+  }
+
+  try {
+    const response = await resolveCRMApiRequest('/tasks', {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      return false
+    }
+
+    const data = await response.json()
+    const normalized = Array.isArray(data) ? data : Object.values(data || {})
+    if (!Array.isArray(normalized) || normalized.length === 0) {
+      return false
+    }
+
+    localStorage.setItem('crm_tasks', JSON.stringify(normalized))
+    console.log('[refreshBackendTasksData] Synced', normalized.length, 'tasks from backend')
+    return true
+  } catch (err) {
+    console.warn('refreshBackendTasksData failed', err)
+    return false
+  }
+}
+
+async function refreshBackendNotificationsData() {
+  if (typeof resolveCRMApiRequest !== 'function' || !getCRMApiBase() || typeof S === 'undefined' || !S || S.backendAuth !== true) {
+    return false
+  }
+
+  try {
+    const response = await resolveCRMApiRequest('/notifications', {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      return false
+    }
+
+    const data = await response.json()
+    const normalized = Array.isArray(data) ? data : Object.values(data || {})
+    if (!Array.isArray(normalized) || normalized.length === 0) {
+      return false
+    }
+
+    localStorage.setItem('crm_notifications', JSON.stringify(normalized))
+    console.log('[refreshBackendNotificationsData] Synced', normalized.length, 'notifications from backend')
+    return true
+  } catch (err) {
+    console.warn('refreshBackendNotificationsData failed', err)
+    return false
+  }
+}
+
+// Periodic refresh for cross-device sync (every 30 seconds)
+let periodicRefreshInterval = null
+function startPeriodicBackendRefresh() {
+  if (periodicRefreshInterval) return // Already started
+  
+  periodicRefreshInterval = setInterval(() => {
+    // Refresh all data types
+    const refreshPromises = []
+    
+    if (typeof refreshBackendLeadJourneyData === 'function') {
+      refreshPromises.push(refreshBackendLeadJourneyData().catch(err => 
+        console.warn('[Periodic Refresh] Failed to refresh backend leads:', err)
+      ))
+    }
+    
+    if (typeof refreshBackendCallsData === 'function') {
+      refreshPromises.push(refreshBackendCallsData().catch(err => 
+        console.warn('[Periodic Refresh] Failed to refresh backend calls:', err)
+      ))
+    }
+    
+    if (typeof refreshBackendFollowUpsData === 'function') {
+      refreshPromises.push(refreshBackendFollowUpsData().catch(err => 
+        console.warn('[Periodic Refresh] Failed to refresh backend follow-ups:', err)
+      ))
+    }
+    
+    if (typeof refreshBackendTasksData === 'function') {
+      refreshPromises.push(refreshBackendTasksData().catch(err => 
+        console.warn('[Periodic Refresh] Failed to refresh backend tasks:', err)
+      ))
+    }
+    
+    if (typeof refreshBackendNotificationsData === 'function') {
+      refreshPromises.push(refreshBackendNotificationsData().catch(err => 
+        console.warn('[Periodic Refresh] Failed to refresh backend notifications:', err)
+      ))
+    }
+    
+    Promise.allSettled(refreshPromises)
+  }, 30000) // 30 seconds
+  
+  console.log('[Periodic Refresh] Started - refreshing all backend data every 30 seconds')
+}
+
+function stopPeriodicBackendRefresh() {
+  if (periodicRefreshInterval) {
+    clearInterval(periodicRefreshInterval)
+    periodicRefreshInterval = null
+    console.log('[Periodic Refresh] Stopped')
+  }
+}
+
+// Start periodic refresh when page loads
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      startPeriodicBackendRefresh()
+    }, 5000) // Start after 5 seconds to allow initial sync
+  })
 }
 
 // Role-based data access

@@ -3,19 +3,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    environment:
-      - DATABASE_URL=postgresql://postgres:fundingsathicrm@postgres:5432/fundingsathicrm
-      - SECRET_KEY=e84bb91e4680d11d396909970785694a5c09fc7e9c9c142c583a2ede7d10ecf9
-      - ENVIRONMENT=production
-      - LOG_LEVEL=INFO
-      - ACCESS_TOKEN_EXPIRE_MINUTES=60
-      - ALLOWED_HOSTS=localhost
-      - FRONTEND_URL=http://localhost
-      - SMTP_HOST=smtp.gmail.com
-      - SMTP_PORT=587
-      - SMTP_USER=your-email@gmail.com
-      - SMTP_PASSWORD=your-app-specific-password
-      - EMAIL_FROM=noreply@fundingsathi.com
+    env_file:
+      - .env.lan
     ports:
       - "8085:8085"
     restart: unless-stopped

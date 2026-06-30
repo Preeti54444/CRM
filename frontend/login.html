@@ -12,18 +12,6 @@
   // Ensure config.js is loaded before this script
   const USE_BACKEND_AUTH = true; // Enable backend authentication
 
-  function getCRMApiBase() {
-    // Use centralized function from config.js
-    if (typeof window.getCRMApiBase === 'function') {
-      return window.getCRMApiBase();
-    }
-    // Fallback if config.js not loaded
-    if (window.API_BASE) {
-      return String(window.API_BASE).replace(/\/$/, '');
-    }
-    return window.location.origin;
-  }
-
   function renderApiBaseDebug() {
     const debug = document.createElement('div')
     debug.style.position = 'fixed'
@@ -37,14 +25,14 @@
     debug.style.lineHeight = '1.4'
     debug.style.borderRadius = '10px'
     debug.style.maxWidth = '320px'
-    debug.textContent = `PAGE: ${window.location.pathname} | API_BASE: ${window.API_BASE || getCRMApiBase()}`
+    debug.textContent = `PAGE: ${window.location.pathname} | API_BASE: ${window.API_BASE || window.location.origin}`
     document.body?.appendChild(debug)
   }
 
   window.addEventListener('DOMContentLoaded', renderApiBaseDebug)
 
   async function tryBackendLogin(email, password) {
-    const endpoint = getCRMApiBase() + '/auth/login';
+    const endpoint = (window.API_BASE || window.location.origin) + '/auth/login';
     console.log('[tryBackendLogin] Endpoint:', endpoint);
     try {
       const response = await fetch(endpoint, {

@@ -1506,16 +1506,9 @@ function getCRMApiBaseCandidates() {
     candidates.push(window.API_BASE);
   }
 
-  if (typeof window.getCRMApiBase === 'function') {
-    try {
-      const resolved = window.getCRMApiBase();
-      if (resolved && !candidates.includes(resolved)) {
-        candidates.push(resolved);
-      }
-    } catch (err) {
-      console.warn('[CRM API] Unable to resolve API base via helper:', err);
-    }
-  }
+  // NOTE: REMOVED recursive call to window.getCRMApiBase() - was causing infinite loop
+  // getCRMApiBaseCandidates() should only gather static candidates, not call getCRMApiBase()
+  // to avoid: getCRMApiBase() -> getCRMApiBaseCandidates() -> getCRMApiBase() -> ...
 
   if (window.location.origin && !candidates.includes(window.location.origin)) {
     candidates.push(window.location.origin);

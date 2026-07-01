@@ -19,7 +19,7 @@ from ..services.typed_report_service import (
 from ..services.user_service import get_users
 from ..services.websocket_notification_service import send_notification_sync, broadcast_data_sync_sync
 
-router = APIRouter(prefix="", tags=["reports"])
+router = APIRouter(prefix="/reports", tags=["reports"])
 
 def _notify_report_submission(
     db: Session,

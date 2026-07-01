@@ -18,6 +18,12 @@ def create_customer(payload: CustomerProfileCreate, db: Session = Depends(get_db
     return obj
 
 
+@router.get("", response_model=list[CustomerProfileResponse])
+def list_customers(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    from ..services.customer_service import list_customers as list_customers_service
+    return list_customers_service(db)
+
+
 @router.get("/{customer_id}", response_model=CustomerProfileResponse)
 def get_customer(customer_id: UUID, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     obj = get_customer_by_id(db, customer_id)

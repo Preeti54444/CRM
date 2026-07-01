@@ -45,6 +45,11 @@ def get_customer_by_id(db: Session, customer_id: UUID) -> Optional[CustomerProfi
     return db.query(CustomerProfile).filter(CustomerProfile.id == customer_id).first()
 
 
+def list_customers(db: Session) -> list[CustomerProfile]:
+    """Retrieve all customer profiles"""
+    return db.query(CustomerProfile).all()
+
+
 def update_customer(db: Session, obj: CustomerProfile, payload: CustomerProfileUpdate) -> CustomerProfile:
     for field, value in payload.__dict__.items():
         if value is not None:

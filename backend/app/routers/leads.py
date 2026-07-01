@@ -81,18 +81,15 @@ def create_lead_endpoint(
     payload: LeadCreate,
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
-    # TEMPORARY: Disable auth to test if request reaches backend
-    # current_user=Depends(get_current_user),
+    current_user=Depends(get_current_user),
 ):
     logger.info(f"POST /leads - Payload received: {payload.dict()}")
     logger.info(f"POST /leads - Payload JSON: {payload.model_dump_json()}")
-    # logger.info(f"POST /leads - Current user ID: {current_user.id}")
+    logger.info(f"POST /leads - Current user ID: {current_user.id}, email: {current_user.email}")
     
     try:
-        # TEMPORARY: Use a valid user ID from database for testing
-        from uuid import UUID
-        creator_id = UUID("94f034de-d8fe-4fc8-872d-3f6c44d677aa")  # Corporate User ID (valid in DB)
-        creator_name = "Corporate User"
+        creator_id = current_user.id
+        creator_name = getattr(current_user, "full_name", None) or current_user.email
         
         lead = create_lead(db, payload, creator_id=creator_id)
         _notify_lead_submission(db, background_tasks, creator_id, creator_name)
@@ -108,6 +105,8 @@ def create_lead_endpoint(
         
         logger.info(f"POST /leads - Lead created successfully: ID={lead.id}")
         return lead
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"POST /leads - Exception occurred: {type(e).__name__}: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Lead creation failed: {str(e)}")

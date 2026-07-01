@@ -4,14 +4,17 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import HTTPException, status
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from ..models.lead import Lead
+from ..models.user import User
 from ..schemas.lead import LeadCreate, LeadUpdate
 from ..schemas.timeline import TimelineEventCreate
 from ..services.timeline_service import add_timeline_event
 from ..services.notification_service import create_notification
+from ..services.user_service import get_user_by_id
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +22,25 @@ logger = logging.getLogger(__name__)
 def create_lead(db: Session, lead_in: LeadCreate, creator_id: Optional[UUID] = None) -> Lead:
     logger.info(f"Creating lead with payload: {lead_in.model_dump()}")
     logger.info(f"Creator ID: {creator_id}")
-    
+
+    if creator_id is not None:
+        creator = get_user_by_id(db, creator_id)
+        if creator is None:
+            logger.error(f"Creator user not found: {creator_id}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Creator user does not exist.",
+            )
+
+    if lead_in.assigned_to is not None:
+        assignee = get_user_by_id(db, lead_in.assigned_to)
+        if assignee is None:
+            logger.error(f"Assigned user not found: {lead_in.assigned_to}")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Assigned user does not exist.",
+            )
+
     new_lead = Lead(
         lead_name=lead_in.lead_name,
         company_name=lead_in.company_name,
@@ -40,7 +61,21 @@ def create_lead(db: Session, lead_in: LeadCreate, creator_id: Optional[UUID] = N
         updated_at=datetime.utcnow(),
     )
     db.add(new_lead)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        logger.exception("Lead creation failed due to database integrity error")
+        if "users" in str(exc.orig).lower() or "foreign key" in str(exc.orig).lower():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Assigned user or creator user does not exist.",
+            ) from exc
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Failed to create lead due to invalid data.",
+        ) from exc
+
     db.refresh(new_lead)
     add_timeline_event(
         db,

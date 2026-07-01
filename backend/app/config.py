@@ -17,6 +17,9 @@ def find_env_file() -> Path:
     if ENV_FILE:
         return Path(ENV_FILE).expanduser().resolve()
 
+    # Prefer the deployment root .env when present, then the backend-specific file,
+    # then any workspace root .env. This prevents backend/.env from overriding the
+    # production deploy environment during Docker Compose runs.
     candidates = [
         CLEAN_PROJECT_DIR / '.env',
         BACKEND_DIR / '.env',

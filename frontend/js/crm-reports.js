@@ -1261,23 +1261,23 @@ async function submitLead(entryType = 'call', prefixOverride = '') {
     const emailMatch = newEmailNorm && existingEmailNorm && newEmailNorm === existingEmailNorm
     const panMatch = newPanNorm && existingPanNorm && newPanNorm === existingPanNorm
 
-    // Debug log to see what's matching
-    console.log('Duplicate check:', {
-      newCompany: company,
-      newCompanyNorm,
-      existingCompany: getLeadCompanyName(lead),
-      existingCompanyNorm,
-      companyMatch,
-      newPhoneNorm,
-      existingPhoneNorm,
-      phoneMatch,
-      newEmailNorm,
-      existingEmailNorm,
-      emailMatch,
-      newPanNorm,
-      existingPanNorm,
-      panMatch
-    })
+    // Debug log to see what's matching (commented out to reduce console spam)
+    // console.log('Duplicate check:', {
+    //   newCompany: company,
+    //   newCompanyNorm,
+    //   existingCompany: getLeadCompanyName(lead),
+    //   existingCompanyNorm,
+    //   companyMatch,
+    //   newPhoneNorm,
+    //   existingPhoneNorm,
+    //   phoneMatch,
+    //   newEmailNorm,
+    //   existingEmailNorm,
+    //   emailMatch,
+    //   newPanNorm,
+    //   existingPanNorm,
+    //   panMatch
+    // })
 
     if (!companyMatch && !phoneMatch && !emailMatch && !panMatch) {
       return false
@@ -1307,29 +1307,55 @@ async function submitLead(entryType = 'call', prefixOverride = '') {
     
     // The assigned_to field contains a UUID, need to fetch user name
     const assignedToUuid = duplicateLead.assigned_to || duplicateLead.assignedTo || duplicateLead.salesExecutive || duplicateLead.createdByName || duplicateLead.owner
+    console.log('[Duplicate Check] Duplicate lead:', duplicateLead)
+    console.log('[Duplicate Check] Assigned to UUID:', assignedToUuid)
     let cleanName = 'Unknown'
     
     // If it's a UUID pattern, try to get user name from backend or localStorage
     if (assignedToUuid && typeof assignedToUuid === 'string' && assignedToUuid.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
-      // Try to get user name from localStorage users cache
+      console.log('[Duplicate Check] UUID pattern matched, fetching user name')
+      // Try to get user name from localStorage users cache first
       try {
         const users = JSON.parse(localStorage.getItem('crm_users') || '[]')
+        console.log('[Duplicate Check] Users from localStorage:', users)
         const user = users.find(u => u.id === assignedToUuid)
+        console.log('[Duplicate Check] Found user in localStorage:', user)
         if (user && user.full_name) {
           cleanName = user.full_name
         } else if (user && user.email) {
           cleanName = user.email.split('@')[0]
         } else {
-          cleanName = 'another team member'
+          // If not in localStorage, try to fetch from backend using public endpoint
+          console.log('[Duplicate Check] User not in localStorage, fetching from backend')
+          try {
+            const userResponse = await fetch(`${getCRMApiBase()}/users/${assignedToUuid}/name`)
+            console.log('[Duplicate Check] Backend response status:', userResponse.status)
+            if (userResponse.ok) {
+              const userData = await userResponse.json()
+              console.log('[Duplicate Check] Backend user data:', userData)
+              cleanName = userData.full_name || userData.email?.split('@')[0] || 'Unknown'
+            } else {
+              console.log('[Duplicate Check] Backend request failed')
+              cleanName = 'another team member'
+            }
+          } catch (e) {
+            console.log('[Duplicate Check] Backend fetch error:', e)
+            cleanName = 'another team member'
+          }
         }
       } catch (e) {
+        console.log('[Duplicate Check] localStorage error:', e)
         cleanName = 'another team member'
       }
     } else if (assignedToUuid && typeof assignedToUuid === 'string') {
       // If it's not a UUID, treat it as a name
+      console.log('[Duplicate Check] Not a UUID, treating as name:', assignedToUuid)
       cleanName = assignedToUuid.trim().split('@')[0] || 'Unknown'
+    } else {
+      console.log('[Duplicate Check] No assigned_to field found')
     }
     
+    console.log('[Duplicate Check] Final user name:', cleanName)
     const outcomeCategory = getLeadOutcomeCategory(duplicateLead)
     const reason = outcomeCategory === 'interested'
       ? 'This company is already marked Interested'
@@ -1839,11 +1865,125 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 })
 
-function renderLeads() {
+async function renderLeads() {
+  console.log('[renderLeads] Starting renderLeads function')
+  
+  // Check if API client is available
+  if (!window.API) {
+    console.error('[renderLeads] window.API is not defined - crm-api-client.js may not have loaded')
+    console.log('[renderLeads] Available window properties:', Object.keys(window).filter(k => k.includes('API') || k.includes('api')))
+  } else {
+    console.log('[renderLeads] window.API is available:', typeof window.API)
+  }
+  
   const q = document.getElementById('leadSearch')?.value?.toLowerCase() || ''
   const execF = document.getElementById('leadExecF')?.value || ''
   const statusF = document.getElementById('leadStatusF')?.value || ''
   const leadDateFilter = document.getElementById('leadDate')?.value || ''
+
+  const tbody = document.getElementById('leadsBody')
+  const showing = document.getElementById('leadsCount')
+
+  console.log('[renderLeads] Filters:', { q, execF, statusF, leadDateFilter })
+
+  // Try to fetch from backend API first
+  try {
+    if (!window.API) {
+      throw new Error('window.API is not defined')
+    }
+    
+    console.log('[renderLeads] Attempting to fetch from backend API')
+    const params = {
+      skip: 0,
+      limit: 1000, // Load more records for initial display
+      search: q || undefined,
+      lead_status: statusF || undefined
+    }
+    
+    console.log('[renderLeads] API params:', params)
+    console.log('[renderLeads] API base URL:', window.API.baseURL)
+    console.log('[renderLeads] API auth token present:', !!window.API.authToken)
+    
+    const response = await window.API.getLeads(params)
+    console.log('[renderLeads] API response:', response)
+    
+    if (response && response.items) {
+      console.log('[renderLeads] Backend API returned items:', response.items.length, 'Total:', response.total)
+      let filtered = response.items
+      
+      // Apply date filter if specified
+      if (leadDateFilter) {
+        const [filterYear, filterMonth, filterDay] = leadDateFilter.split('-').map(Number)
+        filtered = filtered.filter(l => {
+          if (!l.created_at) return false
+          const leadDate = new Date(l.created_at)
+          return leadDate.getFullYear() === filterYear &&
+            leadDate.getMonth() === filterMonth - 1 &&
+            leadDate.getDate() === filterDay
+        })
+        console.log('[renderLeads] After date filter:', filtered.length)
+      }
+      
+      // Apply executive filter if specified
+      if (execF) {
+        filtered = filtered.filter(l => l.assigned_user_name === execF)
+        console.log('[renderLeads] After executive filter:', filtered.length)
+      }
+
+      console.log('[renderLeads] Final filtered count:', filtered.length)
+      console.log('[renderLeads] Sample lead data:', filtered[0])
+
+      if (showing) showing.textContent = `${filtered.length} of ${response.total} entries`
+
+      if (tbody) {
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="10" style="padding:40px;text-align:center;color:var(--gray-400);">No leads found</td></tr>'
+        } else {
+          tbody.innerHTML = filtered.map((l, idx) => {
+            const date = l.created_at ? new Date(l.created_at).toLocaleDateString('en-IN') : '—'
+            const exec = l.assigned_user_name || '—'
+            const comp = l.company_name || '—'
+            const cont = l.lead_name || '—'
+            const phone = l.mobile || '—'
+            const prod = l.product_type || '—'
+            const src = l.lead_source || '—'
+            const stat = l.lead_status || '—'
+            const foll = l.followup_date ? new Date(l.followup_date).toLocaleDateString('en-IN') : '—'
+            let dv = l.deal_value || l.funding_amount || '—'
+            if (dv !== '—' && !dv.toString().includes('₹')) dv = '₹' + Number(dv).toLocaleString('en-IN')
+
+            return `
+            <tr style="border-bottom:1px solid var(--gray-100);">
+              <td style="padding:14px 16px;">${date}</td>
+              <td style="padding:14px 16px;color:var(--gray-700);">${exec}</td>
+              <td style="padding:14px 16px;font-weight:500;color:var(--gray-900);">${comp}</td>
+              <td style="padding:14px 16px;">${cont}<br><small style="color:var(--gray-500);">${phone}</small></td>
+              <td style="padding:14px 16px;">${prod}</td>
+              <td style="padding:14px 16px;"><small>${src}</small></td>
+              <td style="padding:14px 16px;"><span class="status-badge" data-status="${stat}">${stat}</span></td>
+              <td style="padding:14px 16px;"><small>${foll}</small></td>
+              <td style="padding:14px 16px;font-weight:600;">${dv}</td>
+              <td style="padding:14px 16px;">
+                <button class="btn-icon" onclick="viewLeadDetails(${l.id})" title="View Details">👁️</button>
+              </td>
+            </tr>
+            `
+          }).join('')
+        }
+      }
+      console.log('[renderLeads] Successfully rendered from backend API')
+      return
+    } else {
+      console.log('[renderLeads] Backend API response invalid or missing items:', response)
+    }
+  } catch (err) {
+    console.error('[renderLeads] Failed to fetch leads from backend, falling back to localStorage:', err)
+  }
+
+  // Fallback to localStorage if backend fails
+  if (typeof refreshBackendLeadJourneyData === 'function') {
+    refreshBackendLeadJourneyData().catch(err => console.warn('Failed to refresh backend leads:', err))
+  }
 
   // Get leads from both localStorage (manual entries) and sessionStorage (imported data)
   let allLeads = myLeadsJ().map(parseLeadData);
@@ -1905,9 +2045,6 @@ function renderLeads() {
 
   if (execF) filtered = filtered.filter(l => l.salesExecutive === execF)
   if (statusF) filtered = filtered.filter(l => (l.currentStatus || l.status || l.Status) === statusF)
-
-  const tbody = document.getElementById('leadsBody')
-  const showing = document.getElementById('leadsCount')
 
   if (showing) showing.textContent = filtered.length + ' entries'
 

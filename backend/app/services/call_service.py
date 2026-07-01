@@ -43,36 +43,48 @@ def create_call(db: Session, call_in: CallCreate, creator_id: UUID) -> Call:
 
 
 def get_call_by_id(db: Session, call_id: int | str) -> Optional[Call]:
-    if isinstance(call_id, str):
-        try:
-            call_id = int(call_id)
-        except ValueError:
-            return None
-    return db.query(Call).filter(Call.id == call_id).first()
+    try:
+        if isinstance(call_id, str):
+            try:
+                call_id = int(call_id)
+            except ValueError:
+                return None
+        return db.query(Call).filter(Call.id == call_id).first()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error fetching call by ID: {str(e)}"
+        )
 
 
 def get_calls(db: Session, skip: int = 0, limit: int = 50, search: Optional[str] = None, filters: dict | None = None) -> Tuple[list[Call], int]:
-    q = db.query(Call)
-    if search:
-        like = f"%{search}%"
-        q = q.filter(
-            Call.caller_name.ilike(like) |
-            Call.caller_phone.ilike(like) |
-            Call.receiver_name.ilike(like) |
-            Call.receiver_phone.ilike(like)
+    try:
+        q = db.query(Call)
+        if search:
+            like = f"%{search}%"
+            q = q.filter(
+                Call.caller_name.ilike(like) |
+                Call.caller_phone.ilike(like) |
+                Call.receiver_name.ilike(like) |
+                Call.receiver_phone.ilike(like)
+            )
+        if filters:
+            if "call_type" in filters:
+                q = q.filter(Call.call_type == filters["call_type"])
+            if "status" in filters:
+                q = q.filter(Call.status == filters["status"])
+            if "created_by" in filters:
+                q = q.filter(Call.created_by == filters["created_by"])
+            if "lead_id" in filters:
+                q = q.filter(Call.lead_id == filters["lead_id"])
+        total = q.count()
+        items = q.order_by(Call.created_at.desc()).offset(skip).limit(limit).all()
+        return items, total
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error fetching calls: {str(e)}"
         )
-    if filters:
-        if "call_type" in filters:
-            q = q.filter(Call.call_type == filters["call_type"])
-        if "status" in filters:
-            q = q.filter(Call.status == filters["status"])
-        if "created_by" in filters:
-            q = q.filter(Call.created_by == filters["created_by"])
-        if "lead_id" in filters:
-            q = q.filter(Call.lead_id == filters["lead_id"])
-    total = q.count()
-    items = q.offset(skip).limit(limit).all()
-    return items, total
 
 
 def update_call(db: Session, call: Call, call_in: CallUpdate) -> Call:

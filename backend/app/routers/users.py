@@ -106,6 +106,18 @@ def list_users_for_assignment(
     return get_users(db)
 
 
+@router.get("/{user_id}/name", response_model=dict)
+def get_user_name(
+    user_id: UUID,
+    db: Session = Depends(get_db),
+) -> dict:
+    """Get user name by ID - public endpoint for duplicate check display."""
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"id": str(user.id), "full_name": user.full_name, "email": user.email}
+
+
 @router.delete("/{user_id}")
 def delete_user_endpoint(
     user_id: UUID,

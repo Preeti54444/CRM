@@ -233,7 +233,23 @@ function renderDashboard() {
   const leads = DataStore.get('leads')
   const filteredLeads = filterByEmployee(leads, employeeFilter)
   const isAdmin = S?.role === 'admin'
-  
+  const isManager = S?.role === 'manager'
+
+  // Fetch dashboard stats from backend API for admins/managers (fire-and-forget)
+  if (isAdmin || isManager) {
+    window.API.getDashboardStats()
+      .then(backendStats => {
+        console.log('[Dashboard] Backend stats:', backendStats)
+        const kpiLeads = document.getElementById('kpi-leads')
+        if (kpiLeads && backendStats?.total_leads !== undefined) {
+          kpiLeads.textContent = backendStats.total_leads.toLocaleString()
+        }
+      })
+      .catch(err => {
+        console.error('[Dashboard] Failed to fetch backend stats:', err)
+      })
+  }
+
   // Filter tasks by user role
   let allTasks = DataStore.get('tasks')
   if (!isAdmin) {
@@ -252,13 +268,14 @@ function renderDashboard() {
   const activities = filterByEmployee(DataStore.get('activities'), employeeFilter).slice(0, 8)
   const stats = DataStore.getDashboardStats(employeeFilter ? record => matchesEmployee(record, employeeFilter) : null)
 
-  // Update KPI Cards
+  // Update KPI Cards - use local stats initially, will be updated by backend call for admins/managers
   const kpiLeads = document.getElementById('kpi-leads')
   const kpiDeals = document.getElementById('kpi-deals')
   const kpiWon = document.getElementById('kpi-won')
   const kpiConversion = document.getElementById('kpi-conversion')
 
-  if (kpiLeads) kpiLeads.textContent = stats.leads.total.toLocaleString()
+  // For employees, use local stats. For admins/managers, use local stats initially (will be updated by async call)
+  if (kpiLeads && !isAdmin && !isManager) kpiLeads.textContent = stats.leads.total.toLocaleString()
   if (kpiDeals) kpiDeals.textContent = stats.deals.open
   if (kpiWon) kpiWon.textContent = '₹' + (stats.deals.wonValue / 1000000).toFixed(1) + 'Cr'
   if (kpiConversion) kpiConversion.textContent = stats.conversionRate + '%'

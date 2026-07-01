@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Date
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -29,6 +29,10 @@ class Lead(Base):
     remarks = Column(String(1000), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    # Additional fields for Lead Management UI
+    followup_date = Column(Date, nullable=True)
+    deal_value = Column(Float, nullable=True)
 
     # Relationships
     assignee = relationship("User", foreign_keys=[assigned_to])

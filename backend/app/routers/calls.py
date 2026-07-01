@@ -81,15 +81,32 @@ def list_calls(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    filters = {}
-    if call_type:
-        filters["call_type"] = call_type
-    if status:
-        filters["status"] = status
-    if lead_id:
-        filters["lead_id"] = lead_id
-    items, total = get_calls(db, skip=skip, limit=limit, search=search, filters=filters)
-    return items
+    try:
+        filters = {}
+        if call_type:
+            filters["call_type"] = call_type
+        if status:
+            filters["status"] = status
+        if lead_id:
+            filters["lead_id"] = lead_id
+        
+        # Role-based filtering
+        if current_user.role == "employee":
+            # Employees only see calls they created
+            filters["created_by"] = current_user.id
+        elif current_user.role == "manager":
+            # Managers see calls from their team (same department/organization)
+            # For now, show all calls - can be refined based on team structure
+            pass
+        # Admins see all calls (no filtering)
+        
+        items, total = get_calls(db, skip=skip, limit=limit, search=search, filters=filters)
+        return items
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error fetching calls: {str(e)}"
+        )
 
 
 @router.get("/{call_id}", response_model=CallResponse)

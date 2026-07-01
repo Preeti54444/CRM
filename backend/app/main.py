@@ -138,11 +138,22 @@ async def legacy_openapi():
 
 @app.on_event("startup")
 async def startup_scheduler():
+    # Log DATABASE_URL for debugging (mask password)
+    db_url = settings.database_url
+    if db_url:
+        # Mask password in URL for security
+        masked_url = db_url.split('@')[-1] if '@' in db_url else db_url
+        logger.info(f"[AUDIT] DATABASE_URL (masked): postgresql://****:****@{masked_url}")
+    
     # Validate database connectivity on startup.
     try:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT 1"))
             logger.info("Database connection verified: %s", result.scalar())
+            
+            # Log total leads count in database
+            lead_count = connection.execute(text("SELECT COUNT(*) FROM leads")).scalar()
+            logger.info(f"[AUDIT] Total leads in PostgreSQL database: {lead_count}")
     except Exception as exc:
         logger.exception("Database startup validation failed")
         raise

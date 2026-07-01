@@ -42,3 +42,27 @@ def employee_dashboard(db: Session = Depends(get_db), current_user=Depends(get_c
     my_leads = db.query(func.count(Lead.id)).filter(Lead.assigned_to == current_user.id).scalar() or 0
     my_followups = db.query(func.count(FollowUp.id)).filter(FollowUp.assigned_to == current_user.id).scalar() or 0
     return {"my_leads": my_leads, "my_followups": my_followups}
+
+
+@router.get("/stats", response_model=Dict[str, int])
+def dashboard_stats(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    """Generic dashboard stats endpoint that returns counts based on user role"""
+    # For admins and managers, return total counts
+    if current_user.role in ["admin", "manager"]:
+        total_leads = db.query(func.count(Lead.id)).scalar() or 0
+        active_leads = db.query(func.count(Lead.id)).filter(Lead.lead_status != "Closed").scalar() or 0
+        total_followups = db.query(func.count(FollowUp.id)).scalar() or 0
+        return {
+            "total_leads": total_leads,
+            "active_leads": active_leads,
+            "total_followups": total_followups,
+        }
+    # For employees, return only their assigned leads
+    else:
+        my_leads = db.query(func.count(Lead.id)).filter(Lead.assigned_to == current_user.id).scalar() or 0
+        my_followups = db.query(func.count(FollowUp.id)).filter(FollowUp.assigned_to == current_user.id).scalar() or 0
+        return {
+            "total_leads": my_leads,
+            "active_leads": my_leads,
+            "total_followups": my_followups,
+        }

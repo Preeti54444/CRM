@@ -21,5 +21,6 @@ class TimelineEvent(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     lead = relationship("Lead", backref="timeline_events")
-    customer = relationship("CustomerProfile", backref="timeline_events")
+    # Defer customer relationship to avoid circular import issues
+    # customer = relationship("CustomerProfile", backref="timeline_events")
     creator = relationship("User", foreign_keys=[created_by])

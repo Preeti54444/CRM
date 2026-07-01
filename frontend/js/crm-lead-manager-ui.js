@@ -514,30 +514,87 @@ class LeadManagerUI {
   }
 
   /**
-   * Load and display leads
+   * Load and display leads from backend API
+   * Uses getNewLeads endpoint to show only leads without call activity
    */
   async loadLeads() {
     try {
-      const result = await this.leadManager.searchLeads(this.currentFilters, {
-        limit: this.pageSize,
-        offset: (this.currentPage - 1) * this.pageSize,
-        orderBy: 'dateCreated',
-        orderDirection: 'desc'
-      });
+      console.log('[LeadManagerUI] loadLeads called');
+      // Use backend API client to fetch new leads (no call activity)
+      const params = {
+        skip: (this.currentPage - 1) * this.pageSize,
+        limit: this.pageSize
+      };
+      
+      // Add filters if present
+      if (this.currentFilters.lead_status) {
+        params.lead_status = this.currentFilters.lead_status;
+      }
+      if (this.currentFilters.assigned_to) {
+        params.assigned_to = this.currentFilters.assigned_to;
+      }
+      if (this.currentFilters.search) {
+        params.search = this.currentFilters.search;
+      }
 
-      if (!result.success) {
-        alert('Error loading leads: ' + result.error);
+      console.log('[LeadManagerUI] Fetching leads with params:', params);
+      const response = await window.API.getNewLeads(params);
+      console.log('[LeadManagerUI] API response:', response);
+      
+      // Handle both array and object with items/total formats
+      const leads = Array.isArray(response) ? response : (response?.items || []);
+      const total = Array.isArray(response) ? response.length : (response?.total || 0);
+      
+      console.log('[LeadManagerUI] Processed leads:', leads.length, 'Total:', total);
+      
+      if (!leads || !Array.isArray(leads)) {
+        console.error('[LeadManagerUI] Invalid leads response:', response);
+        this.renderLeadsTable([]);
+        this.updatePaginationInfo(0);
         return;
       }
 
-      this.renderLeadsTable(result.leads);
-      this.updatePaginationInfo(result.total);
+      // Transform backend leads to frontend format
+      const transformedLeads = leads.map(lead => ({
+        leadId: lead.id || lead.lead_id || `LEAD-${lead.id}`,
+        fullName: lead.lead_name || lead.name || 'Unknown',
+        mobile: lead.mobile || '',
+        loanType: lead.product_type || '',
+        loanAmount: lead.funding_amount || 0,
+        leadScore: 0, // Backend doesn't have lead score yet
+        status: lead.lead_status || 'New',
+        leadSource: lead.lead_source || '',
+        assignedEmployee: lead.assigned_user_name || lead.assigned_to || '',
+        dateCreated: lead.created_at || new Date().toISOString(),
+        email: lead.email || '',
+        city: lead.city || ''
+      }));
+
+      this.renderLeadsTable(transformedLeads);
+      this.updatePaginationInfo(total);
       this.updateStatistics();
 
-      this.currentPage = 1;
     } catch (error) {
-      console.error('Error loading leads:', error);
-      alert('Error loading leads');
+      console.error('Error loading leads from backend:', error);
+      // Fallback to local storage if backend fails
+      try {
+        const result = await this.leadManager.searchLeads(this.currentFilters, {
+          limit: this.pageSize,
+          offset: (this.currentPage - 1) * this.pageSize,
+          orderBy: 'dateCreated',
+          orderDirection: 'desc'
+        });
+        
+        if (result.success) {
+          this.renderLeadsTable(result.leads);
+          this.updatePaginationInfo(result.total);
+          this.updateStatistics();
+        }
+      } catch (fallbackError) {
+        console.error('Fallback to local storage also failed:', fallbackError);
+        this.renderLeadsTable([]);
+        this.updatePaginationInfo(0);
+      }
     }
   }
 

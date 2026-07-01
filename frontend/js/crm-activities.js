@@ -1016,35 +1016,46 @@ function renderWorkqueueTable() {
 // CALL TRACKER RENDER
 // ═══════════════════════════════════════════════════════════════
 
-function renderCallTracker() {
-  const calls = DataStore.get('calls')
+async function renderCallTracker() {
   const tbody = document.getElementById('callsTableBody')
   if (!tbody) return
 
-  if (calls.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="padding:40px;text-align:center;color:var(--gray-400);">No calls logged yet</td></tr>'
-  } else {
-    tbody.innerHTML = calls.map(call => `
-      <tr>
-        <td style="padding:12px 16px;">
-          <div style="font-weight:500;color:var(--gray-900);">${call.customerName || call.relatedTo}</div>
-          <div style="font-size:12px;color:var(--gray-500);">${call.company || '—'}</div>
-        </td>
-        <td style="padding:12px 16px;color:var(--gray-700);">${call.phone || '—'}</td>
-        <td style="padding:12px 16px;color:var(--gray-700);">${call.date || new Date(call.startTime).toLocaleDateString('en-GB')}</td>
-        <td style="padding:12px 16px;color:var(--gray-700);">${call.duration || 0} min</td>
-        <td style="padding:12px 16px;">
-          <span class="badge ${call.outcome?.toLowerCase().replace(/\s+/g, '-') || 'pending'}">${call.outcome || '—'}</span>
-        </td>
-        <td style="padding:12px 16px;">
-          ${call.hasRecording ? '<span class="recording-badge">🎙️</span>' : '—'}
-        </td>
-      </tr>
-    `).join('')
-  }
+  try {
+    // Fetch leads with call activity from backend
+    const response = await window.API.getCallManagementLeads()
+    const leads = Array.isArray(response) ? response : (response?.items || [])
+    
+    if (leads.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="padding:40px;text-align:center;color:var(--gray-400);">No leads with call activity yet</td></tr>'
+    } else {
+      tbody.innerHTML = leads.map(lead => `
+        <tr>
+          <td style="padding:12px 16px;">
+            <div style="font-weight:500;color:var(--gray-900);">${lead.lead_name || lead.name || 'Unknown'}</div>
+            <div style="font-size:12px;color:var(--gray-500);">${lead.company_name || '—'}</div>
+          </td>
+          <td style="padding:12px 16px;color:var(--gray-700);">${lead.mobile || '—'}</td>
+          <td style="padding:12px 16px;color:var(--gray-700);">${lead.last_call_date ? new Date(lead.last_call_date).toLocaleDateString('en-GB') : (lead.last_followup_date ? new Date(lead.last_followup_date).toLocaleDateString('en-GB') : '—')}</td>
+          <td style="padding:12px 16px;color:var(--gray-700);">
+            ${lead.has_call_activity ? '✓ Calls' : ''}
+            ${lead.has_followup ? '✓ Follow-up' : ''}
+          </td>
+          <td style="padding:12px 16px;">
+            <span class="badge ${lead.lead_status?.toLowerCase().replace(/\s+/g, '-') || 'new'}">${lead.lead_status || 'New'}</span>
+          </td>
+          <td style="padding:12px 16px;">
+            <button onclick="viewLeadDetails(${lead.id})" style="padding:4px 8px;font-size:12px;border:1px solid var(--gray-300);background:white;border-radius:4px;cursor:pointer;">View</button>
+          </td>
+        </tr>
+      `).join('')
+    }
 
-  const showing = document.getElementById('callsShowing')
-  if (showing) showing.textContent = calls.length
+    const showing = document.getElementById('callsShowing')
+    if (showing) showing.textContent = leads.length
+  } catch (error) {
+    console.error('Error loading call management leads:', error)
+    tbody.innerHTML = '<tr><td colspan="6" style="padding:40px;text-align:center;color:var(--gray-400);">Error loading leads</td></tr>'
+  }
 }
 
 // Placeholder renderers

@@ -67,6 +67,13 @@
       if (normalized) return normalized;
     }
 
+    if (port === '80' || port === '443' || !port) {
+      // Production deployment with nginx - API is proxied on same origin
+      // When accessed on standard HTTP/HTTPS ports, assume nginx is proxying API
+      console.log('[Config] Production deployment detected - using same origin for API');
+      return origin;
+    }
+
     // Check cached value for non-localhost environments
     try {
       const cached = localStorage.getItem('crm_api_base');
@@ -78,15 +85,8 @@
       console.warn('[Config] Unable to read cached API base:', e);
     }
 
-    if (port === '80' || port === '443' || !port) {
-      // Production deployment with nginx - API is proxied on same origin
-      // When accessed on standard HTTP/HTTPS ports, assume nginx is proxying API
-      console.log('[Config] Production deployment detected - using same origin for API');
-      return origin;
-    } else {
-      // LAN access - use same host with backend port 8085
-      return window.location.protocol + '//' + host + ':8085';
-    }
+    // LAN access - use same host with backend port 8085
+    return window.location.protocol + '//' + host + ':8085';
   }
 
   /**

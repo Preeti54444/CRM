@@ -24,6 +24,20 @@ USERS = [
         'password': 'vaibhav.emp@01',
         'role': 'employee',
         'department': 'Sales'
+    },
+    {
+        'full_name': 'Saleem K',
+        'email': 'saleem.k@fundingsathi.in',
+        'password': 'saleem.emp@03',
+        'role': 'employee',
+        'department': 'Sales'
+    },
+    {
+        'full_name': 'R Chavan',
+        'email': 'r.chavan@fundingsathi.in',
+        'password': 'roshan.emp@02',
+        'role': 'employee',
+        'department': 'Sales'
     }
 ]
 

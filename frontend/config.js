@@ -10,6 +10,8 @@
   const host = window.location.hostname || 'localhost';
   const port = window.location.port ? ':' + window.location.port : '';
   const origin = window.location.protocol + '//' + host + port;
+  const defaultRemoteApiBase = 'http://187.127.149.245:8085';
+  const remoteFrontendHosts = new Set(['187.127.149.245', 'srv1760511.hstgr.cloud']);
 
   /**
    * Normalize API base URL to ensure consistent format
@@ -70,8 +72,16 @@
     if (port === '80' || port === '443' || !port) {
       // Production deployment with nginx - API is proxied on same origin
       // When accessed on standard HTTP/HTTPS ports, assume nginx is proxying API
-      console.log('[Config] Production deployment detected - using same origin for API');
-      return origin;
+      if (!remoteFrontendHosts.has(host)) {
+        console.log('[Config] Production deployment detected - using same origin for API');
+        return origin;
+      }
+    }
+
+    // Remote host deployment for known hosted CRM domains without nginx proxy
+    if (remoteFrontendHosts.has(host)) {
+      console.log('[Config] Using remote backend by default for hosted CRM');
+      return defaultRemoteApiBase;
     }
 
     // Check cached value for non-localhost environments

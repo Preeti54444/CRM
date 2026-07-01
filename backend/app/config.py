@@ -18,8 +18,8 @@ def find_env_file() -> Path:
         return Path(ENV_FILE).expanduser().resolve()
 
     candidates = [
-        BACKEND_DIR / '.env',
         CLEAN_PROJECT_DIR / '.env',
+        BACKEND_DIR / '.env',
         WORKSPACE_ROOT / '.env',
     ]
 

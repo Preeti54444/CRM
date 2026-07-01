@@ -46,4 +46,4 @@ try: urllib.request.urlopen('http://127.0.0.1:8085/health', timeout=10)\
 except Exception: sys.exit(1)" || exit 1
 
 # Run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8085"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8085", "--proxy-headers", "--workers", "4"]

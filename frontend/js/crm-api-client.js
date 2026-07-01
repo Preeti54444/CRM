@@ -375,6 +375,14 @@ class APIClient {
     return this.delete(`/leads/${leadId}`)
   }
 
+  async deleteCustomer(customerId) {
+    return this.delete(`/customers/${customerId}`)
+  }
+
+  async deleteLender(caseId) {
+    return this.delete(`/lender/${caseId}`)
+  }
+
   // ═══════════════════════════════════════════════════════════════
   // CALLS ENDPOINTS
   // ═══════════════════════════════════════════════════════════════
@@ -486,6 +494,8 @@ class APIClient {
 
 // Create and expose global API client instance
 window.API = new APIClient()
+window.CRM_API_CLIENT = window.API
+window.CRMApiClient = APIClient
 
 // Optional: Set custom unauthorized handler
 window.API.onUnauthorized = () => {

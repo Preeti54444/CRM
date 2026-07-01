@@ -43,19 +43,31 @@
    * 7. Fallback: current origin
    */
   function getCRMApiBase() {
-    // Check environment variable first
+    // Determine based on environment
+    const shouldUseLocalBackend = isFileProtocol || host === 'localhost' || host === '127.0.0.1';
+    if (shouldUseLocalBackend) {
+      const localBase = 'http://localhost:8085';
+      try {
+        localStorage.setItem('crm_api_base', localBase);
+      } catch (e) {
+        console.warn('[Config] Unable to persist local API base:', e);
+      }
+      return localBase;
+    }
+
+    // Check environment variable first for non-localhost environments
     if (window.CRM_API_BASE) {
       const normalized = normalizeApiBase(window.CRM_API_BASE);
       if (normalized) return normalized;
     }
 
-    // Check manual override
+    // Check manual override for non-localhost environments
     if (window.API_BASE) {
       const normalized = normalizeApiBase(window.API_BASE);
       if (normalized) return normalized;
     }
 
-    // Check cached value
+    // Check cached value for non-localhost environments
     try {
       const cached = localStorage.getItem('crm_api_base');
       if (cached) {
@@ -66,13 +78,7 @@
       console.warn('[Config] Unable to read cached API base:', e);
     }
 
-    // Determine based on environment
-    const shouldUseLocalBackend = isFileProtocol || host === 'localhost' || host === '127.0.0.1';
-    
-    if (shouldUseLocalBackend) {
-      // Local development - use localhost:8085
-      return 'http://localhost:8085';
-    } else if (port === '80' || port === '443' || !port) {
+    if (port === '80' || port === '443' || !port) {
       // Production deployment with nginx - API is proxied on same origin
       // When accessed on standard HTTP/HTTPS ports, assume nginx is proxying API
       console.log('[Config] Production deployment detected - using same origin for API');

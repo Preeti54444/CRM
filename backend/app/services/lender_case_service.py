@@ -44,6 +44,15 @@ def create_lender_case(db: Session, payload: Dict[str, Any], creator=None, creat
     return lc
 
 
+def get_lender_case_by_application_id(db: Session, application_id: str) -> LenderCase | None:
+    return db.query(LenderCase).filter(LenderCase.application_id == application_id).first()
+
+
+def delete_lender_case(db: Session, obj: LenderCase) -> None:
+    db.delete(obj)
+    db.commit()
+
+
 def list_lender_cases_for_lead(db: Session, lead_id: int | None = None, limit: int = 200) -> List[Dict[str, Any]]:
     query = db.query(LenderCase).order_by(LenderCase.updated_at.desc()).limit(limit)
     if lead_id is not None:

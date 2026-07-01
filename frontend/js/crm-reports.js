@@ -110,12 +110,12 @@ function submitSOD() {
 }
 
 function isRestrictedReportSubmitUser() {
-  return typeof S !== 'undefined' && S && String(S.role || '').toLowerCase() === 'admin' && String(S.email || '').trim().toLowerCase() === 'shree.rathod@fundingsathi.in'
+  return typeof S !== 'undefined' && S && String(S.role || '').toLowerCase() === 'admin'
 }
 
 function handleRestrictedReportSubmitAttempt(reportType) {
   if (!isRestrictedReportSubmitUser()) return false
-  showToast('Report submission is disabled for this admin user.', 'warning')
+  showToast('Report submission is disabled for admin users.', 'warning')
   console.warn(`Blocked restricted report submission attempt: ${reportType}`)
   return true
 }
@@ -136,6 +136,7 @@ function applyRestrictedReportSubmitBehavior() {
       btn.setAttribute('data-restricted-report-submit', 'true')
     } else {
       btn.style.display = ''
+      btn.disabled = false
       btn.removeAttribute('aria-hidden')
       btn.removeAttribute('data-restricted-report-submit')
     }
@@ -146,13 +147,22 @@ function applyRestrictedReportSubmitBehavior() {
     const navBtn = document.querySelector(`.nav-btn[data-sec="${sec}"]`)
     if (!navBtn) return
     if (shouldHide) {
-      navBtn.style.display = 'none'
-      navBtn.setAttribute('aria-hidden', 'true')
-      navBtn.setAttribute('data-restricted-report-nav', 'true')
+      navBtn.remove()
     } else {
       navBtn.style.display = ''
       navBtn.removeAttribute('aria-hidden')
       navBtn.removeAttribute('data-restricted-report-nav')
+    }
+  })
+
+  const reportSections = ['sec-sod-form', 'sec-eod-form', 'sec-wod-form']
+  reportSections.forEach((id) => {
+    const section = document.getElementById(id)
+    if (!section) return
+    if (shouldHide) {
+      section.remove()
+    } else {
+      section.style.display = ''
     }
   })
 }
@@ -998,9 +1008,6 @@ function mapLeadEntryToBackendPayload(entry) {
   }
   
   const assigneeId = getBackendLeadAssigneeId(entry)
-  
-  // TEMPORARY: Set assigned_to to null to test if user UUID is causing the 500 error
-  // Remove this after confirming the issue
   const payload = {
     lead_name: leadName,
     company_name: cleanString(entry.companyName || entry.company, 255),
@@ -1014,7 +1021,7 @@ function mapLeadEntryToBackendPayload(entry) {
     funding_amount: Number(String(entry.dealValue || entry.funding_amount || '').replace(/[^0-9.]/g, '')) || undefined,
     lead_source: cleanString(entry.leadSource || entry.source, 100),
     lead_status: cleanString(entry.currentStatus || entry.status || 'New', 100),
-    assigned_to: null, // TEMPORARY: Testing without assignee
+    assigned_to: assigneeId || null,
     remarks: cleanString(entry.learningChallenge || entry.remarks || entry.notes, 1000)
   }
   
@@ -1453,68 +1460,80 @@ async function submitLead(entryType = 'call', prefixOverride = '') {
     // Also add to DataStore leads for actual lead entries only
     if (type === 'lead') {
       const leadData = {
-        name: contact || company,
-        company: company,
-        email: entry.emailId,
-        phone: entry.contactNumber,
-        status: (status || 'new lead').toLowerCase(),
-        source: (source || 'other').toLowerCase(),
-        deal_value: parseInt(entry.dealValue.replace(/[^0-9]/g, '')) || 0,
-        assigned_to: S.email,
-        sales_executive: S.name,
-        created_by_name: S.name
+        lead_name: contact || company || 'Unnamed Lead',
+        company_name: company || '',
+        email: entry.emailId || '',
+        company_email: entry.emailId || '',
+        mobile: entry.contactNumber || '',
+        alternate_mobile: '',
+        city: '',
+        state: '',
+        product_type: loanType || '',
+        funding_amount: parseFloat(entry.dealValue.replace(/[^0-9.]/g, '')) || undefined,
+        lead_source: source || rawSource || 'other',
+        lead_status: status || 'New',
+        assigned_to: (typeof S !== 'undefined' && S?.id) ? S.id : undefined,
+        remarks: entry.learningChallenge || remarks || '',
+        followup_date: rawFollowup || undefined,
+        deal_value: parseFloat(entry.dealValue.replace(/[^0-9.]/g, '')) || undefined
       }
       
       // Save to backend database
-      const apiClient = window.CRM_API_CLIENT || (typeof CRMApiClient !== 'undefined' ? new CRMApiClient() : null)
-      if (apiClient) {
-        apiClient.createLead(leadData).then(async (createdLead) => {
-          console.log('Lead saved to backend database', createdLead)
-          
-          // Create follow-up if scheduled
-          const followupDate = document.getElementById('followupDate')?.value
-          const followupTime = document.getElementById('followupTime')?.value
-          const followupType = document.getElementById('followupType')?.value
-          const followupNote = document.getElementById('followupNote')?.value
-          
-          if (followupDate && createdLead && createdLead.id) {
-            try {
-              const followupData = {
-                lead_id: createdLead.id,
-                assigned_to: S.id || S.email,
-                followup_date: followupDate,
-                followup_time: followupTime || null,
-                followup_type: followupType || 'Phone Call',
-                notes: followupNote || '',
-                next_followup_date: followupDate,
-                next_followup_time: followupTime || null
-              }
-              
-              const followupResponse = await fetch(`${window.API_BASE}/followups`, {
-                method: 'POST',
-                headers: {
-                  'Authorization': `Bearer ${window.CRM_API_CLIENT?.getAuthToken() || localStorage.getItem('crm_session')?.access_token}`,
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(followupData)
-              })
-              
-              if (followupResponse.ok) {
-                console.log('Follow-up scheduled successfully')
-              } else {
-                console.warn('Failed to schedule follow-up')
-              }
-            } catch (err) {
-              console.warn('Failed to create follow-up:', err)
-            }
-          }
-        }).catch(err => {
-          console.warn('Failed to save lead to backend, saving locally only:', err)
-        })
+      const apiClient = window.CRM_API_CLIENT || window.API || (typeof CRMApiClient !== 'undefined' ? new CRMApiClient() : null)
+      const saveLeadToBackend = async (payload) => {
+        if (apiClient && typeof apiClient.createLead === 'function') {
+          return apiClient.createLead(payload)
+        }
+        if (typeof postToCRMBackendEndpoint === 'function') {
+          return postToCRMBackendEndpoint('leads', payload, 'POST')
+        }
+        throw new Error('Backend save function not available for leads')
       }
-      
-      // Also save to DataStore as fallback
-      DataStore.add('leads', leadData)
+
+      try {
+        const createdLead = await saveLeadToBackend(leadData)
+        console.log('Lead saved to backend database', createdLead)
+
+        const followupDate = document.getElementById('followupDate')?.value
+        const followupTime = document.getElementById('followupTime')?.value
+        const followupType = document.getElementById('followupType')?.value
+        const followupNote = document.getElementById('followupNote')?.value
+
+        if (followupDate && createdLead && createdLead.id) {
+          try {
+            const followupData = {
+              lead_id: createdLead.id,
+              assigned_to: (typeof S !== 'undefined' && S?.id) ? S.id : undefined,
+              followup_date: followupDate,
+              followup_time: followupTime || null,
+              followup_type: followupType || 'Phone Call',
+              notes: followupNote || '',
+              next_followup_date: followupDate,
+              next_followup_time: followupTime || null
+            }
+
+            const followupResponse = await fetch(`${window.API_BASE || window.location.origin}/followups`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${window.CRM_API_CLIENT?.getAuthToken() || JSON.parse(localStorage.getItem('crm_session') || '{}').access_token || ''}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(followupData)
+            })
+
+            if (followupResponse.ok) {
+              console.log('Follow-up scheduled successfully')
+            } else {
+              console.warn('Failed to schedule follow-up')
+            }
+          } catch (err) {
+            console.warn('Failed to create follow-up:', err)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to save lead to backend:', err)
+        throw err
+      }
     }
 
     // Also add to DataStore calls (for call tracker display)
@@ -1963,8 +1982,11 @@ async function renderLeads() {
               <td style="padding:14px 16px;"><span class="status-badge" data-status="${stat}">${stat}</span></td>
               <td style="padding:14px 16px;"><small>${foll}</small></td>
               <td style="padding:14px 16px;font-weight:600;">${dv}</td>
-              <td style="padding:14px 16px;">
-                <button class="btn-icon" onclick="viewLeadDetails(${l.id})" title="View Details">👁️</button>
+              <td style="padding:14px 16px;display:flex;justify-content:center;gap:8px;">
+                <button class="btn-icon" onclick="openProfile('lead','${l.id || idx}')" title="View profile" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--gray-500)'">👤</button>
+                <button class="btn-icon" onclick="openLeadCaseManager('${l.id || idx}')" title="Manage lender cases" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='var(--gray-500)'">🏦</button>
+                <button class="btn-icon" onclick="changeLeadStatus('${String(l.id || idx).replace(/'/g, "\\'")}')" title="Change Status" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='var(--gray-500)'">🔄</button>
+                <button class="btn-icon" onclick="deleteLead('${l.id || idx}')" title="Delete lead" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='var(--gray-500)'">🗑️</button>
               </td>
             </tr>
             `
@@ -2087,11 +2109,66 @@ async function renderLeads() {
           <td style="padding:14px 16px;text-align:center;display:flex;justify-content:center;gap:8px;">
             <button class="btn-icon" onclick="openProfile('lead','${l.id || idx}')" title="View profile" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#2563eb'" onmouseout="this.style.color='var(--gray-500)'">👤</button>
             <button class="btn-icon" onclick="openLeadCaseManager('${l.id || idx}')" title="Manage lender cases" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='var(--gray-500)'">🏦</button>
+            <button class="btn-icon" onclick="changeLeadStatus('${String(l.id || idx).replace(/'/g, "\\'")}')" title="Change Status" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='var(--gray-500)'">🔄</button>
             <button class="btn-icon" onclick="deleteLead('${l.id || idx}')" title="Delete lead" style="background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--gray-500);padding:4px 8px;border-radius:4px;transition:all 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='var(--gray-500)'">🗑️</button>
           </td>
         </tr>
       `}).join('')
     }
+  }
+}
+
+async function changeLeadStatus(leadId) {
+  const targetId = String(leadId || '').trim()
+  if (!targetId) return
+
+  const currentLead = findLeadById(targetId)
+  const currentStatus = currentLead?.lead_status || currentLead?.currentStatus || currentLead?.status || 'Unknown'
+  const newStatus = prompt(`Change status for lead ${targetId}\nCurrent status: ${currentStatus}\nEnter new status:`)
+  if (!newStatus) return
+
+  const statusValue = newStatus.trim()
+  if (!statusValue || statusValue === currentStatus) {
+    showToast('Status update canceled or unchanged', 'info')
+    return
+  }
+
+  try {
+    if (window.API && typeof window.API.updateLead === 'function') {
+      await window.API.updateLead(targetId, {
+        lead_status: statusValue,
+        currentStatus: statusValue,
+        status: statusValue
+      })
+      showToast('Lead status updated successfully', 'success')
+    }
+  } catch (err) {
+    console.warn('Backend update failed for lead status:', err)
+    showToast('Unable to update status on backend. Saving locally.', 'warning')
+  }
+
+  try {
+    if (typeof getLeadsJourney === 'function' && typeof saveLeadsJourney === 'function') {
+      const allLeads = getLeadsJourney() || []
+      const updatedLeads = allLeads.map((lead) => {
+        if (parseLeadIdentifier(lead) === targetId) {
+          return {
+            ...lead,
+            lead_status: statusValue,
+            currentStatus: statusValue,
+            status: statusValue
+          }
+        }
+        return lead
+      })
+      saveLeadsJourney(updatedLeads)
+    }
+  } catch (err) {
+    console.warn('Local status update failed:', err)
+  }
+
+  if (typeof renderLeads === 'function') {
+    renderLeads()
   }
 }
 
@@ -2726,12 +2803,24 @@ function addLoanApplication() {
   renderLoanApplicationsTable()
 }
 
-function deleteLoanApplication(applicationId) {
+async function deleteLoanApplication(applicationId) {
   if (!confirm('Delete this loan application?')) return
   const id = Number(applicationId)
+  const application = DataStore.getById('loanApplications', id)
+
+  if (application && application.applicationId && typeof postToCRMBackendEndpoint === 'function') {
+    try {
+      await postToCRMBackendEndpoint(`lender/${encodeURIComponent(String(application.applicationId))}`, null, 'DELETE')
+      console.log('Lender case deleted from backend:', application.applicationId)
+    } catch (err) {
+      console.warn('Backend delete failed for lender case:', err)
+      showToast('Unable to delete lender case from backend. It will still be removed locally.', 'warning')
+    }
+  }
+
   const stored = DataStore.getAll()
-  stored.loanApplications = stored.loanApplications.filter(app => Number(app.id) !== id)
-  stored.lenderQueries = stored.lenderQueries.filter(q => Number(q.applicationId) !== id)
+  stored.loanApplications = (stored.loanApplications || []).filter(app => Number(app.id) !== id)
+  stored.lenderQueries = (stored.lenderQueries || []).filter(q => Number(q.applicationId) !== id)
   DataStore.saveAll(stored)
   showToast('Loan application removed.', 'info')
   renderLoanApplicationsTable()
@@ -5579,6 +5668,15 @@ window.renderSODHistory = renderSODHistory
 window.renderEODHistory = renderEODHistory
 window.renderWODHistory = renderWODHistory
 window.renderLeads = renderLeads
+
+if (typeof window.renderDocuments !== 'function') {
+  window.renderDocuments = function() {
+    const container = document.getElementById('documentsContainer')
+    if (!container) return
+    container.innerHTML = '<div style="padding:20px;color:var(--gray-500);">Documents will appear here.</div>'
+  }
+}
+
 window.renderEOD = renderEOD
 window.renderTeam = renderTeam
 window.renderTargets = renderTargets

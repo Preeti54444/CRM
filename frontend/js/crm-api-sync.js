@@ -113,7 +113,23 @@
       console.log('[crm-api-sync] No auth token found, skipping sync');
       return false;
     }
-    if (!force && sessionStorage.getItem('crm_api_synced') && ['crm_leads', 'crm_eod', 'crm_wod', 'crm_leads_journey', 'crm_tasks', 'crm_users', 'crm_notifications', 'crm_work_sessions', 'crm_followups', 'crm_lender', 'crm_calls'].every(isDatasetPopulated)) {
+
+    const requiredSyncKeys = [
+      'crm_leads',
+      'crm_leads_journey',
+      'crm_eod',
+      'crm_wod',
+      'crm_tasks',
+      'crm_users',
+      'crm_notifications',
+      'crm_work_sessions',
+      'crm_followups',
+      'crm_lender',
+      'crm_calls',
+      'crm_customers'
+    ];
+
+    if (!force && sessionStorage.getItem('crm_api_synced') && requiredSyncKeys.every(isDatasetPopulated)) {
       console.log('[crm-api-sync] Already synced, skipping');
       return true;
     }
@@ -132,11 +148,12 @@
       { path: '/reports/wod', storageKey: 'crm_wod' },
       { path: '/tasks', storageKey: 'crm_tasks' },
       { path: '/notifications', storageKey: 'crm_notifications' },
-      { path: '/lender/lender', storageKey: 'crm_lender' },
+      { path: '/lender', storageKey: 'crm_lender' },
       { path: '/users', storageKey: 'crm_users' },
-      { path: '/work_sessions', storageKey: 'crm_work_sessions' },
+      { path: '/work-sessions', storageKey: 'crm_work_sessions' },
       { path: '/followups', storageKey: 'crm_followups' },
-      { path: '/calls', storageKey: 'crm_calls' }
+      { path: '/calls', storageKey: 'crm_calls' },
+      { path: '/customers', storageKey: 'crm_customers' }
     ];
 
     for (const { path: endpoint, storageKey } of fallbackEndpoints) {

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
-from pydantic import model_validator
+from pydantic import ConfigDict, model_validator
 from pydantic_settings import BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -152,9 +152,11 @@ class Settings(BaseSettings):
                 raise ValueError("SECRET_KEY must be a securely generated random value in production.")
         return self
     
-    class Config:
-        env_file = str(find_env_file())
-        case_sensitive = False
+    model_config = ConfigDict(
+        env_file=str(find_env_file()),
+        case_sensitive=False,
+        extra='ignore',
+    )
 
 
 settings = Settings()

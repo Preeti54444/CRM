@@ -4,16 +4,13 @@
 
 // Main navigation function
 function nav(btn) {
-  // Prevent admin users from accessing call forms
+  // Prevent admin users from accessing restricted forms
   const key = btn.dataset.sec
-  if (key === 'call-form') {
-    const session = JSON.parse(localStorage.getItem('crm_session') || '{}')
-    const role = String(session.role || '').trim().toLowerCase()
-    
-    if (role === 'admin') {
-      alert('Admins cannot access call forms.')
-      return
-    }
+  const session = JSON.parse(localStorage.getItem('crm_session') || '{}')
+  const role = String(session.role || '').trim().toLowerCase()
+  if (role === 'admin' && ['call-form', 'sod-form', 'eod-form', 'wod-form'].includes(key)) {
+    alert('Admins cannot access this form.')
+    return
   }
 
   // Remove active from all nav buttons

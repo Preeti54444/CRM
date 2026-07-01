@@ -221,16 +221,38 @@ async function initSession() {
   checkTodaysMeetings()
 
   // Admin vs Employee UI adjustments
-  if (S.role === 'admin') {
+  const isAdminRole = String(S.role || '').toLowerCase() === 'admin'
+  if (isAdminRole) {
     const histExecF = document.getElementById('histExecF')
     const eodExecF = document.getElementById('eodExecF')
     const wodExecF = document.getElementById('wodExecF')
     const leadExecF = document.getElementById('leadExecF')
-    
+    const sodSection = document.getElementById('sec-sod-form')
+    const eodSection = document.getElementById('sec-eod-form')
+    const wodSection = document.getElementById('sec-wod-form')
+    const reportSubmitButtons = ['sodSubmitBtn', 'eodSubmitBtn', 'wodSubmitBtn']
+    const restrictedMenuKeys = ['sod-form', 'eod-form', 'wod-form']
+
     if (histExecF) histExecF.style.display = 'block'
     if (eodExecF) eodExecF.style.display = 'block'
     if (wodExecF) wodExecF.style.display = 'block'
     if (leadExecF) leadExecF.style.display = 'block'
+    restrictedMenuKeys.forEach(key => {
+      document.querySelectorAll(`.nav-btn[data-sec="${key}"]`).forEach(el => {
+        el.style.display = 'none'
+        el.remove()
+      })
+    })
+    if (sodSection) sodSection.style.display = 'none'
+    if (eodSection) eodSection.style.display = 'none'
+    if (wodSection) wodSection.style.display = 'none'
+    reportSubmitButtons.forEach(id => {
+      const btn = document.getElementById(id)
+      if (btn) {
+        btn.style.display = 'none'
+        btn.disabled = true
+      }
+    })
 
     updateElementText('leadsTitle', 'All Lead Journeys')
     updateElementText('leadsSub', 'Complete database from all executives')
@@ -1478,12 +1500,28 @@ function mergeDatasetById(existing, incoming) {
 }
 
 function getCRMApiBaseCandidates() {
-  // Use centralized API base from config.js
-  const apiBase = typeof window.getCRMApiBase === 'function' 
-    ? window.getCRMApiBase() 
-    : window.API_BASE || window.location.origin;
-  
-  return [apiBase].filter(Boolean);
+  const candidates = [];
+
+  if (window.API_BASE) {
+    candidates.push(window.API_BASE);
+  }
+
+  if (typeof window.getCRMApiBase === 'function') {
+    try {
+      const resolved = window.getCRMApiBase();
+      if (resolved && !candidates.includes(resolved)) {
+        candidates.push(resolved);
+      }
+    } catch (err) {
+      console.warn('[CRM API] Unable to resolve API base via helper:', err);
+    }
+  }
+
+  if (window.location.origin && !candidates.includes(window.location.origin)) {
+    candidates.push(window.location.origin);
+  }
+
+  return candidates.filter(Boolean);
 }
 
 function getCRMSession() {

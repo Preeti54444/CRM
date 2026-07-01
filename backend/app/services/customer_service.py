@@ -64,3 +64,8 @@ def update_customer(db: Session, obj: CustomerProfile, payload: CustomerProfileU
         creator_id=None,
     )
     return obj
+
+
+def delete_customer_profile(db: Session, obj: CustomerProfile) -> None:
+    db.delete(obj)
+    db.commit()

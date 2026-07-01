@@ -1436,17 +1436,6 @@
             <button class="btn btn-outline" onclick="openImportCSVModal()"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg> Import CSV</button>
             <button class="btn btn-outline" onclick="exportData('leads')"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg> Export</button>
           </div>
-          <script>
-            // Override renderLeads to handle async properly when called from HTML events
-            const originalRenderLeads = window.renderLeads;
-            window.renderLeads = function() {
-              if (originalRenderLeads && originalRenderLeads.constructor.name === 'AsyncFunction') {
-                originalRenderLeads().catch(err => console.error('Error in renderLeads:', err));
-              } else {
-                originalRenderLeads();
-              }
-            };
-          </script>
         </div>
         <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Executive</th><th>Company</th><th>Contact</th><th>Product</th><th>Source</th><th>Status</th><th>Follow-up</th><th>Deal Value</th><th>Action</th></tr></thead><tbody id="leadsBody"></tbody></table></div>
       </div>
@@ -5592,6 +5581,21 @@ function startInitSessionWhenReady() {
 startInitSessionWhenReady();
 </script>
 <script src="js/home-button-inject.js?v=1"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const isAdmin = document.body.classList.contains('admin') || (window.S && String(window.S.role || '').toLowerCase() === 'admin')
+    if (!isAdmin) return
+    const removeKeys = ['sod-form', 'eod-form', 'wod-form']
+    removeKeys.forEach((sec) => {
+      document.querySelectorAll(`.nav-btn[data-sec="${sec}"]`).forEach(el => el.remove())
+    })
+    const removeSections = ['sec-sod-form', 'sec-eod-form', 'sec-wod-form']
+    removeSections.forEach((id) => {
+      const section = document.getElementById(id)
+      if (section) section.remove()
+    })
+  })
+</script>
 
 <!-- FALLBACK: Inject missing functions that aren't loading from crm-reports.js -->
 <script>

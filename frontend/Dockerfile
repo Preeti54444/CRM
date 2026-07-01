@@ -4,6 +4,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 80
 
-CMD ["python", "-m", "http.server", "3000"]
+CMD ["python", "-m", "http.server", "80"]

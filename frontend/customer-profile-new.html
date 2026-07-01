@@ -44,6 +44,7 @@
       <div class="controls">
         <button class="btn" onclick="downloadProfile()">Download</button>
         <button class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+        <button class="btn btn-danger" onclick="deleteProfile()">Delete Profile</button>
       </div>
     </div>
 
@@ -167,9 +168,85 @@
   </div>
 
   <script src="js/crm-data-store.js"></script>
+  <script src="js/crm-api-client.js"></script>
   <script>
     function parseQuery(){const q={};location.search.replace(/^\?/,'').split('&').forEach(p=>{if(!p) return;const [k,v]=p.split('=');q[decodeURIComponent(k)]=decodeURIComponent(v||'')});return q}
     function editProfile(){window.location.href='crm1.html'}
+    function deleteProfile(){
+      if (!confirm('Are you sure you want to delete this profile?')) return
+      const q=parseQuery()
+      const type = q.type || sessionStorage.getItem('profileType') || 'lead'
+      let profile = null
+      try { profile = JSON.parse(sessionStorage.getItem('selectedProfile') || 'null') } catch (e) { profile = null }
+      if (!profile || !profile.id) {
+        alert('Profile not found or cannot be deleted.')
+        return
+      }
+
+      const deleteLocalProfile = () => {
+        const targetId = String(profile.id)
+        const cleanupCollection = (key, idField = 'id') => {
+          try {
+            const values = JSON.parse(localStorage.getItem(key) || '[]') || []
+            const filtered = values.filter(item => String(item[idField] || item.id || '') !== targetId)
+            localStorage.setItem(key, JSON.stringify(filtered))
+          } catch (err) {
+            console.warn('Failed cleaning localStorage collection', key, err)
+          }
+        }
+
+        cleanupCollection('crm_leads_journey')
+        cleanupCollection('crm_leads')
+        cleanupCollection('crm_customers')
+
+        if (window.DataStore && typeof window.DataStore.getAll === 'function' && typeof window.DataStore.saveAll === 'function') {
+          const data = window.DataStore.getAll() || {}
+          if (Array.isArray(data.leads)) {
+            data.leads = data.leads.filter(item => String(item.id || item.leadId || item.customerId) !== targetId)
+          }
+          if (Array.isArray(data.contacts)) {
+            data.contacts = data.contacts.filter(item => String(item.id || item.contactId) !== targetId)
+          }
+          window.DataStore.saveAll(data)
+        }
+        sessionStorage.removeItem('selectedProfile')
+        sessionStorage.removeItem('profileId')
+        sessionStorage.removeItem('profileType')
+      }
+
+      const backendDelete = async () => {
+        try {
+          if (typeof window.API !== 'undefined' && typeof window.API.deleteLead === 'function' && type === 'lead') {
+            await window.API.deleteLead(profile.id)
+            return true
+          }
+          if (typeof postToCRMBackendEndpoint === 'function' && type === 'lead') {
+            await postToCRMBackendEndpoint(`leads/${encodeURIComponent(String(profile.id))}`, null, 'DELETE')
+            return true
+          }
+          if (typeof window.API !== 'undefined' && typeof window.API.deleteCustomer === 'function') {
+            await window.API.deleteCustomer(profile.id)
+            return true
+          }
+        } catch (err) {
+          console.warn('Backend profile delete failed', err)
+          return false
+        }
+        return false
+      }
+
+      Promise.resolve().then(async () => {
+        const deletedFromBackend = await backendDelete()
+        deleteLocalProfile()
+        if (deletedFromBackend) {
+          alert('Profile deleted successfully.')
+        } else {
+          alert('Profile deleted locally. Backend delete may not have been available.')
+        }
+        window.location.href = 'crm1.html'
+      })
+    }
+
     function downloadProfile(){
       const el = document.querySelector('.container')
       const text = el ? el.innerText : document.title

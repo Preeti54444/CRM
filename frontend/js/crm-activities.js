@@ -467,45 +467,56 @@ function submitCall() {
   }
 
   // Save to backend FIRST - localStorage is only for caching
-  if (typeof postToCRMBackendEndpoint === 'function') {
-    const backendPayload = {
-      call_id: callEntry.id || callEntry.callId,
-      call_type: callEntry.callType || 'Outbound',
-      lead_id: leadId || null,
-      lead_name: name || '',
-  	  phone: phone || '',
-      date: date || new Date().toISOString().split('T')[0],
-      time: time || '',
-      duration: duration || 0,
-      outcome: outcome || '',
-      summary: summary || '',
-      sentiment: sentiment || '',
-      products: callEntry.products || '',
-      agent: callEntry.agent || '',
-      agent_email: callEntry.agentEmail || '',
-      has_recording: callEntry.hasRecording || false,
-      recording_saved: callEntry.recordingSaved || false
-    }
-    
-    postToCRMBackendEndpoint('calls', backendPayload, 'POST').then(result => {
-      console.debug('Call saved to backend:', result);
-      // Only cache to localStorage AFTER successful backend save
-      DataStore.add('calls', callEntry)
-      try {
-        const raw = localStorage.getItem('crm_calls_journey') || '[]'
-        const arr = JSON.parse(raw || '[]') || []
-        arr.push(callEntry)
-        localStorage.setItem('crm_calls_journey', JSON.stringify(arr))
-        sessionStorage.setItem('crm_calls_journey', JSON.stringify(arr))
-      } catch(e) { console.warn('Failed saving to crm_calls_journey', e) }
-    }).catch(err => {
-      console.error('Call backend save failed:', err);
-      showToast('Failed to save call to backend. Please check your connection.', 'error');
-    });
-  } else {
-    console.error('Backend save function not available for calls');
-    showToast('Backend unavailable. Cannot save call.', 'error');
+  const backendPayload = {
+    call_id: callEntry.id,
+    call_type: direction || 'Outbound',
+    call_date: date || new Date().toISOString().split('T')[0],
+    call_time: time || '',
+    duration_seconds: duration ? Number(duration) : 0,
+    caller_name: name || '',
+    caller_phone: phone || '',
+    receiver_name: company || '',
+    receiver_phone: '',
+    receiver_email: email || '',
+    lead_id: leadId || null,
+    purpose: outcome || '',
+    description: summary || '',
+    status: 'Completed',
+    priority: priority || 'Medium',
+    outcome: outcome || '',
+    followup_required: followup ? 'Yes' : 'No',
+    followup_date: followup || null,
+    followup_notes: nextAction || '',
+    recording_link: '',
+    notes: summary || ''
   }
+
+  const saveCallToBackend = async (payload) => {
+    if (typeof postToCRMBackendEndpoint === 'function') {
+      return postToCRMBackendEndpoint('calls', payload, 'POST')
+    }
+    const apiClient = window.CRM_API_CLIENT || window.API || (typeof CRMApiClient !== 'undefined' ? new CRMApiClient() : null)
+    if (apiClient && typeof apiClient.createCall === 'function') {
+      return apiClient.createCall(payload)
+    }
+    throw new Error('Backend save function not available for calls')
+  }
+
+  saveCallToBackend(backendPayload).then(result => {
+    console.debug('Call saved to backend:', result);
+    // Only cache to localStorage AFTER successful backend save
+    DataStore.add('calls', callEntry)
+    try {
+      const raw = localStorage.getItem('crm_calls_journey') || '[]'
+      const arr = JSON.parse(raw || '[]') || []
+      arr.push(callEntry)
+      localStorage.setItem('crm_calls_journey', JSON.stringify(arr))
+      sessionStorage.setItem('crm_calls_journey', JSON.stringify(arr))
+    } catch(e) { console.warn('Failed saving to crm_calls_journey', e) }
+  }).catch(err => {
+    console.error('Call backend save failed:', err);
+    showToast('Failed to save call to backend. Please check your connection.', 'error');
+  });
 
   // Update the lead's activity history and lastInteraction
   if (leadId) {

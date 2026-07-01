@@ -1,3 +1,4 @@
+version: '3.9'
 services:
   backend:
     build:
@@ -7,7 +8,14 @@ services:
       - .env
     ports:
       - "8085:8085"
+    expose:
+      - "8085"
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8085/health', timeout=10)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
@@ -18,7 +26,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3000:80"
+    expose:
+      - "80"
     restart: unless-stopped
 
   postgres:

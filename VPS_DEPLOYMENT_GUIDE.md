@@ -139,6 +139,8 @@ The frontend (`config.js`) automatically detects the environment and configures 
 **Production Detection:**
 When accessed on standard HTTP/HTTPS ports (80/443), the frontend assumes nginx is proxying API requests and uses the same origin.
 
+> Note: If a host system already has Nginx running on port 80, the Docker nginx proxy cannot bind that port. If you see the default "Welcome to nginx!" page on your VPS IP, stop or disable the system nginx service before starting this stack.
+
 ### Nginx Configuration
 
 Nginx acts as a reverse proxy with the following features:

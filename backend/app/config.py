@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from typing import Optional
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlsplit, urlunsplit
 from pydantic import ConfigDict, model_validator
 from pydantic_settings import BaseSettings
 
@@ -139,6 +139,25 @@ class Settings(BaseSettings):
 
         return origins
 
+    def _resolve_database_url(self) -> str:
+        database_url = (self.database_url or "").strip()
+        if not database_url:
+            return database_url
+
+        if not self._is_running_in_docker():
+            return database_url
+
+        parsed = urlsplit(database_url)
+        if parsed.hostname in {"localhost", "127.0.0.1", "::1"}:
+            host = os.getenv("POSTGRES_HOST", "postgres")
+            parsed = parsed._replace(netloc=f"{parsed.username or ''}:{parsed.password or ''}@{host}:{parsed.port or 5432}" if parsed.username else f"{host}:{parsed.port or 5432}")
+            return urlunsplit(parsed)
+
+        return database_url
+
+    def _is_running_in_docker(self) -> bool:
+        return os.path.exists("/.dockerenv") or os.getenv("DOTENV") == "docker"
+
     @model_validator(mode="after")
     def validate_production_settings(self):
         environment = self.environment.lower()
@@ -150,6 +169,8 @@ class Settings(BaseSettings):
                 raise ValueError("ALLOWED_HOSTS must be explicitly configured for production environments.")
             if len(secret_key) < 32 or secret_key.startswith("your-") or secret_key.startswith("please-"):
                 raise ValueError("SECRET_KEY must be a securely generated random value in production.")
+
+        self.database_url = self._resolve_database_url()
         return self
     
     model_config = ConfigDict(

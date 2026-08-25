@@ -1,0 +1,90 @@
+version: '3.9'
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      # NOTE: your current .env points DATABASE_URL at this VPS's public IP
+      # (187.127.149.245) rather than at the "postgres" service below. That
+      # means the "postgres" service in this file may not even be the
+      # database you're actually using - double-check which Postgres your
+      # app is really talking to (this compose file's container, or one
+      # installed separately on the VPS) and make sure only that one is
+      # reachable from the internet. If you ARE using this compose file's
+      # postgres service, change DATABASE_URL in .env to use host "postgres"
+      # instead of the public IP - it's faster and doesn't need port 5432
+      # exposed at all.
+      DATABASE_URL: ${DATABASE_URL}
+    # Published on 8085 in addition to being reverse-proxied via nginx on
+    # port 80, so the frontend's LAN-access fallback (config.js) can reach
+    # the API directly by host:8085 when not going through nginx. Remove
+    # this "ports" mapping (keep only "expose") if you only ever access the
+    # app through nginx on port 80/443.
+    ports:
+      - "8085:8085"
+    expose:
+      - "8085"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8085/health', timeout=10)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    expose:
+      - "80"
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fundingsathicrm}
+      POSTGRES_DB: ${POSTGRES_DB:-fundingsathicrm}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # Bound to localhost only: the backend container reaches this via the
+    # internal Docker network (host "postgres"), so there is no reason to
+    # expose 5432 to the public internet. Previously this was
+    # "5432:5432" (all interfaces) with a weak default password - on a
+    # VPS that means the database was reachable from anywhere on the
+    # internet. Change back to "5432:5432" only if you specifically need
+    # remote DB access, and use a strong POSTGRES_PASSWORD if you do.
+    ports:
+      - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fundingsathicrm"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/logs:/var/log/backend:rw
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

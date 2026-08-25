@@ -1,0 +1,200 @@
+/**
+ * Submission Manager CSS - CRM System
+ * Styles for parallel loan submissions and lender query management
+ * Version: 1.0.0
+ */
+
+/* ==================== PARALLEL SUBMISSION VIEW ==================== */
+.parallel-submission-view {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.submission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.submission-header h4 {
+  margin: 0;
+  color: #1a202c;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.submissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+/* ==================== SUBMISSION CARD ==================== */
+.submission-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #e9ecef;
+}
+
+.submission-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.submission-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+}
+
+.lender-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lender-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 2px solid #dee2e6;
+}
+
+.lender-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  border: 2px solid #dee2e6;
+}
+
+.lender-name {
+  font-weight: 600;
+  color: #1a202c;
+  font-size: 14px;
+}
+
+.submission-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submission-card-body {
+  padding: 15px;
+}
+
+.submission-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.metric {
+  text-align: center;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.metric-value.sanctioned {
+  color: #10b981;
+}
+
+.submission-queries {
+  margin-bottom: 12px;
+}
+
+.queries-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fcd34d;
+}
+
+.queries-badge.has-queries {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+.queries-icon {
+  font-size: 14px;
+}
+
+.submission-details {
+  padding-top: 12px;
+  border-top: 1px solid #e9ecef;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.detail-label {
+  color: #6c757d;
+}
+
+.detail-value {
+  font-weight: 600;
+  color: #1a202c;
+}
+
+.submission-card-footer {
+  padding: 12px 15px;
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

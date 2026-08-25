@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forecasts — Funding Sathi</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="config.js"></script>
+<script>
+  // Auth guard (same pattern as crm1.html)
+  (function () {
+    try {
+      var raw = localStorage.getItem("crm_session");
+      var s = raw ? JSON.parse(raw) : {};
+      var t = s && (s.access_token || s.token || s.accessToken);
+      if (!t) { window.location.href = "login.html"; }
+    } catch (e) { window.location.href = "login.html"; }
+  })();
+</script>
+<style>
+:root{
+  --maroon:#7A1F1F;
+  --maroon-dark:#5C1414;
+  --maroon-light:#F5E4E4;
+  --charcoal:#1E1F24;
+  --charcoal-2:#2A2C33;
+  --offwhite:#FAF8F5;
+  --surface:#FFFFFF;
+  --surface-2:#F4F1EC;
+  --border:#E6E1DA;
+  --border-strong:#D4CEC3;
+  --text-primary:#1E1F24;
+  --text-secondary:#5B5A58;
+  --text-muted:#8E8C88;
+  --success:#0E6B4B;
+  --success-bg:#E1F0E8;
+  --warning:#B08300;
+  --info:#1E3FA8;
+  --radius:10px;
+  --radius-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:var(--offwhite);font-family:'Poppins','Montserrat',system-ui,sans-serif;color:var(--text-primary);font-size:14px;line-height:1.5;}
+a{color:inherit;}
+
+.top-bar{background:linear-gradient(135deg,var(--maroon),var(--maroon-dark));color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;box-shadow:0 4px 14px rgba(0,0,0,0.08);}
+.top-bar .brand{display:flex;align-items:center;gap:12px;font-family:'Montserrat',sans-serif;font-weight:800;letter-spacing:0.02em;font-size:16px;}
+.brand-logo{width:34px;height:34px;border-radius:8px;background:#fff;color:var(--maroon);display:grid;place-items:center;font-weight:800;font-family:'Montserrat',sans-serif;font-size:16px;}
+.top-bar nav{display:flex;gap:10px;flex-wrap:wrap;}
+.top-bar nav a{color:rgba(255,255,255,0.9);text-decoration:none;padding:8px 12px;border-radius:6px;font-size:13px;font-weight:500;transition:background 0.15s ease;}
+.top-bar nav a:hover{background:rgba(255,255,255,0.14);}
+.top-bar nav a.active{background:#fff;color:var(--maroon);font-weight:600;}
+.top-bar .who{display:flex;align-items:center;gap:10px;font-size:12px;opacity:0.9;}
+
+.page{max-width:1400px;margin:0 auto;padding:26px 28px 60px;}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px;}
+.page-head h1{font-family:'Montserrat',sans-serif;font-weight:800;font-size:32px;letter-spacing:-0.02em;color:var(--charcoal);}
+.page-head p{color:var(--text-secondary);font-size:14px;margin-top:4px;}
+.badge-auto{background:var(--success-bg);color:var(--success);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+.badge-auto::before{content:"";width:8px;height:8px;background:var(--success);border-radius:50%;box-shadow:0 0 0 3px rgba(14,107,75,0.18);animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.55;transform:scale(0.85);}}
+
+.filters{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;margin-bottom:22px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;align-items:end;}
+.filters .fld{display:flex;flex-direction:column;gap:5px;}
+.filters label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);}
+.filters input,.filters select{border:1px solid var(--border-strong);border-radius:8px;padding:8px 10px;font:inherit;background:var(--surface);color:var(--text-primary);}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--maroon);box-shadow:0 0 0 3px var(--maroon-light);}
+.filters .btn-reset{background:var(--charcoal);color:#fff;border:none;border-radius:8px;padding:9px 14px;font-weight:600;font-size:13px;cursor:pointer;}
+
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:24px;}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 24px;position:relative;overflow:hidden;}
+.kpi::after{content:"";position:absolute;inset:auto -30px -60px auto;width:180px;height:180px;background:radial-gradient(circle,var(--maroon-light) 0%,transparent 70%);opacity:0.6;}
+.kpi h4{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--maroon);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+.kpi .val{font-family:'Montserrat',sans-serif;font-size:34px;font-weight:800;letter-spacing:-0.02em;color:var(--charcoal);}
+.kpi .sub{color:var(--text-muted);font-size:12px;margin-top:6px;}
+.kpi.primary{background:linear-gradient(135deg,var(--maroon),var(--maroon-dark));color:#fff;border-color:transparent;}
+.kpi.primary::after{background:radial-gradient(circle,rgba(255,255,255,0.15) 0%,transparent 70%);}
+.kpi.primary h4{color:rgba(255,255,255,0.85);}
+.kpi.primary .val{color:#fff;}
+.kpi.primary .sub{color:rgba(255,255,255,0.75);}
+
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px;}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 22px;}
+.chart-card h3{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--charcoal);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.chart-card h3 .hint{font-size:11px;color:var(--text-muted);font-weight:400;letter-spacing:0.04em;text-transform:uppercase;}
+.chart-wrap{height:280px;position:relative;}
+
+.table-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.table-head{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.table-head h3{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:var(--charcoal);}
+.table-head .subtle{color:var(--text-muted);font-size:12px;}
+.table-scroll{overflow-x:auto;}
+table.deals{width:100%;border-collapse:collapse;font-size:13px;}
+table.deals th{background:var(--surface-2);text-align:left;padding:12px 14px;font-weight:600;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);}
+table.deals td{padding:14px;border-bottom:1px solid var(--border);vertical-align:middle;}
+table.deals tr:hover td{background:var(--surface-2);}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:600;}
+.pill.stage-Mandate{background:#FEF3C7;color:#92400E;}
+.pill.stage-Sanctioned{background:#DBEAFE;color:#1E40AF;}
+.pill.stage-Disbursed{background:var(--success-bg);color:var(--success);}
+.mono{font-family:'Poppins',monospace;font-variant-numeric:tabular-nums;}
+.deal-ref{color:var(--maroon);font-weight:600;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:0.02em;}
+.customer{font-weight:600;color:var(--charcoal);}
+.money-inr{font-weight:700;color:var(--maroon);}
+.money-usd{font-weight:600;color:var(--charcoal-2);}
+.updated{color:var(--text-muted);font-size:12px;}
+
+.empty{padding:60px 20px;text-align:center;color:var(--text-muted);}
+.footer{margin-top:30px;padding:18px 0;text-align:center;color:var(--text-muted);font-size:12px;}
+.footer strong{color:var(--maroon);}
+
+@media (max-width:960px){
+  .kpi-row{grid-template-columns:1fr;}
+  .chart-row{grid-template-columns:1fr;}
+  .filters{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="brand">
+    <div class="brand-logo">FS</div>
+    <span>Funding Sathi CRM</span>
+  </div>
+  <nav>
+    <a href="crm1.html">Dashboard</a>
+    <a href="crm1.html#deals">Deals</a>
+    <a href="forecast.html" class="active">Forecasts</a>
+    <a href="lender-products.html">Lenders</a>
+    <a href="reports.html">Reports</a>
+  </nav>
+  <div class="who" id="whoAmI">Signed in</div>
+</div>
+
+<main class="page">
+
+  <div class="page-head">
+    <div>
+      <h1>Forecasts</h1>
+      <p>Funding Sathi Revenue only · Fully automated · Deal → Forecast pipeline</p>
+    </div>
+    <span class="badge-auto">Live sync — auto-updates from Deals</span>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters" id="filters">
+    <div class="fld"><label>Date Range</label>
+      <select id="fltDate">
+        <option value="all">All Time</option>
+        <option value="30">Last 30 Days</option>
+        <option value="90">Last 90 Days</option>
+        <option value="ytd">Year to Date</option>
+      </select></div>
+    <div class="fld"><label>Product</label><select id="fltProduct"><option value="all">All Products</option></select></div>
+    <div class="fld"><label>Vertical</label><select id="fltVertical"><option value="all">All Verticals</option></select></div>
+    <div class="fld"><label>Assigned Lender</label><select id="fltLender"><option value="all">All Lenders</option></select></div>
+    <div class="fld"><label>Pipeline Stage</label>
+      <select id="fltStage">
+        <option value="all">All Stages</option>
+        <option>New Lead</option>
+        <option>Qualified Lead</option>
+        <option>Product Exploration</option>
+        <option>Mandate Signed</option>
+        <option>Lender Selected</option>
+        <option>Logged In To Lender</option>
+        <option>Documentation</option>
+        <option>Credit Evaluation</option>
+        <option>PD Completed</option>
+        <option>Sanctioned</option>
+        <option>Compliance</option>
+        <option>Disbursed</option>
+        <option>Active Customer</option>
+      </select></div>
+    <div class="fld"><label>Sales Executive</label><select id="fltExec"><option value="all">All Executives</option></select></div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-row">
+    <div class="kpi primary">
+      <h4>Total Realized FS Revenue</h4>
+      <div class="val mono" id="kpiWeighted">₹ 0.00</div>
+      <div class="sub" id="kpiWeightedSub">Weighted by pipeline stage</div>
+    </div>
+    <div class="kpi">
+      <h4>USD Equivalent</h4>
+      <div class="val mono" id="kpiUsd">$ 0.00</div>
+      <div class="sub" id="kpiUsdSub">Cross-currency @ live rate</div>
+    </div>
+    <div class="kpi">
+      <h4>Unweighted Gross Revenue</h4>
+      <div class="val mono" id="kpiGross">₹ 0.00</div>
+      <div class="sub" id="kpiGrossSub">Full pipeline potential</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="chart-row">
+    <div class="chart-card">
+      <h3>Revenue by Pipeline Stage <span class="hint">Weighted INR</span></h3>
+      <div class="chart-wrap"><canvas id="stageChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Revenue by Lender <span class="hint">Weighted INR</span></h3>
+      <div class="chart-wrap"><canvas id="lenderChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- DEAL-WISE TABLE -->
+  <div class="table-card">
+    <div class="table-head">
+      <div>
+        <h3>Deal-wise Forecast</h3>
+        <div class="subtle" id="tableCount">0 deals</div>
+      </div>
+      <div class="subtle">Values below are Funding Sathi revenue — never loan amount</div>
+    </div>
+    <div class="table-scroll">
+      <table class="deals" id="dealsTable">
+        <thead>
+          <tr>
+            <th>Deal Ref</th>
+            <th>Customer</th>
+            <th>Assigned Lender</th>
+            <th>Product</th>
+            <th>Vertical</th>
+            <th class="mono">Sanction Amount</th>
+            <th>Stage</th>
+            <th class="mono">Gross Rev.</th>
+            <th class="mono">Weighted Rev.</th>
+            <th class="mono">USD Rev.</th>
+            <th>Last Updated</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="dealsBody"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="emptyState" style="display:none;">No deals match the current filters.</div>
+  </div>
+
+  <div class="footer">
+    Powered by the <strong>Funding Sathi Revenue Engine</strong> · <code>computeDealRevenue()</code> ·
+    All numbers auto-derived from Deal Commercials · No manual entry
+  </div>
+
+</main>
+
+<script src="js/fs-revenue-engine.js"></script>
+<script src="js/fs-deals-store.js"></script>
+<script>
+(function(){
+  // Show signed-in user
+  try {
+    var s = JSON.parse(localStorage.getItem("crm_session")||"{}");
+    var el = document.getElementById("whoAmI");
+    if(el && (s.name || s.email)) el.textContent = "Signed in · " + (s.name || s.email);
+  } catch(e){}
+
+  var stageChart, lenderChart;
+  var STAGE_ORDER = ["New Lead","Qualified Lead","Product Exploration","Mandate Signed","Lender Selected","Logged In To Lender","Documentation","Credit Evaluation","PD Completed","Sanctioned","Compliance","Disbursed","Active Customer"];
+  var STAGE_COLORS = { "New Lead":"#94A3B8", "Qualified Lead":"#64748B", "Product Exploration":"#7C5EAB", "Mandate Signed":"#B08300", "Lender Selected":"#B45309", "Logged In To Lender":"#0E7490", "Documentation":"#1E40AF", "Credit Evaluation":"#1E3FA8", "PD Completed":"#5B21B6", "Sanctioned":"#0369A1", "Compliance":"#059669", "Disbursed":"#0E6B4B", "Active Customer":"#065F46" };
+
+  function formatINR(n){ return "₹ " + Number(n||0).toLocaleString("en-IN",{maximumFractionDigits:0}); }
+  function formatINR2(n){ return "₹ " + Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function formatUSD2(n){ return "$ " + Number(n||0).toLocaleString("en-IN",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+  function daysAgo(iso){ if(!iso) return Infinity; return (Date.now()-new Date(iso).getTime())/86400000; }
+  function ytdStart(){ var d=new Date(); return new Date(d.getFullYear(),0,1).getTime(); }
+
+  function populateFilters(deals){
+    var uniq = function(arr,key){ return Array.from(new Set(arr.map(function(d){return d[key];}).filter(Boolean))); };
+    fill("fltProduct", uniq(deals,"product"));
+    fill("fltVertical", uniq(deals,"vertical"));
+    fill("fltLender", uniq(deals,"assignedLender"));
+    fill("fltExec", uniq(deals,"salesExecutive"));
+  }
+  function fill(id, opts){
+    var sel = document.getElementById(id);
+    var current = sel.value;
+    var first = sel.querySelector("option[value=\"all\"]");
+    sel.innerHTML = ""; sel.appendChild(first);
+    opts.forEach(function(v){ var o=document.createElement("option"); o.value=v; o.textContent=v; sel.appendChild(o); });
+    sel.value = current || "all";
+  }
+
+  function applyFilters(deals){
+    var f = {
+      date: document.getElementById("fltDate").value,
+      product: document.getElementById("fltProduct").value,
+      vertical: document.getElementById("fltVertical").value,
+      lender: document.getElementById("fltLender").value,
+      stage: document.getElementById("fltStage").value,
+      exec: document.getElementById("fltExec").value,
+    };
+    return deals.filter(function(d){
+      if(f.product !== "all" && d.product !== f.product) return false;
+      if(f.vertical !== "all" && d.vertical !== f.vertical) return false;
+      if(f.lender !== "all" && d.assignedLender !== f.lender) return false;
+      if(f.stage !== "all" && d.pipelineStage !== f.stage) return false;
+      if(f.exec !== "all" && d.salesExecutive !== f.exec) return false;
+      if(f.date === "30" && daysAgo(d.updatedAt) > 30) return false;
+      if(f.date === "90" && daysAgo(d.updatedAt) > 90) return false;
+      if(f.date === "ytd" && new Date(d.updatedAt).getTime() < ytdStart()) return false;
+      return true;
+    });
+  }
+
+  function computeAll(deals){
+    return deals.map(function(d){
+      var r = FSRevenue.computeDealRevenue(d);
+      return Object.assign({}, d, {
+        _grossRevenue: r.grossRevenue,
+        _weightedRevenue: r.weightedRevenue,
+        _usdRevenue: r.usdRevenue,
+        _stageWeight: r.stageWeight,
+      });
+    });
+  }
+
+  function renderKPIs(deals){
+    var totalWeighted = deals.reduce(function(s,d){return s+d._weightedRevenue;},0);
+    var totalUsd = deals.reduce(function(s,d){return s+d._usdRevenue;},0);
+    var totalGross = deals.reduce(function(s,d){return s+d._grossRevenue;},0);
+    document.getElementById("kpiWeighted").textContent = formatINR2(totalWeighted);
+    document.getElementById("kpiUsd").textContent = formatUSD2(totalUsd);
+    document.getElementById("kpiGross").textContent = formatINR2(totalGross);
+    document.getElementById("kpiWeightedSub").textContent = deals.length + " deal" + (deals.length===1?"":"s") + " · weighted by stage";
+    document.getElementById("kpiUsdSub").textContent = "@ ₹ " + (deals[0] && deals[0].exchangeRate || 96.29) + " / USD";
+    document.getElementById("kpiGrossSub").textContent = "Full pipeline potential — unweighted";
+  }
+
+  function renderStageChart(deals){
+    var byStage = {};
+    STAGE_ORDER.forEach(function(s){ byStage[s] = 0; });
+    deals.forEach(function(d){ if(byStage[d.pipelineStage]!=null) byStage[d.pipelineStage]+=d._weightedRevenue; });
+    var data = STAGE_ORDER.map(function(k){return byStage[k];});
+    var colors = STAGE_ORDER.map(function(k){return STAGE_COLORS[k];});
+    if(stageChart) stageChart.destroy();
+    var ctx = document.getElementById("stageChart").getContext("2d");
+    stageChart = new Chart(ctx, {
+      type: "bar",
+      data: { labels: STAGE_ORDER, datasets: [{ label: "Weighted Revenue (INR)", data: data, backgroundColor: colors, borderRadius: 6, barThickness: 46 }]},
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:function(c){return " " + formatINR2(c.raw);} } } },
+        scales:{ y:{ ticks:{ callback:function(v){return formatINR(v);} }, grid:{ color:"#EEE7DD" } }, x:{ grid:{ display:false } } }
+      }
+    });
+  }
+
+  function renderLenderChart(deals){
+    var byLender = {};
+    deals.forEach(function(d){
+      var k = d.assignedLender || "Unassigned";
+      byLender[k] = (byLender[k]||0) + d._weightedRevenue;
+    });
+    var entries = Object.entries(byLender).sort(function(a,b){return b[1]-a[1];});
+    var labels = entries.map(function(e){return e[0];});
+    var data = entries.map(function(e){return e[1];});
+    var palette = ["#7A1F1F","#1E3FA8","#0E6B4B","#B08300","#5C1414","#312E81","#9A6300"];
+    if(lenderChart) lenderChart.destroy();
+    var ctx = document.getElementById("lenderChart").getContext("2d");
+    lenderChart = new Chart(ctx, {
+      type: "bar",
+      data: { labels: labels, datasets: [{ label:"Weighted Revenue (INR)", data:data, backgroundColor: labels.map(function(_,i){return palette[i%palette.length];}), borderRadius:6, barThickness:38 }]},
+      options: {
+        indexAxis:"y",
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:function(c){return " " + formatINR2(c.raw);} } } },
+        scales:{ x:{ ticks:{ callback:function(v){return formatINR(v);} }, grid:{ color:"#EEE7DD" } }, y:{ grid:{ display:false } } }
+      }
+    });
+  }
+
+  function renderTable(deals){
+    var body = document.getElementById("dealsBody");
+    var empty = document.getElementById("emptyState");
+    var count = document.getElementById("tableCount");
+    count.textContent = deals.length + " deal" + (deals.length===1?"":"s");
+    if(deals.length === 0){ body.innerHTML = ""; empty.style.display="block"; return; } else empty.style.display="none";
+    body.innerHTML = deals.map(function(d){
+      var stageKey = (d.pipelineStage||"").split(" ")[0];
+      return '<tr>' +
+        '<td class="deal-ref">'+ (d.dealRef||"—") +'</td>' +
+        '<td class="customer">'+ (d.customer||"—") +'</td>' +
+        '<td>'+ (d.assignedLender||"—") +'</td>' +
+        '<td>'+ (d.product||"—") +'</td>' +
+        '<td>'+ (d.vertical||"—") +'</td>' +
+        '<td class="mono">'+ formatINR(d.sanctionAmount) +'</td>' +
+        '<td><span class="pill stage-'+ stageKey +'">'+ (d.pipelineStage||"—") +'</span></td>' +
+        '<td class="mono">'+ formatINR2(d._grossRevenue) +'</td>' +
+        '<td class="mono money-inr">'+ formatINR2(d._weightedRevenue) +'</td>' +
+        '<td class="mono money-usd">'+ formatUSD2(d._usdRevenue) +'</td>' +
+        '<td class="updated">'+ (d.updatedAt||"—") +'</td>' +
+        '<td><a href="crm1.html?deal='+ encodeURIComponent(d.dealRef||"") +'" style="color:var(--maroon);font-weight:600;font-size:12px;text-decoration:none;">Open →</a></td>' +
+      '</tr>';
+    }).join("");
+  }
+
+  function refresh(){
+    var raw = FSDeals.list();
+    var deals = computeAll(raw);
+    populateFilters(raw);
+    var filtered = applyFilters(deals);
+    renderKPIs(filtered);
+    renderStageChart(filtered);
+    renderLenderChart(filtered);
+    renderTable(filtered);
+  }
+
+  // Wire filter change events
+  ["fltDate","fltProduct","fltVertical","fltLender","fltStage","fltExec"].forEach(function(id){
+    document.getElementById(id).addEventListener("change", refresh);
+  });
+
+  // React to any deal being upserted from the Deal Console (in same tab or other tab)
+  window.addEventListener("fs-deals-updated", refresh);
+  window.addEventListener("storage", function(e){ if(e.key==="fs_deals_v1") refresh(); });
+
+  document.addEventListener("DOMContentLoaded", refresh);
+  refresh();
+})();
+</script>
+</body>
+</html>

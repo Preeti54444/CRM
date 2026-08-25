@@ -1,0 +1,612 @@
+/* Forecast Module Styles */
+.forecast-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+    background: var(--bg-light, #f8f9fa);
+    min-height: 100vh;
+}
+
+/* KPI Cards */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid var(--maroon, #8B4C63);
+    transition: all 0.3s ease;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.kpi-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.kpi-card.primary {
+    border-left-color: var(--maroon, #8B4C63);
+}
+
+.kpi-card.success {
+    border-left-color: #28a745;
+}
+
+.kpi-card.warning {
+    border-left-color: #ffc107;
+}
+
+.kpi-card.danger {
+    border-left-color: #dc3545;
+}
+
+.kpi-label {
+    font-size: 12px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.kpi-value.currency::before {
+    content: '₹ ';
+    font-size: 24px;
+    color: var(--maroon, #8B4C63);
+}
+
+.kpi-value.percentage::after {
+    content: '%';
+    font-size: 20px;
+    color: #666;
+    margin-left: 4px;
+}
+
+.kpi-change {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+.kpi-change.positive {
+    color: #28a745;
+}
+
+.kpi-change.negative {
+    color: #dc3545;
+}
+
+/* Filter Bar */
+.forecast-filter-bar {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.forecast-filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.forecast-filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.forecast-filter-control {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    color: #333;
+    transition: all 0.2s;
+}
+
+.forecast-filter-control:hover {
+    border-color: var(--maroon, #8B4C63);
+}
+
+.forecast-filter-control:focus {
+    outline: none;
+    border-color: var(--maroon, #8B4C63);
+    box-shadow: 0 0 0 3px rgba(139, 76, 99, 0.1);
+}
+
+.forecast-filter-btn {
+    padding: 8px 20px;
+    background: var(--maroon, #8B4C63);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.forecast-filter-btn:hover {
+    background: #703749;
+    transform: translateY(-1px);
+}
+
+.forecast-filter-btn:active {
+    transform: translateY(0);
+}
+
+/* Chart Containers */
+.forecast-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.forecast-chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.forecast-chart-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.forecast-chart-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.forecast-chart-container {
+    position: relative;
+    min-height: 300px;
+    width: 100%;
+}
+
+.forecast-chart-container canvas {
+    max-height: 300px;
+}
+
+/* Full Width Charts */
+.forecast-chart-full {
+    grid-column: 1 / -1;
+}
+
+/* Table Styles */
+.forecast-table-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+}
+
+.forecast-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.forecast-table th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.forecast-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+    color: #333;
+}
+
+.forecast-table tbody tr:hover {
+    background: #f8f9fa;
+    cursor: pointer;
+}
+
+.forecast-table tbody tr:hover td {
+    background: none;
+}
+
+.forecast-table .numeric {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+}
+
+.forecast-table .currency {
+    font-weight: 600;
+    color: var(--maroon, #8B4C63);
+}
+
+/* Funnel Visualization */
+.forecast-funnel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.funnel-stage {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(139, 76, 99, 0.05) 0%, rgba(139, 76, 99, 0.02) 100%);
+    border-radius: 8px;
+    border-left: 3px solid var(--maroon, #8B4C63);
+}
+
+.funnel-bar {
+    height: 30px;
+    background: linear-gradient(90deg, var(--maroon, #8B4C63), #a85a73);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    color: white;
+    font-weight: 600;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.funnel-bar:hover {
+    box-shadow: 0 2px 8px rgba(139, 76, 99, 0.2);
+}
+
+.funnel-label {
+    min-width: 150px;
+    font-weight: 600;
+    color: #333;
+    font-size: 13px;
+}
+
+.funnel-metrics {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: #666;
+}
+
+.funnel-metrics span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.funnel-metrics .value {
+    font-weight: 700;
+    color: #1a1a1a;
+    font-size: 14px;
+}
+
+/* Heat Map */
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+}
+
+.heatmap-cell {
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.05);
+}
+
+.heatmap-cell.green {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+}
+
+.heatmap-cell.yellow {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb800 100%);
+    color: white;
+}
+
+.heatmap-cell.red {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+/* Loading State */
+.forecast-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--maroon, #8B4C63);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.forecast-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #999;
+    gap: 12px;
+}
+
+.forecast-empty-icon {
+    font-size: 48px;
+    opacity: 0.5;
+}
+
+.forecast-empty-text {
+    font-size: 14px;
+    color: #999;
+}
+
+/* Modal */
+.forecast-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s;
+}
+
+.forecast-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forecast-modal-content {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.forecast-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.forecast-modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.forecast-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    transition: all 0.2s;
+}
+
+.forecast-modal-close:hover {
+    color: #1a1a1a;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .forecast-chart-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    
+    .forecast-filter-bar {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .forecast-container {
+        padding: 16px;
+        gap: 16px;
+    }
+    
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .kpi-card {
+        min-height: 100px;
+    }
+    
+    .forecast-chart-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .forecast-filter-bar {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .kpi-value {
+        font-size: 24px;
+    }
+    
+    .forecast-table {
+        font-size: 12px;
+    }
+    
+    .forecast-table th,
+    .forecast-table td {
+        padding: 8px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .kpi-card,
+    .forecast-chart-card,
+    .forecast-table-card,
+    .forecast-filter-bar,
+    .forecast-modal-content {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+    
+    .kpi-value {
+        color: #e0e0e0;
+    }
+    
+    .kpi-label,
+    .forecast-filter-label {
+        color: #999;
+    }
+    
+    .forecast-table th {
+        background: #333;
+        color: #999;
+    }
+    
+    .forecast-table td {
+        color: #e0e0e0;
+        border-color: #444;
+    }
+    
+    .forecast-table tbody tr:hover {
+        background: #333;
+    }
+    
+    .forecast-filter-control {
+        background: #333;
+        border-color: #555;
+        color: #e0e0e0;
+    }
+}
+
+/* Animation Counters */
+@keyframes countUp {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.kpi-value {
+    animation: countUp 0.6s ease-out;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+.font-semi-bold {
+    font-weight: 600;
+}
+
+.text-muted {
+    color: #999;
+}
+
+.text-success {
+    color: #28a745;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+.text-warning {
+    color: #ffc107;
+}

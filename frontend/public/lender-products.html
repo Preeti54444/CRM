@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add New Lender — Product &amp; Sub-Product</title>
+<style>
+  :root{
+    --blue:#2563eb; --blue-dark:#1d4ed8; --border:#e2e8f0;
+    --text:#1e293b; --sub:#64748b; --bg:#f8fafc; --tab-bg:#f1f5f9;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--text); }
+  .modal-overlay{ min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:24px; }
+  .modal{ background:#fff; width:100%; max-width:860px; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.08); border:1px solid var(--border); }
+  .modal-header{ padding:18px 24px 0 24px; }
+  .modal-header h2{ margin:0 0 4px 0; font-size:18px; font-weight:600; }
+  .modal-header p{ margin:0 0 14px 0; font-size:12px; color:var(--sub); }
+
+  .tabs{ display:flex; gap:4px; border-bottom:1px solid var(--border); }
+  .tab-btn{
+    flex:1; padding:12px 10px; text-align:center; background:var(--tab-bg);
+    border:1px solid var(--border); border-bottom:none; border-radius:8px 8px 0 0;
+    font-size:13px; font-weight:700; color:var(--sub); cursor:pointer; position:relative; top:1px;
+  }
+  .tab-btn.active{ background:#fff; color:var(--blue); border-bottom:1px solid #fff; }
+  .tab-btn .tab-icon{ display:block; font-size:16px; margin-bottom:2px; }
+
+  .modal-body{ padding:20px 24px; max-height:72vh; overflow-y:auto; }
+  .product-panel{ display:none; }
+  .product-panel.active{ display:block; }
+
+  .section{ margin-bottom:26px; }
+  .section-title{ font-size:14px; font-weight:700; margin:0 0 6px 0; padding-bottom:8px; border-bottom:1px solid var(--border); }
+  .section-hint{ font-size:12px; color:var(--sub); margin:-2px 0 14px 0; }
+
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .row.single{ grid-template-columns:1fr; }
+  .row.triple{ grid-template-columns:1fr 1fr 1fr; }
+  .row:last-child{ margin-bottom:0; }
+
+  .field label{ display:block; font-size:13px; font-weight:600; margin-bottom:5px; }
+  .field .hint{ font-weight:400; color:var(--sub); }
+  .field input, .field select, .field textarea{
+    width:100%; padding:9px 11px; font-size:13px; border:1px solid var(--border);
+    border-radius:6px; background:#fff; font-family:inherit;
+  }
+  .field textarea{ resize:vertical; min-height:52px; }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(37,99,235,0.12);
+  }
+
+  .checkbox-row{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .checkbox-row input[type="checkbox"]{ width:16px; height:16px; accent-color:var(--blue); cursor:pointer; }
+  .checkbox-row label{ font-size:13px; font-weight:600; margin:0; cursor:pointer; }
+  .field-flex-end{ display:flex; align-items:flex-end; }
+  .field-flex-end .checkbox-row{ margin-bottom:0; }
+
+  /* Sub-product blocks */
+  .sub-product{ border:1px solid var(--border); border-radius:8px; margin-bottom:10px; background:#fafbfc; overflow:hidden; }
+  .sub-product-header{ display:flex; align-items:center; gap:8px; padding:10px 12px; cursor:pointer; }
+  .sub-product-header input[type="checkbox"]{ width:15px; height:15px; accent-color:var(--blue); cursor:pointer; }
+  .sub-product-header label{ font-size:13px; font-weight:600; cursor:pointer; flex:1; margin:0; }
+  .real-badge{
+    font-size:10.5px; font-weight:700; color:var(--blue); background:#eff6ff;
+    border:1px solid #bfdbfe; padding:1px 7px; border-radius:20px;
+  }
+  .lender-tag{ font-size:11px; color:var(--sub); font-weight:500; }
+  .sub-product-fields{ display:none; padding:14px; border-top:1px dashed var(--border); }
+  .sub-product-fields.open{ display:block; }
+
+  .modal-footer{ display:flex; justify-content:flex-end; gap:10px; padding:16px 24px; border-top:1px solid var(--border); }
+  .btn{ padding:9px 18px; font-size:13px; font-weight:600; border-radius:6px; cursor:pointer; border:1px solid var(--border); }
+  .btn-cancel{ background:#fff; color:var(--text); }
+  .btn-cancel:hover{ background:#f1f5f9; }
+  .btn-save{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .btn-save:hover{ background:var(--blue-dark); }
+
+  @media (max-width:640px){
+    .row, .row.triple{ grid-template-columns:1fr; }
+    .tab-btn{ font-size:11px; padding:10px 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Add New Lender</h2>
+      <p>Checking a sub-product reveals its specific fields — pre-filled with real examples where master-sheet data exists.</p>
+      <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="intl" onclick="switchTab('intl')">
+          <span class="tab-icon">🌐</span>A. International Trade Finance
+        </button>
+        <button type="button" class="tab-btn" data-tab="scf" onclick="switchTab('scf')">
+          <span class="tab-icon">🔗</span>B. Supply Chain Finance
+        </button>
+        <button type="button" class="tab-btn" data-tab="pc" onclick="switchTab('pc')">
+          <span class="tab-icon">💳</span>C. Private Credit
+        </button>
+      </div>
+    </div>
+
+    <form id="lenderForm">
+    <div class="modal-body">
+
+      <!-- COMMON: Basic Information -->
+      <div class="section">
+        <p class="section-title">1. Basic Information</p>
+        <div class="row single">
+          <div class="field"><label>Lender Name</label><input type="text" list="lenderList" placeholder="e.g., Aditya Birla Capital"></div>
+        </div>
+        <datalist id="lenderList">
+          <option value="Aditya Birla Capital"><option value="CashFloat"><option value="CredFund">
+          <option value="GetVantage"><option value="Recur Club"><option value="Ratnaafin Capital">
+          <option value="Agrizy"><option value="AMBIT Finvest">
+        </datalist>
+        <div class="row single">
+          <div class="field"><label>Eligible Entity Types <span class="hint">(comma separated)</span></label><input type="text" placeholder="e.g., Proprietorship, Partnership, Pvt Ltd"></div>
+        </div>
+      </div>
+
+      <!-- COMMON: Financial baseline -->
+      <div class="section">
+        <p class="section-title">2. Overall Lender Financial Baseline</p>
+        <p class="section-hint">Lender-wide defaults — individual products below can override these.</p>
+        <div class="row">
+          <div class="field"><label>ROI (%)</label><input type="text" placeholder="e.g., 12-15% p.a."></div>
+          <div class="field"><label>Min Turnover (₹)</label><input type="text" placeholder="e.g., ₹20 Crore+"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Min Vintage</label><input type="text" placeholder="e.g., 2-5 Years"></div>
+          <div class="field"><label>Min CIBIL Score</label><input type="text" placeholder="e.g., 700+"></div>
+        </div>
+      </div>
+
+      <!-- DYNAMIC: Main Product tabs with per-sub-product real fields -->
+      <div class="section">
+        <p class="section-title">3. Main Product &amp; Sub-Products</p>
+        <div id="tabPanelsContainer"></div>
+      </div>
+
+      <!-- COMMON: trailing sections -->
+      <div class="section">
+        <p class="section-title">4. Legal Documents</p>
+        <div class="row triple">
+          <div class="field"><label>GST Number</label><input type="text" placeholder="e.g., 27ABCDE1234F1Z5"></div>
+          <div class="field"><label>PAN Number</label><input type="text" placeholder="e.g., ABCDE1234F"></div>
+          <div class="field"><label>CIN Number</label><input type="text" placeholder="e.g., U12345MH2023PTC123456"></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <p class="section-title">5. Additional Requirements</p>
+        <div class="checkbox-row"><input type="checkbox"><label>Requires ATNW Positive (After Tax Net Worth)</label></div>
+        <div class="checkbox-row"><input type="checkbox"><label>Requires Owned Property</label></div>
+      </div>
+
+      <div class="section">
+        <p class="section-title">6. Performance Metrics</p>
+        <div class="row">
+          <div class="field"><label>Historical Approval Rate (%)</label><input type="number" step="0.1" placeholder="e.g., 75.5"></div>
+          <div class="field"><label>Historical Rejection Rate (%)</label><input type="number" step="0.1" placeholder="e.g., 15.0"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Average Approval Days</label><input type="number" placeholder="e.g., 5"></div>
+          <div class="field"><label>Average Disbursement Days</label><input type="number" placeholder="e.g., 7"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-cancel" onclick="document.getElementById('lenderForm').reset()">Cancel</button>
+      <button type="submit" class="btn btn-save">Save Lender</button>
+    </div>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   REAL DATA extracted from Lenders_SCF_Products__2___1_.xlsx
+   Keyed by sub-product id. Used to pre-fill placeholders.
+   ============================================================ */
+var REAL_DATA = {
+  "wctl": { lender:"Aditya Birla Capital", "Loan Amount Range":"Upto ₹30 Lacs", "ROI/Interest Rate":"Market Based", "Tenure":"6-9 Months", "Processing Fee":"Variable", "Minimum Turnover":"₹20 Crore+", "Business Vintage":"3 Years", "Minimum CIBIL/Credit Score":"CIBIL/CMR: Score ≥700 or CMR 1-6", "Minimum Credit Rating Grade":"Not applicable (borrower-rated program)", "Key Eligibility Criteria":"₹20Cr turnover, 3yr vintage, ₹50K ABB, Good banking conduct", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Manufacturing & Trading MSMEs", "Negative Industries":"As per ABCL negative industry list", "Primary Security/Collateral":"Unsecured (Invoice-based disbursement, no collateral)", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Short-term WC solution for MSMEs, Invoice based, No collateral" },
+  "pid": { lender:"Aditya Birla Capital", "Loan Amount Range":"Upto ₹3 Crore", "ROI/Interest Rate":"Market Based", "Tenure":"30-90 Days", "Processing Fee":"1-2%", "Minimum Turnover":"₹50 Crore+", "Business Vintage":"2-5 Years", "Minimum CIBIL/Credit Score":"Individual CIBIL >700 (cutoff 685); CMR 1-6", "Minimum Credit Rating Grade":"Rated Supplier: BBB+ & above; Unrated: not rating-dependent", "Key Eligibility Criteria":"Good banking, Positive PAT, Current Ratio >1.25, Interest Coverage >1.5", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Manufacturers/Traders/Companies; Rated & Unrated Supplier Programs", "Negative Industries":"As per ABCL negative industry list", "Primary Security/Collateral":"Collateral Margin: 15% (Unrated); 10% >₹1Cr / Nil upto ₹1Cr (Rated)", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Supplier flexibility, Cash flow benefit, Quick disbursal" },
+  "sid": { lender:"Aditya Birla Capital", "Loan Amount Range":"Upto ₹1 Crore", "ROI/Interest Rate":"Market Based", "Tenure":"30-90 Days", "Processing Fee":"1-2%", "Minimum Turnover":"₹50 Crore+", "Business Vintage":"2-5 Years", "Minimum CIBIL/Credit Score":"Individual CIBIL >700 (cutoff 685); CMR 1-6", "Minimum Credit Rating Grade":"Rated Supplier Program: BBB+ & above", "Key Eligibility Criteria":"Positive ATNW, DSCR >1.25, Interest Coverage >1.5", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Anchor (Seller) selling to large/reputed buyers", "Negative Industries":"As per ABCL negative industry list", "Primary Security/Collateral":"Similar collateral-margin structure to PID", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Quick receivables realization, Large buyer credit, Escrow mechanism" },
+  "treds": { lender:"Aditya Birla Capital", "Loan Amount Range":"Upto ₹10 Crore", "ROI/Interest Rate":"9-11% p.a.", "Tenure":"Upto 90 Days", "Processing Fee":"Platform Fee", "Minimum Turnover":"₹150 Crore+", "Business Vintage":"Established", "Minimum CIBIL/Credit Score":"Not applicable (corporate rating based)", "Minimum Credit Rating Grade":"BBB- & above (mandatory)", "Key Eligibility Criteria":"BBB- rated corporate, MSME supplier bills only, Tax invoices", "Locations Working In":"Pan-India (M1xchange/RXIL/Invoicemart)", "Preferred Industry":"Rated Corporate/Large Enterprise borrowers; MSME supplier bills only", "Negative Industries":"Brickwork Ratings NOT accepted", "Primary Security/Collateral":"Insurance Backed; Collateral: Nil", "Guarantee Requirement":"Off-book exposure, not reflected in CIBIL", "Key Features":"RBI-regulated, Competitive bidding, Insurance backed" },
+  "anchorledsid": { lender:"CashFloat", "Loan Amount Range":"Upto ₹1 Crore", "ROI/Interest Rate":"Market Based", "Tenure":"60-90 Days", "Processing Fee":"0.5-1%", "Minimum Turnover":"₹150 Crore+", "Business Vintage":"5+ Years", "Minimum CIBIL/Credit Score":"Consumer Score min 675 / <CMR6", "Minimum Credit Rating Grade":"Anchor rating: BBB- to A-", "Key Eligibility Criteria":"₹150Cr+ revenue, Regular supplier, Corporate guarantee", "Locations Working In":"Phase 1: Delhi-NCR, Mumbai, Pune | Phase 2: Bengaluru, Ahmedabad, Hyderabad", "Preferred Industry":"Pharma & Chemicals, Logistics, Retail/E-commerce, IT/ITES, Healthcare", "Negative Industries":"Not on RBI defaulter list; no sales dip >10%", "Primary Security/Collateral":"FLDG / Cash Margin (per Anchor program)", "Guarantee Requirement":"SPDC; Master Facility Agreement + Alliance Agreement", "Key Features":"Supplier recommended, Recourse to supplier" },
+  "paylaterid": { lender:"CashFloat", "Loan Amount Range":"Upto ₹75 Lacs", "ROI/Interest Rate":"Market Based", "Tenure":"Flexible EMI", "Processing Fee":"2%", "Minimum Turnover":"Flexible", "Business Vintage":"1+ Year", "Minimum CIBIL/Credit Score":"Consumer Score min 675 / <CMR6", "Minimum Credit Rating Grade":"Anchor rating: BBB- to A-", "Key Eligibility Criteria":"₹5 Crore+ sales, Min 1yr vintage, Min 675 CIBIL", "Locations Working In":"Same Anchor footprint as CashFloat", "Preferred Industry":"Small or very large suppliers not fitting standard programs", "Negative Industries":"Not on RBI defaulter list/banned categories", "Primary Security/Collateral":"Cash Security / SPDC", "Guarantee Requirement":"Personal Guarantee; ICD/Cash Security Agreement", "Key Features":"Flexible for small/large suppliers, EMI repayment option" },
+  "vendorfinancing": { lender:"CredFund / GetVantage", "Loan Amount Range":"Upto ₹1-10 Crore", "ROI/Interest Rate":"Market Based / 17-20% p.a.", "Tenure":"Upto 90 Days", "Processing Fee":"2%", "Minimum Turnover":"₹150 Crore+", "Business Vintage":"5+ Years", "Minimum CIBIL/Credit Score":"Company CMR <7; Promoter Score 650+", "Minimum Credit Rating Grade":"Anchor guarantee/FLDG backed", "Key Eligibility Criteria":"Anchor BBB- rated, 5yr vendor relationship, Corporate guarantee", "Locations Working In":"Not specified in source docs", "Preferred Industry":"MSMEs across Manufacturing, Trading, Services (Anchor-led)", "Negative Industries":"Real Estate/Infra, Capital Market, Gems & Jewellery, others", "Primary Security/Collateral":"FLDG: 5-10% from Anchor", "Guarantee Requirement":"Corporate Guarantee from Anchor and/or FLDG", "Key Features":"Corporate guarantee backed, FLDG/cash margin" },
+  "stf": { lender:"Agrizy", "Loan Amount Range":"Agri-Commodity Based", "ROI/Interest Rate":"13.5-14.5% p.a.", "Tenure":"Variable", "Processing Fee":"Asset-backed", "Minimum Turnover":"Commodity Based", "Business Vintage":"Established", "Minimum CIBIL/Credit Score":"Not specified in source docs", "Minimum Credit Rating Grade":"Not specified in source docs", "Key Eligibility Criteria":"Ownership of goods, Accredited WSP, Commodity quality checks", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Agri-Food Processing: Traders, Processors, Aggregators", "Negative Industries":"Not specified in source docs", "Primary Security/Collateral":"Warehouse-stored commodity; ownership retained until repayment", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Warehouse-stored commodities, 80% LTV, No collateral, EMD mechanism" },
+  "wrf": { lender:"Agrizy", "Loan Amount Range":"Commodity Based", "ROI/Interest Rate":"9-11% p.a.", "Tenure":"Variable", "Processing Fee":"Lower rate", "Minimum Turnover":"Commodity Based", "Business Vintage":"Established", "Minimum CIBIL/Credit Score":"Not specified in source docs", "Minimum Credit Rating Grade":"Not specified in source docs", "Key Eligibility Criteria":"Warehouse receipt backing, Accredited WSP, Quality compliance", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Agri-Food Processing: Processors needing liquidity against stock", "Negative Industries":"Not specified in source docs", "Primary Security/Collateral":"Negotiable Warehouse Receipt backed by stored commodity", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Negotiable warehouse receipts, No immediate sale needed" },
+  "rbf": { lender:"GetVantage", "Loan Amount Range":"₹2 Lac - ₹20 Crore", "ROI/Interest Rate":"1.2-1.5% p.m + GST", "Tenure":"6-18 Months", "Processing Fee":"Upfront", "Minimum Turnover":"₹50 Lacs+", "Business Vintage":"6+ Months", "Minimum CIBIL/Credit Score":"Company CMR <7; Promoter Score 650+", "Minimum Credit Rating Grade":"Not applicable", "Key Eligibility Criteria":">₹50L ARR, Positive unit economics, Good banking", "Locations Working In":"Not specified in source docs", "Preferred Industry":"D2C, E-commerce, B2B SaaS, Personal Care, Beauty, QSR, Healthcare", "Negative Industries":"Real Estate/Infra, Capital Market, Gems & Jewellery, others", "Primary Security/Collateral":"Cash-flow/revenue-based, no collateral", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Equity-free, Founder-friendly, Cash flow based, D2C focused" },
+  "ftl": { lender:"GetVantage", "Loan Amount Range":"₹2 Lac - ₹5 Crore", "ROI/Interest Rate":"18-21% p.a.", "Tenure":"6-18 Months", "Processing Fee":"2%", "Minimum Turnover":"₹50 Lacs+", "Business Vintage":"6+ Months", "Minimum CIBIL/Credit Score":"Company CMR <7; Promoter Score 650+", "Minimum Credit Rating Grade":"Not applicable", "Key Eligibility Criteria":"₹50L+ ARR, Positive ATNW, Banking credit >₹10 Crore", "Locations Working In":"Not specified in source docs", "Preferred Industry":"D2C, E-commerce, B2B SaaS, Personal Care, Beauty, QSR, Healthcare", "Negative Industries":"Real Estate/Infra, Capital Market, Gems & Jewellery, others", "Primary Security/Collateral":"No collateral mentioned in tenure-based structure", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Traditional term loan, Quick processing" },
+  "recurswift": { lender:"Recur Club", "Loan Amount Range":"Upto ₹10 Crore", "ROI/Interest Rate":"16%+ p.a.", "Tenure":"3-18 Months", "Processing Fee":"Nil", "Minimum Turnover":"₹5 Crore+", "Business Vintage":"1+ Year", "Minimum CIBIL/Credit Score":"Not specified in source docs", "Minimum Credit Rating Grade":"Not specified in source docs", "Key Eligibility Criteria":"₹5Cr+ revenue, 1yr vintage, 30% revenue upfront available", "Locations Working In":"Not specified in source docs", "Preferred Industry":"High-growth companies (Marketplace, D2C, SaaS, EV, EdTech)", "Negative Industries":"Not specified in source docs", "Primary Security/Collateral":"None (Unsecured Debt for Startups)", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Quick disbursal (48hrs), No collateral, Revenue based" },
+  "recurscale": { lender:"Recur Club", "Loan Amount Range":"Upto ₹100 Crore", "ROI/Interest Rate":"9-12% p.a.", "Tenure":"1-5 Years", "Processing Fee":"Nil", "Minimum Turnover":"₹40 Crore+", "Business Vintage":"6+ Months", "Minimum CIBIL/Credit Score":"Not specified in source docs", "Minimum Credit Rating Grade":"Not specified in source docs", "Key Eligibility Criteria":"₹40Cr+ revenue, 6mo runway, Institutional lender network", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Large companies (Marketplace, D2C, SaaS, EV, EdTech)", "Negative Industries":"Not specified in source docs", "Primary Security/Collateral":"Secured (specific type not detailed in source)", "Guarantee Requirement":"Not specified in source docs", "Key Features":"100+ lenders, Acquisition/R&D funding eligible" },
+  "gstprogram": { lender:"AMBIT Finvest", "Loan Amount Range":"Upto ₹50 Lacs", "ROI/Interest Rate":"Market Based", "Tenure":"Flexible", "Processing Fee":"Competitive", "Minimum Turnover":"₹10 Crore+", "Business Vintage":"3+ Years", "Minimum CIBIL/Credit Score":"CMR 7 or better; clean repayment track record", "Minimum Credit Rating Grade":"Not applicable (business loan)", "Key Eligibility Criteria":"₹10Cr turnover, 3yr vintage, Positive cash flow, CMR 7+", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Proprietorship/Partnership/LLP/Pvt Ltd - Traders, Manufacturers", "Negative Industries":"Not specified in source docs", "Primary Security/Collateral":"Unsecured (property ownership in same city required)", "Guarantee Requirement":"Not specified in source docs", "Key Features":"Unsecured, GST-based assessment, Quick turnaround" },
+  "incomeprogram": { lender:"AMBIT Finvest", "Loan Amount Range":"Upto ₹75 Lacs", "ROI/Interest Rate":"Market Based", "Tenure":"Flexible", "Processing Fee":"Competitive", "Minimum Turnover":"₹10 Crore+", "Business Vintage":"3+ Years", "Minimum CIBIL/Credit Score":"CMR 7 or better; clean repayment track record", "Minimum Credit Rating Grade":"Not applicable (business loan)", "Key Eligibility Criteria":"₹10Cr+ turnover, Profitable business, ITR consistency, DSCR >0.80", "Locations Working In":"Not specified in source docs", "Preferred Industry":"Proprietorship/Partnership/LLP/Pvt Ltd - Traders, Manufacturers", "Negative Industries":"Not specified in source docs", "Primary Security/Collateral":"Unsecured (property ownership in same city required)", "Guarantee Requirement":"Not specified in source docs", "Key Features":"ITR & Financial statement based, Owned property preferred" }
+};
+
+/* ============================================================
+   FIELD TEMPLATES — different sub-products need different fields.
+   "default" is used by every sub-product that already has REAL_DATA
+   (its keys map 1:1 to this template, so it stays unchanged).
+   Generic (real:false) sub-products get a template matched to what
+   that kind of product actually needs.
+   ============================================================ */
+var FIELD_TEMPLATES = {
+
+  /* used by all real:true sub-products, so REAL_DATA keys keep matching */
+  default: [
+    ["text","Loan Amount Range"], ["text","ROI/Interest Rate"],
+    ["text","Tenure"], ["text","Processing Fee"],
+    ["text","Minimum Turnover"], ["text","Business Vintage"],
+    ["text","Minimum CIBIL/Credit Score"], ["text","Minimum Credit Rating Grade"],
+    ["textarea","Key Eligibility Criteria"], ["text","Locations Working In"],
+    ["textarea","Preferred Industry"], ["textarea","Negative Industries"],
+    ["textarea","Primary Security/Collateral"], ["textarea","Guarantee Requirement"],
+    ["textarea","Key Features"]
+  ],
+
+  /* Acquisition Finance — M&A / buyout style deals */
+  acquisition: [
+    ["text","Deal/Facility Amount Range"], ["text","ROI/Interest Rate"],
+    ["text","Tenure"], ["text","Processing Fee"],
+    ["text","Deal Structure (Debt/Equity Mix)"], ["text","Debt-to-Equity Ratio Cap"],
+    ["text","Minimum Turnover"], ["text","Target Company Sector"],
+    ["textarea","Key Eligibility Criteria"], ["textarea","Repayment Source"],
+    ["textarea","Primary Security/Collateral"], ["textarea","Key Features"]
+  ],
+
+  /* Import Finance — financing goods coming into India */
+  importFinance: [
+    ["text","Facility Amount Range"], ["text","ROI/Interest Rate"],
+    ["text","Usance Period"], ["text","Processing Fee"],
+    ["text","Instrument Type (Import LC/SBLC)"], ["text","Country of Origin/Supplier"],
+    ["text","INCOTERMS Supported"], ["text","Minimum Turnover"],
+    ["textarea","Key Eligibility Criteria"], ["textarea","Import Documentation Required"],
+    ["textarea","Primary Security/Collateral"], ["textarea","Key Features"]
+  ],
+
+  /* Export Finance — pre/post-shipment credit for exporters */
+  exportFinance: [
+    ["text","Facility Amount Range"], ["text","ROI/Interest Rate"],
+    ["text","Facility Type (Pre-Shipment/Post-Shipment)"], ["text","Processing Fee"],
+    ["text","Buyer's Country"], ["text","INCOTERMS Supported"],
+    ["text","ECGC/Insurance Cover"], ["text","Minimum Turnover"],
+    ["textarea","Key Eligibility Criteria"], ["textarea","Export Documentation Required"],
+    ["textarea","Primary Security/Collateral"], ["textarea","Key Features"]
+  ],
+
+  /* Buyer Credit — deferred payment via overseas bank guarantee */
+  buyerCredit: [
+    ["text","Facility Amount Range"], ["text","Interest Spread (LIBOR/SOFR + X%)"],
+    ["text","Guarantee Tenure"], ["text","Processing Fee"],
+    ["text","Instrument Type (LC/BG)"], ["text","Overseas Bank/Corridor"],
+    ["text","Minimum Turnover"], ["text","Business Vintage"],
+    ["textarea","Key Eligibility Criteria"], ["textarea","Underlying Trade Transaction Docs"],
+    ["textarea","Primary Security/Collateral"], ["textarea","Key Features"]
+  ],
+
+  /* SCF working-capital style: Vendor/Dealer Finance, WCDL, Channel Finance, Purchase Finance */
+  workingCapital: [
+    ["text","Loan Amount Range"], ["text","ROI/Interest Rate"],
+    ["text","Tenure"], ["text","Processing Fee"],
+    ["text","Minimum Turnover"], ["text","Business Vintage"],
+    ["text","Anchor/Dealer Network Requirement"], ["text","Minimum CIBIL/Credit Score"],
+    ["textarea","Key Eligibility Criteria"], ["text","Locations Working In"],
+    ["textarea","Preferred Industry"], ["textarea","Primary Security/Collateral"],
+    ["textarea","Key Features"]
+  ],
+
+  /* Special Situation Funding — bridge/stress/M&A style deals */
+  specialSituation: [
+    ["text","Deal Size Range"], ["text","ROI/Pricing Structure"],
+    ["text","Tenure"], ["text","Situation Type (Stress/Bridge/M&A)"],
+    ["text","Turnaround Time"], ["text","Minimum Turnover"],
+    ["textarea","Key Eligibility Criteria"], ["textarea","Deal Structure Notes"],
+    ["textarea","Primary Security/Collateral"], ["textarea","Key Features"]
+  ],
+
+  /* Private Credit (General) */
+  privateCredit: [
+    ["text","Loan Amount Range"], ["text","ROI/Interest Rate"],
+    ["text","Tenure"], ["text","Processing Fee"],
+    ["text","Minimum Turnover"], ["text","Business Vintage"],
+    ["text","Minimum CIBIL/Credit Score"], ["text","Minimum Credit Rating Grade"],
+    ["textarea","Key Eligibility Criteria"], ["textarea","Preferred Use of Funds"],
+    ["textarea","Preferred Industry"], ["textarea","Primary Security/Collateral"],
+    ["textarea","Key Features"]
+  ]
+};
+
+var MAIN_PRODUCTS = [
+  {
+    id:'intl', label:'International Trade Finance',
+    subProducts:[
+      { id:'acquisition', label:'Acquisition Finance', real:false, template:'acquisition' },
+      { id:'import', label:'Import Finance', real:false, template:'importFinance' },
+      { id:'export', label:'Export Finance', real:false, template:'exportFinance' },
+      { id:'buyercredit', label:'Buyer Credit', real:false, template:'buyerCredit' }
+    ]
+  },
+  {
+    id:'scf', label:'Supply Chain Finance',
+    subProducts:[
+      { id:'vendorfinance', label:'Vendor Finance', real:false, template:'workingCapital' },
+      { id:'dealerfinance', label:'Dealer Finance', real:false, template:'workingCapital' },
+      { id:'wcdl', label:'Working Capital Demand Loan', real:false, template:'workingCapital' },
+      { id:'wctl', label:'WCTL (Working Capital Term Loan)', real:true },
+      { id:'channelfinance', label:'Channel Finance', real:false, template:'workingCapital' },
+      { id:'specialsituation', label:'Special Situation Funding', real:false, template:'specialSituation' },
+      { id:'invoicediscounting', label:'Invoice Discounting', real:false, template:'workingCapital' },
+      { id:'purchasefinance', label:'Purchase Finance', real:false, template:'workingCapital' },
+      { id:'pid', label:'PID (Purchase Invoice Discounting)', real:true },
+      { id:'sid', label:'SID (Sales Invoice Discounting)', real:true },
+      { id:'anchorledsid', label:'Anchor-Led SID (Supplier Finance)', real:true },
+      { id:'paylaterid', label:'Pay Later ID (Invoice Discounting)', real:true },
+      { id:'vendorfinancing', label:'Vendor Financing / Anchor Backed Channel Financing', real:true },
+      { id:'treds', label:'TReDS (Trade Receivables Discounting)', real:true },
+      { id:'stf', label:'Structured Trade Finance (Agri)', real:true },
+      { id:'wrf', label:'Warehouse Receipt Financing', real:true }
+    ]
+  },
+  {
+    id:'pc', label:'Private Credit',
+    subProducts:[
+      { id:'privatecreditgeneral', label:'Private Credit (General)', real:false, template:'privateCredit' },
+      { id:'rbf', label:'Revenue Based Financing (RBF)', real:true },
+      { id:'gstprogram', label:'Business Loan (GST Program)', real:true },
+      { id:'incomeprogram', label:'Business Loan (Income Program)', real:true },
+      { id:'ftl', label:'Fixed Term Loan (FTL)', real:true },
+      { id:'recurswift', label:'Recur Swift (Unsecured Debt)', real:true },
+      { id:'recurscale', label:'Recur Scale (Secured Debt)', real:true }
+    ]
+  }
+];
+
+var TAB_ICONS = { intl:'🌐', scf:'🔗', pc:'💳' };
+var TAB_LETTERS = { intl:'A.', scf:'B.', pc:'C.' };
+
+function fieldHtml(uid, f, data){
+  var type = f[0], key = f[1];
+  var placeholder = data ? (data[key] || '') : ('e.g., ' + key);
+  var fid = 'f-' + uid + '-' + key.replace(/[^a-zA-Z0-9]/g,'');
+  if(type === 'textarea'){
+    return '<div class="field"><label>' + key + '</label><textarea placeholder="' + placeholder.replace(/"/g,'&quot;') + '"></textarea></div>';
+  }
+  return '<div class="field"><label>' + key + '</label><input type="text" placeholder="' + placeholder.replace(/"/g,'&quot;') + '"></div>';
+}
+
+function buildFieldsHtml(uid, data, templateKey){
+  var html = '';
+  var template = FIELD_TEMPLATES[templateKey] || FIELD_TEMPLATES.default;
+  if(data && data.lender){
+    html += '<p class="lender-tag" style="margin:0 0 12px 0;">Example data source: <strong>' + data.lender + '</strong></p>';
+  }
+  for(var i=0; i<template.length; i+=2){
+    var pair = template.slice(i, i+2);
+    html += '<div class="row">' + pair.map(function(f){ return fieldHtml(uid, f, data); }).join('') + '</div>';
+  }
+  return html;
+}
+
+function buildTabs(){
+  var container = document.getElementById('tabPanelsContainer');
+  var html = '';
+  MAIN_PRODUCTS.forEach(function(mp, idx){
+    html += '<div class="product-panel' + (idx===0 ? ' active' : '') + '" id="panel-' + mp.id + '">';
+    html += '<p class="section-hint">Check a sub-product to reveal its specific fields.</p>';
+    mp.subProducts.forEach(function(sp){
+      var uid = mp.id + '-' + sp.id;
+      var data = sp.real ? REAL_DATA[sp.id] : null;
+      html += '<div class="sub-product">';
+      html += '<div class="sub-product-header" onclick="toggleSubProduct(\'' + uid + '\')">';
+      html += '<input type="checkbox" id="sp-' + uid + '" onclick="event.stopPropagation(); toggleSubProduct(\'' + uid + '\', true)">';
+      html += '<label for="sp-' + uid + '">' + sp.label + '</label>';
+      if(sp.real){ html += '<span class="real-badge">Real data 📄</span>'; }
+      html += '</div>';
+      html += '<div class="sub-product-fields" id="spf-' + uid + '">' + buildFieldsHtml(uid, data, sp.template || 'default') + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+function switchTab(key){
+  document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.toggle('active', btn.dataset.tab === key); });
+  document.querySelectorAll('.product-panel').forEach(function(panel){ panel.classList.toggle('active', panel.id === 'panel-' + key); });
+}
+
+function toggleSubProduct(uid, fromCheckbox){
+  var fieldsPanel = document.getElementById('spf-' + uid);
+  var checkbox = document.getElementById('sp-' + uid);
+  if(fromCheckbox){
+    fieldsPanel.classList.toggle('open', checkbox.checked);
+  } else {
+    checkbox.checked = !checkbox.checked;
+    fieldsPanel.classList.toggle('open', checkbox.checked);
+  }
+}
+
+buildTabs();
+
+document.getElementById('lenderForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var activeTab = document.querySelector('.tab-btn.active').textContent.trim();
+  alert('Lender saved for: ' + activeTab + ' (demo only — wire this up to your API).');
+});
+</script>
+
+</body>
+</html>

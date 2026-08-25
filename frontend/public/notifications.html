@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Funding Sathi CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .notification-badge { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .notification-enter { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+    <script src="js/accessibility-init.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const API_BASE = window.API_BASE || window.CRM_API_BASE || window.location.origin;
+
+        // Utility function to get auth token
+        const getAuthToken = () => localStorage.getItem('token');
+
+        // Utility function for API calls
+        const apiCall = async (endpoint, options = {}) => {
+            const token = getAuthToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+            
+            return response.json();
+        };
+
+        // Notification Type Icon
+        const getNotificationIcon = (type) => {
+            const icons = {
+                'Morning Target Missed': { icon: 'fas fa-sun', color: 'text-yellow-500', bg: 'bg-yellow-100' },
+                'Daily Target Missed': { icon: 'fas fa-exclamation-circle', color: 'text-red-500', bg: 'bg-red-100' },
+                'Midweek Report Generated': { icon: 'fas fa-chart-bar', color: 'text-blue-500', bg: 'bg-blue-100' },
+                'Weekly Report Generated': { icon: 'fas fa-chart-line', color: 'text-green-500', bg: 'bg-green-100' },
+                'Admin Override Approved': { icon: 'fas fa-shield-alt', color: 'text-purple-500', bg: 'bg-purple-100' },
+                'default': { icon: 'fas fa-bell', color: 'text-gray-500', bg: 'bg-gray-100' }
+            };
+            return icons[type] || icons['default'];
+        };
+
+        // Notification Item Component
+        const NotificationItem = ({ notification, onMarkRead, onDelete }) => {
+            const iconConfig = getNotificationIcon(notification.title);
+            
+            return (
+                <div className={`notification-enter p-4 rounded-lg mb-3 ${notification.is_read ? 'bg-white' : 'bg-blue-50 border-l-4 border-blue-500'}`}>
+                    <div className="flex items-start">
+                        <div className={`p-3 rounded-full ${iconConfig.bg} mr-4 flex-shrink-0`}>
+                            <i className={`${iconConfig.icon} ${iconConfig.color} text-lg`}></i>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-start">
+                                <h4 className={`font-semibold ${notification.is_read ? 'text-gray-700' : 'text-gray-900'}`}>
+                                    {notification.title}
+                                </h4>
+                                <div className="flex space-x-2 ml-2">
+                                    {!notification.is_read && (
+                                        <button 
+                                            onClick={() => onMarkRead(notification.id)}
+                                            className="text-blue-500 hover:text-blue-700 text-sm"
+                                            title="Mark as read"
+                                        >
+                                            <i className="fas fa-check"></i>
+                                        </button>
+                                    )}
+                                    <button 
+                                        onClick={() => onDelete(notification.id)}
+                                        className="text-gray-400 hover:text-red-500 text-sm"
+                                        title="Delete"
+                                    >
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                            <p className="text-xs text-gray-400 mt-2">
+                                {new Date(notification.created_at).toLocaleString()}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Notification Filter Component
+        const NotificationFilter = ({ activeFilter, onFilterChange }) => {
+            const filters = [
+                { id: 'all', label: 'All' },
+                { id: 'unread', label: 'Unread' },
+                { id: 'morning', label: 'Morning Targets' },
+                { id: 'daily', label: 'Daily Targets' },
+                { id: 'reports', label: 'Reports' },
+                { id: 'overrides', label: 'Overrides' }
+            ];
+
+            return (
+                <div className="flex flex-wrap gap-2 mb-6">
+                    {filters.map((filter) => (
+                        <button
+                            key={filter.id}
+                            onClick={() => onFilterChange(filter.id)}
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                                activeFilter === filter.id
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                            }`}
+                        >
+                            {filter.label}
+                        </button>
+                    ))}
+                </div>
+            );
+        };
+
+        // Main Notification Center Component
+        const NotificationCenter = () => {
+            const [notifications, setNotifications] = useState([]);
+            const [unreadCount, setUnreadCount] = useState(0);
+            const [activeFilter, setActiveFilter] = useState('all');
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                fetchNotifications();
+                fetchUnreadCount();
+            }, [activeFilter]);
+
+            const fetchNotifications = async () => {
+                try {
+                    setLoading(true);
+                    const data = await apiCall('/employee/notifications');
+                    let filtered = data;
+                    
+                    if (activeFilter === 'unread') {
+                        filtered = data.filter(n => !n.is_read);
+                    } else if (activeFilter === 'morning') {
+                        filtered = data.filter(n => n.title.includes('Morning'));
+                    } else if (activeFilter === 'daily') {
+                        filtered = data.filter(n => n.title.includes('Daily'));
+                    } else if (activeFilter === 'reports') {
+                        filtered = data.filter(n => n.title.includes('Report'));
+                    } else if (activeFilter === 'overrides') {
+                        filtered = data.filter(n => n.title.includes('Override'));
+                    }
+                    
+                    setNotifications(filtered);
+                } catch (err) {
+                    setError('Failed to fetch notifications');
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const fetchUnreadCount = async () => {
+                try {
+                    const data = await apiCall('/employee/notifications/unread-count');
+                    setUnreadCount(data.unread_count);
+                } catch (err) {
+                    console.error('Failed to fetch unread count:', err);
+                }
+            };
+
+            const handleMarkAsRead = async (notificationId) => {
+                try {
+                    await apiCall(`/employee/notifications/${notificationId}/read`, { method: 'POST' });
+                    fetchNotifications();
+                    fetchUnreadCount();
+                } catch (err) {
+                    console.error('Failed to mark notification as read:', err);
+                }
+            };
+
+            const handleMarkAllAsRead = async () => {
+                try {
+                    await apiCall('/employee/notifications/read-all', { method: 'POST' });
+                    fetchNotifications();
+                    fetchUnreadCount();
+                } catch (err) {
+                    console.error('Failed to mark all notifications as read:', err);
+                }
+            };
+
+            const handleDeleteNotification = async (notificationId) => {
+                try {
+                    await apiCall(`/employee/notifications/${notificationId}`, { method: 'DELETE' });
+                    fetchNotifications();
+                    fetchUnreadCount();
+                } catch (err) {
+                    console.error('Failed to delete notification:', err);
+                }
+            };
+
+            const handleDeleteAll = async () => {
+                if (!confirm('Are you sure you want to delete all notifications?')) return;
+                
+                try {
+                    await apiCall('/employee/notifications', { method: 'DELETE' });
+                    fetchNotifications();
+                    fetchUnreadCount();
+                } catch (err) {
+                    console.error('Failed to delete all notifications:', err);
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-6">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800">Notifications</h1>
+                                <p className="text-gray-500 mt-1">Stay updated with your performance alerts</p>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                                {unreadCount > 0 && (
+                                    <span className="notification-badge bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                                        {unreadCount} unread
+                                    </span>
+                                )}
+                                <button 
+                                    onClick={handleMarkAllAsRead}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                                    disabled={unreadCount === 0}
+                                >
+                                    <i className="fas fa-check-double mr-2"></i>Mark All Read
+                                </button>
+                                <button 
+                                    onClick={handleDeleteAll}
+                                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                                    disabled={notifications.length === 0}
+                                >
+                                    <i className="fas fa-trash mr-2"></i>Delete All
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Filter */}
+                    <NotificationFilter 
+                        activeFilter={activeFilter} 
+                        onFilterChange={setActiveFilter} 
+                    />
+
+                    {/* Notifications List */}
+                    {loading ? (
+                        <div className="flex items-center justify-center py-12">
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                        </div>
+                    ) : error ? (
+                        <div className="text-red-500 text-center py-12">{error}</div>
+                    ) : notifications.length === 0 ? (
+                        <div className="text-center py-12">
+                            <i className="fas fa-bell-slash text-gray-300 text-6xl mb-4"></i>
+                            <p className="text-gray-500 text-lg">No notifications</p>
+                            <p className="text-gray-400 text-sm mt-2">
+                                {activeFilter === 'unread' ? 'No unread notifications' : 'You\'re all caught up!'}
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="space-y-4">
+                            {notifications.map((notification) => (
+                                <NotificationItem
+                                    key={notification.id}
+                                    notification={notification}
+                                    onMarkRead={handleMarkAsRead}
+                                    onDelete={handleDeleteNotification}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Notification Statistics */}
+                    {notifications.length > 0 && (
+                        <div className="mt-8 bg-white rounded-lg shadow-md p-6">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">Notification Statistics</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                                    <p className="text-3xl font-bold text-gray-800">{notifications.length}</p>
+                                    <p className="text-sm text-gray-500">Total</p>
+                                </div>
+                                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                                    <p className="text-3xl font-bold text-blue-600">{unreadCount}</p>
+                                    <p className="text-sm text-gray-500">Unread</p>
+                                </div>
+                                <div className="text-center p-4 bg-green-50 rounded-lg">
+                                    <p className="text-3xl font-bold text-green-600">
+                                        {notifications.filter(n => n.title.includes('Target')).length}
+                                    </p>
+                                    <p className="text-sm text-gray-500">Target Alerts</p>
+                                </div>
+                                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                                    <p className="text-3xl font-bold text-purple-600">
+                                        {notifications.filter(n => n.title.includes('Report')).length}
+                                    </p>
+                                    <p className="text-sm text-gray-500">Reports</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<NotificationCenter />, document.getElementById('root'));
+    </script>
+</body>
+</html>

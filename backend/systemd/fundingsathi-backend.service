@@ -1,0 +1,17 @@
+[Unit]
+Description=FundingSathi CRM Backend
+After=network.target postgresql.service
+
+[Service]
+User=crm
+Group=crm
+WorkingDirectory=/opt/fundingsathi/backend
+Environment="PATH=/opt/fundingsathi/.venv/bin"
+Environment="DATABASE_URL=postgresql://postgres:REPLACE_PASSWORD@127.0.0.1:5432/fundingsathicrm"
+ExecStart=/opt/fundingsathi/.venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8085 --workers 4
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .pending { background: #fff3cd; border-color: #ffeeba; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+    <script src="js/accessibility-init.js"></script>
+</head>
+<body>
+    <h1>Simple Backend Connection Test</h1>
+    <p>This test uses hardcoded localhost:8085 to bypass config.js</p>
+    
+    <button onclick="runTests()">Run Tests</button>
+    
+    <div id="health" class="test pending">Health Check: Waiting...</div>
+    <div id="auth" class="test pending">Auth Test: Waiting...</div>
+    <div id="cors" class="test pending">CORS Test: Waiting...</div>
+    
+    <div class="test">
+        <h3>Debug Info</h3>
+        <pre id="debug"></pre>
+    </div>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:8085';
+        
+        function updateResult(id, status, message) {
+            const el = document.getElementById(id);
+            el.className = 'test ' + status;
+            el.innerHTML = `<strong>${id.toUpperCase()}:</strong> ${message}`;
+        }
+        
+        async function testHealth() {
+            updateResult('health', 'pending', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                updateResult('health', 'success', `✓ Connected - ${JSON.stringify(data)}`);
+                return true;
+            } catch (error) {
+                updateResult('health', 'error', `✗ Failed: ${error.message}`);
+                return false;
+            }
+        }
+        
+        async function testAuth() {
+            updateResult('auth', 'pending', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'shree.rathod@fundingsathi.in',
+                        password: 'shree.admin@2026'
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    updateResult('auth', 'success', `✓ Auth works - Token received`);
+                } else {
+                    updateResult('auth', 'error', `✗ Auth failed: ${JSON.stringify(data)}`);
+                }
+                return response.ok;
+            } catch (error) {
+                updateResult('auth', 'error', `✗ Failed: ${error.message}`);
+                return false;
+            }
+        }
+        
+        async function testCORS() {
+            updateResult('cors', 'pending', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/health`, {
+                    headers: { 'Origin': window.location.origin }
+                });
+                // CORS headers are not exposed to JavaScript in browsers for security
+                // If the request succeeds, CORS is working properly
+                if (response.ok) {
+                    updateResult('cors', 'success', `✓ CORS enabled - Request succeeded`);
+                } else {
+                    updateResult('cors', 'error', `✗ Request failed: ${response.status}`);
+                }
+                return response.ok;
+            } catch (error) {
+                updateResult('cors', 'error', `✗ Failed: ${error.message}`);
+                return false;
+            }
+        }
+        
+        async function runTests() {
+            document.getElementById('debug').textContent = `API_BASE: ${API_BASE}\nLocation: ${window.location.href}\nUser Agent: ${navigator.userAgent}`;
+            
+            await testHealth();
+            await new Promise(r => setTimeout(r, 500));
+            await testAuth();
+            await new Promise(r => setTimeout(r, 500));
+            await testCORS();
+        }
+        
+        // Auto-run on load
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

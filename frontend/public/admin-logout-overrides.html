@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout Overrides - Funding Sathi CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    </style>
+    <script src="js/accessibility-init.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const API_BASE = window.API_BASE || window.CRM_API_BASE || window.location.origin;
+
+        // Utility function to get auth token
+        const getAuthToken = () => localStorage.getItem('token');
+
+        // Utility function for API calls
+        const apiCall = async (endpoint, options = {}) => {
+            const token = getAuthToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+            
+            return response.json();
+        };
+
+        // Override Request Card Component
+        const OverrideRequestCard = ({ request, onApprove, onReject }) => {
+            return (
+                <div className="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
+                    <div className="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 className="font-bold text-gray-800">{request.employee_name}</h3>
+                            <p className="text-sm text-gray-500">
+                                Requested: {new Date(request.created_at).toLocaleString()}
+                            </p>
+                        </div>
+                        <div className="flex space-x-2">
+                            <button 
+                                onClick={() => onApprove(request.id)}
+                                className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition text-sm"
+                            >
+                                <i className="fas fa-check mr-1"></i>Approve
+                            </button>
+                            <button 
+                                onClick={() => onReject(request.id)}
+                                className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition text-sm"
+                            >
+                                <i className="fas fa-times mr-1"></i>Reject
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p className="text-sm text-gray-600">
+                            <strong>Reason:</strong> {request.reason}
+                        </p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex justify-between">
+                            <span className="text-gray-500">Calls Completed:</span>
+                            <span className="font-semibold text-gray-800">{request.calls_completed}</span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span className="text-gray-500">Leads Completed:</span>
+                            <span className="font-semibold text-gray-800">{request.leads_completed}</span>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Override History Item Component
+        const OverrideHistoryItem = ({ override }) => {
+            return (
+                <div className="bg-white rounded-lg shadow-md p-4 mb-3">
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <h4 className="font-semibold text-gray-800">{override.employee_name}</h4>
+                            <p className="text-sm text-gray-500">
+                                Approved by: {override.approved_by_name}
+                            </p>
+                        </div>
+                        <span className="text-sm text-gray-400">
+                            {new Date(override.created_at).toLocaleString()}
+                        </span>
+                    </div>
+                    <div className="mt-3 bg-gray-50 rounded p-3">
+                        <p className="text-sm text-gray-600">
+                            <strong>Reason:</strong> {override.reason}
+                        </p>
+                    </div>
+                    <div className="mt-3 flex space-x-4 text-sm">
+                        <span className="text-gray-500">
+                            <strong>Calls:</strong> {override.calls_completed}
+                        </span>
+                        <span className="text-gray-500">
+                            <strong>Leads:</strong> {override.leads_completed}
+                        </span>
+                    </div>
+                </div>
+            );
+        };
+
+        // Create Override Modal Component
+        const CreateOverrideModal = ({ isOpen, onClose, employees, onSubmit }) => {
+            const [selectedEmployee, setSelectedEmployee] = useState('');
+            const [reason, setReason] = useState('');
+            const [loading, setLoading] = useState(false);
+
+            if (!isOpen) return null;
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                if (!selectedEmployee || !reason) return;
+                
+                setLoading(true);
+                try {
+                    await onSubmit(selectedEmployee, reason);
+                    setSelectedEmployee('');
+                    setReason('');
+                    onClose();
+                } catch (err) {
+                    console.error('Failed to create override:', err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Create Logout Override</h3>
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Select Employee
+                                </label>
+                                <select
+                                    value={selectedEmployee}
+                                    onChange={(e) => setSelectedEmployee(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                >
+                                    <option value="">Choose an employee...</option>
+                                    {employees.map((emp) => (
+                                        <option key={emp.id} value={emp.id}>
+                                            {emp.full_name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Reason for Override
+                                </label>
+                                <textarea
+                                    value={reason}
+                                    onChange={(e) => setReason(e.target.value)}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    rows="3"
+                                    placeholder="Enter the reason for this override..."
+                                    required
+                                ></textarea>
+                            </div>
+                            <div className="flex justify-end space-x-3">
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
+                                >
+                                    {loading ? 'Creating...' : 'Create Override'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main Admin Logout Overrides Component
+        const AdminLogoutOverrides = () => {
+            const [activeTab, setActiveTab] = useState('pending');
+            const [pendingRequests, setPendingRequests] = useState([]);
+            const [overrideHistory, setOverrideHistory] = useState([]);
+            const [employees, setEmployees] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            const [showCreateModal, setShowCreateModal] = useState(false);
+
+            useEffect(() => {
+                fetchData();
+            }, [activeTab]);
+
+            const fetchData = async () => {
+                try {
+                    setLoading(true);
+                    if (activeTab === 'pending') {
+                        const data = await apiCall('/admin/logout-overrides');
+                        setPendingRequests(data);
+                    } else {
+                        const data = await apiCall('/admin/logout-overrides/history');
+                        setOverrideHistory(data);
+                    }
+                    
+                    // Fetch employees for create modal
+                    const empData = await apiCall('/users');
+                    setEmployees(empData);
+                } catch (err) {
+                    setError('Failed to fetch data');
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const handleApproveOverride = async (overrideId) => {
+                try {
+                    await apiCall(`/admin/logout-overrides/${overrideId}/approve`, { method: 'POST' });
+                    fetchData();
+                } catch (err) {
+                    console.error('Failed to approve override:', err);
+                }
+            };
+
+            const handleRejectOverride = async (overrideId) => {
+                try {
+                    await apiCall(`/admin/logout-overrides/${overrideId}/reject`, { method: 'POST' });
+                    fetchData();
+                } catch (err) {
+                    console.error('Failed to reject override:', err);
+                }
+            };
+
+            const handleCreateOverride = async (employeeId, reason) => {
+                try {
+                    await apiCall('/admin/logout-overrides', {
+                        method: 'POST',
+                        body: JSON.stringify({ employee_id: employeeId, reason })
+                    });
+                    fetchData();
+                } catch (err) {
+                    console.error('Failed to create override:', err);
+                    throw err;
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-6">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-800">Logout Overrides</h1>
+                                <p className="text-gray-500 mt-1">Manage employee logout override requests</p>
+                            </div>
+                            <button
+                                onClick={() => setShowCreateModal(true)}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                            >
+                                <i className="fas fa-plus mr-2"></i>Create Override
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="flex space-x-4 mb-6 border-b">
+                        <button
+                            onClick={() => setActiveTab('pending')}
+                            className={`px-4 py-2 font-medium ${activeTab === 'pending' ? 'border-b-3 border-blue-500 text-blue-500' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Pending Requests
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('history')}
+                            className={`px-4 py-2 font-medium ${activeTab === 'history' ? 'border-b-3 border-blue-500 text-blue-500' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Override History
+                        </button>
+                    </div>
+
+                    {loading ? (
+                        <div className="flex items-center justify-center py-12">
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                        </div>
+                    ) : error ? (
+                        <div className="text-red-500 text-center py-12">{error}</div>
+                    ) : (
+                        <div>
+                            {activeTab === 'pending' ? (
+                                pendingRequests.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <i className="fas fa-check-circle text-green-300 text-6xl mb-4"></i>
+                                        <p className="text-gray-500 text-lg">No pending override requests</p>
+                                        <p className="text-gray-400 text-sm mt-2">All caught up!</p>
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {pendingRequests.map((request) => (
+                                            <OverrideRequestCard
+                                                key={request.id}
+                                                request={request}
+                                                onApprove={handleApproveOverride}
+                                                onReject={handleRejectOverride}
+                                            />
+                                        ))}
+                                    </div>
+                                )
+                            ) : (
+                                overrideHistory.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <i className="fas fa-history text-gray-300 text-6xl mb-4"></i>
+                                        <p className="text-gray-500 text-lg">No override history</p>
+                                        <p className="text-gray-400 text-sm mt-2">History will appear here once overrides are processed</p>
+                                    </div>
+                                ) : (
+                                    <div className="max-w-4xl mx-auto">
+                                        {overrideHistory.map((override) => (
+                                            <OverrideHistoryItem
+                                                key={override.id}
+                                                override={override}
+                                            />
+                                        ))}
+                                    </div>
+                                )
+                            )}
+                        </div>
+                    )}
+
+                    {/* Create Override Modal */}
+                    <CreateOverrideModal
+                        isOpen={showCreateModal}
+                        onClose={() => setShowCreateModal(false)}
+                        employees={employees.filter(emp => emp.role === 'Employee')}
+                        onSubmit={handleCreateOverride}
+                    />
+                </div>
+            );
+        };
+
+        ReactDOM.render(<AdminLogoutOverrides />, document.getElementById('root'));
+    </script>
+</body>
+</html>

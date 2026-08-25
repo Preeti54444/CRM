@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Funding Sathi CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.8.0/umd/Recharts.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .zone-green { background-color: #22c55e; color: white; }
+        .zone-yellow { background-color: #eab308; color: white; }
+        .zone-red { background-color: #ef4444; color: white; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .tab-active { border-bottom: 3px solid #3b82f6; color: #3b82f6; }
+    </style>
+    <script src="js/accessibility-init.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+
+        const API_BASE = window.API_BASE || window.CRM_API_BASE || window.location.origin;
+
+        // Utility function to get auth token
+        const getAuthToken = () => localStorage.getItem('token');
+
+        // Utility function for API calls
+        const apiCall = async (endpoint, options = {}) => {
+            const token = getAuthToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+            
+            return response.json();
+        };
+
+        // Zone Badge Component
+        const ZoneBadge = ({ zone }) => {
+            const zoneConfig = {
+                green: { class: 'zone-green', label: 'Target Achieved', icon: '🟢' },
+                yellow: { class: 'zone-yellow', label: 'On Track', icon: '🟡' },
+                red: { class: 'zone-red', label: 'Target Not Achieved', icon: '🔴' }
+            };
+            
+            const config = zoneConfig[zone.toLowerCase()] || zoneConfig.red;
+            
+            return (
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${config.class}`}>
+                    {config.icon} {config.label}
+                </span>
+            );
+        };
+
+        // Report Card Component
+        const ReportCard = ({ title, value, icon, color, subtitle }) => (
+            <div className="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-gray-500 text-sm font-medium">{title}</p>
+                        <p className="text-3xl font-bold text-gray-800 mt-2">{value}</p>
+                        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+                    </div>
+                    <div className={`p-4 rounded-full ${color}`}>
+                        <i className={`${icon} text-2xl text-white`}></i>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // Mid-Week Report Component
+        const MidWeekReport = ({ report }) => {
+            if (!report) {
+                return (
+                    <div className="text-center py-12">
+                        <i className="fas fa-file-alt text-gray-300 text-6xl mb-4"></i>
+                        <p className="text-gray-500">No mid-week report available</p>
+                    </div>
+                );
+            }
+
+            const startDate = new Date(report.week_start).toLocaleDateString();
+            const endDate = new Date(report.week_end).toLocaleDateString();
+
+            return (
+                <div className="space-y-6">
+                    {/* Report Header */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">Mid-Week Report</h2>
+                                <p className="text-gray-500 mt-1">
+                                    {startDate} - {endDate}
+                                </p>
+                            </div>
+                            <div className="text-right">
+                                <ZoneBadge zone={report.zone} />
+                                <p className="text-sm text-gray-500 mt-2">
+                                    Generated: {new Date(report.generated_at).toLocaleString()}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Metrics Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <ReportCard 
+                            title="Calls Completed" 
+                            value={report.calls_completed} 
+                            icon="fas fa-phone"
+                            color="bg-blue-500"
+                        />
+                        <ReportCard 
+                            title="Leads Completed" 
+                            value={report.leads_completed} 
+                            icon="fas fa-users"
+                            color="bg-green-500"
+                        />
+                        <ReportCard 
+                            title="Exploration Calls" 
+                            value={report.exploration_calls_completed} 
+                            icon="fas fa-search"
+                            color="bg-purple-500"
+                        />
+                    </div>
+
+                    {/* Achievement Summary */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Achievement Summary</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-gray-500 text-sm">Achievement Percentage</p>
+                                <p className="text-3xl font-bold text-gray-800 mt-2">
+                                    {report.achievement_percentage.toFixed(1)}%
+                                </p>
+                                <ZoneBadge zone={report.zone} />
+                            </div>
+                            <div className="bg-gray-50 rounded-lg p-4">
+                                <p className="text-gray-500 text-sm">Performance Zone</p>
+                                <div className="mt-2">
+                                    <ZoneBadge zone={report.zone} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Performance Breakdown */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Performance Breakdown</h3>
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-phone text-blue-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Calls</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.calls_completed}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-users text-green-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Leads</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.leads_completed}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-search text-purple-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Exploration Calls</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.exploration_calls_completed}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Weekly Report Component
+        const WeeklyReport = ({ report }) => {
+            if (!report) {
+                return (
+                    <div className="text-center py-12">
+                        <i className="fas fa-file-alt text-gray-300 text-6xl mb-4"></i>
+                        <p className="text-gray-500">No weekly report available</p>
+                    </div>
+                );
+            }
+
+            const startDate = new Date(report.week_start).toLocaleDateString();
+            const endDate = new Date(report.week_end).toLocaleDateString();
+
+            // Chart data
+            const chartData = [
+                { name: 'Calls', value: report.total_calls, target: 0 },
+                { name: 'Leads', value: report.total_leads, target: 0 },
+                { name: 'Exploration', value: report.total_exploration_calls, target: 0 },
+                { name: 'Meetings', value: report.total_meetings, target: 0 }
+            ];
+
+            return (
+                <div className="space-y-6">
+                    {/* Report Header */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-800">Weekly Report</h2>
+                                <p className="text-gray-500 mt-1">
+                                    {startDate} - {endDate}
+                                </p>
+                            </div>
+                            <div className="text-right">
+                                <div className="flex items-center space-x-2">
+                                    {report.rank && (
+                                        <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">
+                                            Rank #{report.rank}
+                                        </span>
+                                    )}
+                                    <ZoneBadge zone={report.zone} />
+                                </div>
+                                <p className="text-sm text-gray-500 mt-2">
+                                    Generated: {new Date(report.generated_at).toLocaleString()}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Metrics Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <ReportCard 
+                            title="Total Calls" 
+                            value={report.total_calls} 
+                            icon="fas fa-phone"
+                            color="bg-blue-500"
+                        />
+                        <ReportCard 
+                            title="Total Leads" 
+                            value={report.total_leads} 
+                            icon="fas fa-users"
+                            color="bg-green-500"
+                        />
+                        <ReportCard 
+                            title="Exploration Calls" 
+                            value={report.total_exploration_calls} 
+                            icon="fas fa-search"
+                            color="bg-purple-500"
+                        />
+                        <ReportCard 
+                            title="Total Meetings" 
+                            value={report.total_meetings} 
+                            icon="fas fa-calendar-check"
+                            color="bg-orange-500"
+                        />
+                    </div>
+
+                    {/* Performance Score */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Performance Score</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6 text-center">
+                                <p className="text-gray-600 text-sm">Performance Score</p>
+                                <p className="text-4xl font-bold text-blue-600 mt-2">
+                                    {report.performance_score.toFixed(1)}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">Weighted Score</p>
+                            </div>
+                            <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-6 text-center">
+                                <p className="text-gray-600 text-sm">Achievement</p>
+                                <p className="text-4xl font-bold text-green-600 mt-2">
+                                    {report.achievement_percentage.toFixed(1)}%
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">Overall Achievement</p>
+                            </div>
+                            <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-6 text-center">
+                                <p className="text-gray-600 text-sm">Zone</p>
+                                <div className="mt-2">
+                                    <ZoneBadge zone={report.zone} />
+                                </div>
+                                <p className="text-xs text-gray-500 mt-1">Performance Zone</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Performance Chart */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Performance Chart</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                            <BarChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="value" fill="#3b82f6" name="Completed" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    {/* Detailed Breakdown */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Detailed Breakdown</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-phone text-blue-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Total Calls</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.total_calls}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-users text-green-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Total Leads</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.total_leads}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-search text-purple-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Exploration Calls</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.total_exploration_calls}</span>
+                            </div>
+                            <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center">
+                                    <i className="fas fa-calendar-check text-orange-500 text-xl mr-3"></i>
+                                    <span className="font-medium text-gray-700">Total Meetings</span>
+                                </div>
+                                <span className="text-2xl font-bold text-gray-800">{report.total_meetings}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Admin Reports Component
+        const AdminReports = () => {
+            const [activeTab, setActiveTab] = useState('midweek');
+            const [midweekReports, setMidweekReports] = useState([]);
+            const [weeklyReports, setWeeklyReports] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                fetchReports();
+            }, [activeTab]);
+
+            const fetchReports = async () => {
+                try {
+                    setLoading(true);
+                    if (activeTab === 'midweek') {
+                        const data = await apiCall('/admin/midweek-reports');
+                        setMidweekReports(data);
+                    } else {
+                        const data = await apiCall('/admin/weekly-reports');
+                        setWeeklyReports(data);
+                    }
+                } catch (err) {
+                    setError('Failed to fetch reports');
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-6">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-800">Reports</h1>
+                        <p className="text-gray-500 mt-1">View and manage employee performance reports</p>
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="flex space-x-4 mb-6 border-b">
+                        <button 
+                            onClick={() => setActiveTab('midweek')}
+                            className={`px-4 py-2 font-medium ${activeTab === 'midweek' ? 'tab-active' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Mid-Week Reports
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('weekly')}
+                            className={`px-4 py-2 font-medium ${activeTab === 'weekly' ? 'tab-active' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Weekly Reports
+                        </button>
+                    </div>
+
+                    {loading ? (
+                        <div className="flex items-center justify-center py-12">
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                        </div>
+                    ) : error ? (
+                        <div className="text-red-500 text-center py-12">{error}</div>
+                    ) : (
+                        <div className="space-y-6">
+                            {activeTab === 'midweek' ? (
+                                midweekReports.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <i className="fas fa-file-alt text-gray-300 text-6xl mb-4"></i>
+                                        <p className="text-gray-500">No mid-week reports available</p>
+                                    </div>
+                                ) : (
+                                    midweekReports.map((report) => (
+                                        <div key={report.id} className="bg-white rounded-lg shadow-md p-6">
+                                            <div className="flex justify-between items-start mb-4">
+                                                <div>
+                                                    <h3 className="font-bold text-gray-800">{report.employee_name}</h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        {new Date(report.week_start).toLocaleDateString()} - {new Date(report.week_end).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <ZoneBadge zone={report.zone} />
+                                                    <span className="text-sm text-gray-500">
+                                                        {new Date(report.generated_at).toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-4">
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-blue-600">{report.calls_completed}</p>
+                                                    <p className="text-xs text-gray-500">Calls</p>
+                                                </div>
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-green-600">{report.leads_completed}</p>
+                                                    <p className="text-xs text-gray-500">Leads</p>
+                                                </div>
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-purple-600">{report.exploration_calls_completed}</p>
+                                                    <p className="text-xs text-gray-500">Exploration</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )
+                            ) : (
+                                weeklyReports.length === 0 ? (
+                                    <div className="text-center py-12">
+                                        <i className="fas fa-file-alt text-gray-300 text-6xl mb-4"></i>
+                                        <p className="text-gray-500">No weekly reports available</p>
+                                    </div>
+                                ) : (
+                                    weeklyReports.map((report) => (
+                                        <div key={report.id} className="bg-white rounded-lg shadow-md p-6">
+                                            <div className="flex justify-between items-start mb-4">
+                                                <div>
+                                                    <h3 className="font-bold text-gray-800">{report.employee_name}</h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        {new Date(report.week_start).toLocaleDateString()} - {new Date(report.week_end).toLocaleDateString()}
+                                                    </p>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    {report.rank && (
+                                                        <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-semibold">
+                                                            #{report.rank}
+                                                        </span>
+                                                    )}
+                                                    <ZoneBadge zone={report.zone} />
+                                                    <span className="text-sm text-gray-500">
+                                                        {new Date(report.generated_at).toLocaleString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-4 gap-4">
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-blue-600">{report.total_calls}</p>
+                                                    <p className="text-xs text-gray-500">Calls</p>
+                                                </div>
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-green-600">{report.total_leads}</p>
+                                                    <p className="text-xs text-gray-500">Leads</p>
+                                                </div>
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-purple-600">{report.total_exploration_calls}</p>
+                                                    <p className="text-xs text-gray-500">Exploration</p>
+                                                </div>
+                                                <div className="text-center p-3 bg-gray-50 rounded">
+                                                    <p className="text-2xl font-bold text-orange-600">{report.total_meetings}</p>
+                                                    <p className="text-xs text-gray-500">Meetings</p>
+                                                </div>
+                                            </div>
+                                            <div className="mt-4 pt-4 border-t flex justify-between items-center">
+                                                <div>
+                                                    <span className="text-sm text-gray-500">Performance Score:</span>
+                                                    <span className="font-bold text-gray-800 ml-2">{report.performance_score.toFixed(1)}</span>
+                                                </div>
+                                                <div>
+                                                    <span className="text-sm text-gray-500">Achievement:</span>
+                                                    <span className="font-bold text-gray-800 ml-2">{report.achievement_percentage.toFixed(1)}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // Employee Reports Component
+        const EmployeeReports = () => {
+            const [activeTab, setActiveTab] = useState('midweek');
+            const [midweekReport, setMidweekReport] = useState(null);
+            const [weeklyReport, setWeeklyReport] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                fetchReports();
+            }, [activeTab]);
+
+            const fetchReports = async () => {
+                try {
+                    setLoading(true);
+                    if (activeTab === 'midweek') {
+                        const data = await apiCall('/employee/midweek-report');
+                        setMidweekReport(data);
+                    } else {
+                        const data = await apiCall('/employee/weekly-report');
+                        setWeeklyReport(data);
+                    }
+                } catch (err) {
+                    setError('Failed to fetch reports');
+                    console.error(err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-6">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-800">My Reports</h1>
+                        <p className="text-gray-500 mt-1">View your performance reports</p>
+                    </div>
+
+                    {/* Tabs */}
+                    <div className="flex space-x-4 mb-6 border-b">
+                        <button 
+                            onClick={() => setActiveTab('midweek')}
+                            className={`px-4 py-2 font-medium ${activeTab === 'midweek' ? 'tab-active' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Mid-Week Report
+                        </button>
+                        <button 
+                            onClick={() => setActiveTab('weekly')}
+                            className={`px-4 py-2 font-medium ${activeTab === 'weekly' ? 'tab-active' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            Weekly Report
+                        </button>
+                    </div>
+
+                    {loading ? (
+                        <div className="flex items-center justify-center py-12">
+                            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                        </div>
+                    ) : error ? (
+                        <div className="text-red-500 text-center py-12">{error}</div>
+                    ) : (
+                        <div>
+                            {activeTab === 'midweek' ? (
+                                <MidWeekReport report={midweekReport} />
+                            ) : (
+                                <WeeklyReport report={weeklyReport} />
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        // Determine which component to render based on URL or user role
+        const isAdmin = window.location.pathname.includes('admin-reports');
+        const ReportsComponent = isAdmin ? AdminReports : EmployeeReports;
+
+        ReactDOM.render(<ReportsComponent />, document.getElementById('root'));
+    </script>
+</body>
+</html>

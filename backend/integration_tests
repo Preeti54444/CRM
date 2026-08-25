@@ -1,0 +1,149 @@
+"""Test the Pipeline System"""
+import requests
+import json
+
+# Base URL
+BASE_URL = "http://localhost:8000"
+
+def test_pipeline_system():
+    print("Testing Pipeline System...")
+    print("=" * 60)
+    
+    # First, login to get token
+    print("\n1. Logging in...")
+    login_response = requests.post(f"{BASE_URL}/auth/login", json={
+        "email": "test@pipeline.com",
+        "password": "test123"
+    })
+    
+    if login_response.status_code != 200:
+        print(f"Login failed: {login_response.status_code}")
+        print(login_response.text)
+        print("\nPlease update the password in the test script or create a test user.")
+        return
+    
+    token = login_response.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+    print("Login successful!")
+    
+    # Test 1: Create a new lead
+    print("\n2. Creating a new lead with status 'New'...")
+    lead_data = {
+        "lead_name": "Test Pipeline Lead",
+        "company_name": "Test Company",
+        "mobile": "9876543210",
+        "email": "test@example.com",
+        "lead_status": "New",
+        "product_type": "Business Loan",
+        "funding_amount": 500000.0
+    }
+    
+    create_response = requests.post(f"{BASE_URL}/leads", json=lead_data, headers=headers)
+    
+    if create_response.status_code != 201:
+        print(f"Lead creation failed: {create_response.status_code}")
+        print(create_response.text)
+        return
+    
+    lead = create_response.json()
+    lead_id = lead["id"]
+    print(f"Lead created successfully! ID: {lead_id}")
+    print(f"Lead Status: {lead['lead_status']}")
+    print(f"Pipeline Stage: {lead.get('pipeline_stage', 'NOT SET')}")
+    
+    # Verify pipeline stage was set automatically
+    if lead.get('pipeline_stage') == 'New Leads':
+        print("[PASS] Pipeline stage automatically set to 'New Leads'")
+    else:
+        print(f"[FAIL] Pipeline stage not set correctly. Got: {lead.get('pipeline_stage')}")
+    
+    # Test 2: Update lead status
+    print("\n3. Updating lead status to 'Contacted'...")
+    update_response = requests.put(
+        f"{BASE_URL}/leads/{lead_id}",
+        json={"lead_status": "Contacted"},
+        headers=headers
+    )
+    
+    if update_response.status_code != 200:
+        print(f"Lead update failed: {update_response.status_code}")
+        print(update_response.text)
+        return
+    
+    updated_lead = update_response.json()
+    print(f"Lead updated successfully!")
+    print(f"New Status: {updated_lead['lead_status']}")
+    print(f"New Pipeline Stage: {updated_lead.get('pipeline_stage', 'NOT SET')}")
+    
+    # Verify pipeline stage was updated automatically
+    if updated_lead.get('pipeline_stage') == 'Contacted':
+        print("[PASS] Pipeline stage automatically updated to 'Contacted'")
+    else:
+        print(f"[FAIL] Pipeline stage not updated correctly. Got: {updated_lead.get('pipeline_stage')}")
+    
+    # Test 3: Update to another status
+    print("\n4. Updating lead status to 'Qualified'...")
+    update_response = requests.put(
+        f"{BASE_URL}/leads/{lead_id}",
+        json={"lead_status": "Qualified"},
+        headers=headers
+    )
+    
+    if update_response.status_code != 200:
+        print(f"Lead update failed: {update_response.status_code}")
+        print(update_response.text)
+        return
+    
+    updated_lead = update_response.json()
+    print(f"Lead updated successfully!")
+    print(f"New Status: {updated_lead['lead_status']}")
+    print(f"New Pipeline Stage: {updated_lead.get('pipeline_stage', 'NOT SET')}")
+    
+    # Verify pipeline stage was updated automatically
+    if updated_lead.get('pipeline_stage') == 'Qualified':
+        print("[PASS] Pipeline stage automatically updated to 'Qualified'")
+    else:
+        print(f"[FAIL] Pipeline stage not updated correctly. Got: {updated_lead.get('pipeline_stage')}")
+    
+    # Test 4: Check audit trail
+    print("\n5. Checking audit trail...")
+    audit_response = requests.get(f"{BASE_URL}/pipeline/audit/{lead_id}", headers=headers)
+    
+    if audit_response.status_code == 200:
+        audit_data = audit_response.json()
+        print(f"Audit trail entries: {len(audit_data['transitions'])}")
+        for transition in audit_data['transitions']:
+            print(f"  - {transition['previous_status']} -> {transition['new_status']}")
+            print(f"    Stage: {transition['previous_pipeline_stage']} -> {transition['new_pipeline_stage']}")
+            print(f"    By: {transition['changed_by_name']} at {transition['created_at']}")
+        print("[PASS] Audit trail recorded successfully")
+    else:
+        print(f"[FAIL] Could not retrieve audit trail: {audit_response.status_code}")
+    
+    # Test 5: Check pipeline configuration
+    print("\n6. Checking pipeline configuration...")
+    config_response = requests.get(f"{BASE_URL}/pipeline/configuration", headers=headers)
+    
+    if config_response.status_code == 200:
+        configs = config_response.json()
+        print(f"Total configurations: {len(configs)}")
+        print("Sample mappings:")
+        for config in configs[:5]:
+            print(f"  - {config['lead_status']} -> {config['pipeline_stage']}")
+        print("[PASS] Pipeline configuration accessible")
+    else:
+        print(f"[FAIL] Could not retrieve configuration: {config_response.status_code}")
+    
+    # Cleanup: Delete test lead
+    print("\n7. Cleaning up test lead...")
+    delete_response = requests.delete(f"{BASE_URL}/leads/{lead_id}", headers=headers)
+    if delete_response.status_code == 204:
+        print("Test lead deleted successfully")
+    else:
+        print(f"Could not delete test lead: {delete_response.status_code}")
+    
+    print("\n" + "=" * 60)
+    print("Pipeline System Test Complete!")
+
+if __name__ == "__main__":
+    test_pipeline_system()

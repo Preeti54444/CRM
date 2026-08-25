@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Funding Sathi CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.8.0/umd/Recharts.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .zone-green { background-color: #22c55e; color: white; }
+        .zone-yellow { background-color: #eab308; color: white; }
+        .zone-red { background-color: #ef4444; color: white; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .progress-bar { transition: width 0.5s ease-in-out; }
+    </style>
+    <script src="js/accessibility-init.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+
+        const API_BASE = (() => {
+          try {
+            const stored = localStorage.getItem('crm_api_base')
+            if (stored) return stored.replace(/\/$/, '')
+          } catch (e) { /* ignore */ }
+          return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://127.0.0.1:8085'
+            : window.location.origin
+        })();
+
+        const getAuthToken = () => {
+          try {
+            const session = JSON.parse(localStorage.getItem('crm_session') || '{}')
+            return session.access_token || session.token || localStorage.getItem('token')
+          } catch (e) {
+            return localStorage.getItem('token')
+          }
+        };
+
+        // Utility function for API calls
+        const apiCall = async (endpoint, options = {}) => {
+            const token = getAuthToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+            
+            return response.json();
+        };
+
+        // Dashboard Card Component
+        const DashboardCard = ({ title, value, icon, color, trend }) => (
+            <div className={`bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300`}>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-gray-500 text-sm font-medium">{title}</p>
+                        <p className="text-3xl font-bold text-gray-800 mt-2">{value}</p>
+                        {trend && (
+                            <p className={`text-sm mt-2 ${trend > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}% from last week
+                            </p>
+                        )}
+                    </div>
+                    <div className={`p-4 rounded-full ${color}`}>
+                        <i className={`${icon} text-2xl text-white`}></i>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // Zone Badge Component
+        const ZoneBadge = ({ zone }) => {
+            const zoneConfig = {
+                green: { class: 'zone-green', label: 'Green Zone', icon: '🟢' },
+                yellow: { class: 'zone-yellow', label: 'Yellow Zone', icon: '🟡' },
+                red: { class: 'zone-red', label: 'Red Zone', icon: '🔴' },
+                gray: { class: 'bg-gray-400 text-white', label: 'No Activity', icon: '⚪' }
+            };
+            
+            const config = zoneConfig[zone.toLowerCase()] || zoneConfig.red;
+            
+            return (
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${config.class}`}>
+                    {config.icon} {config.label}
+                </span>
+            );
+        };
+
+        // Progress Bar Component
+        const ProgressBar = ({ value, target, color }) => {
+            const percentage = Math.min((value / target) * 100, 100);
+            
+            return (
+                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div 
+                        className={`progress-bar h-2.5 rounded-full ${color}`} 
+                        style={{ width: `${percentage}%` }}
+                    ></div>
+                </div>
+            );
+        };
+
+        // Top Performer Card
+        const TopPerformerCard = ({ performer }) => {
+            if (!performer) return <div className="text-gray-500">No data available</div>;
+            
+            const getRankBadge = (rank) => {
+                if (rank === 1) return '🥇';
+                if (rank === 2) return '🥈';
+                if (rank === 3) return '🥉';
+                return `#${rank}`;
+            };
+            
+            return (
+                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 border border-yellow-200">
+                    <div className="flex items-center space-x-4">
+                        <div className="text-4xl">{getRankBadge(performer.rank)}</div>
+                        <div className="flex-1">
+                            <h4 className="font-bold text-gray-800">{performer.employee_name}</h4>
+                            <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                                <div><span className="text-gray-500">Calls:</span> {performer.calls}</div>
+                                <div><span className="text-gray-500">Leads:</span> {performer.leads}</div>
+                                <div><span className="text-gray-500">Exploration:</span> {performer.exploration_calls}</div>
+                                <div><span className="text-gray-500">Score:</span> {performer.performance_score.toFixed(1)}</div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-2xl font-bold text-green-600">{performer.achievement_percentage.toFixed(1)}%</div>
+                            <ZoneBadge zone={performer.zone} />
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main Dashboard Component
+        const AdminDashboard = () => {
+            const [dashboardData, setDashboardData] = useState(null);
+            const [employeePerformance, setEmployeePerformance] = useState([]);
+            const [rankings, setRankings] = useState([]);
+            const [dailyTrends, setDailyTrends] = useState([]);
+            const [weeklyPerformance, setWeeklyPerformance] = useState([]);
+            const [targetVsAchievement, setTargetVsAchievement] = useState([]);
+            const [monthlyAchievement, setMonthlyAchievement] = useState([]);
+            const [targetKPIs, setTargetKPIs] = useState(null);
+            const [targetGrid, setTargetGrid] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+
+            useEffect(() => {
+                fetchDashboardData();
+                fetchEmployeePerformance();
+                fetchRankings();
+                fetchDailyTrends();
+                fetchWeeklyPerformance();
+                fetchTargetVsAchievement();
+                fetchMonthlyAchievement();
+                fetchTargetKPIs();
+                fetchTargetGrid();
+                const interval = setInterval(() => {
+                    fetchTargetKPIs();
+                    fetchTargetGrid();
+                }, 20000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const fetchDashboardData = async () => {
+                try {
+                    const data = await apiCall('/admin/dashboard');
+                    setDashboardData(data);
+                } catch (err) {
+                    setError('Failed to fetch dashboard data');
+                    console.error(err);
+                }
+            };
+
+            const fetchEmployeePerformance = async () => {
+                try {
+                    const data = await apiCall('/admin/employees/performance');
+                    setEmployeePerformance(data);
+                } catch (err) {
+                    console.error('Failed to fetch employee performance:', err);
+                }
+            };
+
+            const fetchRankings = async () => {
+                try {
+                    const data = await apiCall('/admin/rankings');
+                    setRankings(data);
+                } catch (err) {
+                    console.error('Failed to fetch rankings:', err);
+                }
+            };
+
+            const fetchDailyTrends = async () => {
+                try {
+                    const data = await apiCall('/admin/charts/daily-trends?days=7');
+                    setDailyTrends(data);
+                } catch (err) {
+                    console.error('Failed to fetch daily trends:', err);
+                }
+            };
+
+            const fetchWeeklyPerformance = async () => {
+                try {
+                    const data = await apiCall('/admin/charts/weekly-performance?weeks=4');
+                    setWeeklyPerformance(data);
+                } catch (err) {
+                    console.error('Failed to fetch weekly performance:', err);
+                }
+            };
+
+            const fetchTargetVsAchievement = async () => {
+                try {
+                    const data = await apiCall('/admin/charts/target-vs-achievement');
+                    setTargetVsAchievement(data);
+                } catch (err) {
+                    console.error('Failed to fetch target vs achievement:', err);
+                }
+            };
+
+            const fetchMonthlyAchievement = async () => {
+                try {
+                    const data = await apiCall('/admin/charts/monthly-achievement?months=6');
+                    setMonthlyAchievement(data);
+                } catch (err) {
+                    console.error('Failed to fetch monthly achievement:', err);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const fetchTargetKPIs = async () => {
+                try {
+                    const data = await apiCall('/targets/admin/kpis');
+                    setTargetKPIs(data);
+                } catch (err) {
+                    console.error('Failed to fetch target KPIs:', err);
+                }
+            };
+
+            const fetchTargetGrid = async () => {
+                try {
+                    const data = await apiCall('/targets/admin/grid');
+                    setTargetGrid(data);
+                } catch (err) {
+                    console.error('Failed to fetch target grid:', err);
+                }
+            };
+
+            if (loading) {
+                return (
+                    <div className="flex items-center justify-center h-screen">
+                        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                    </div>
+                );
+            }
+
+            if (error) {
+                return (
+                    <div className="flex items-center justify-center h-screen">
+                        <div className="text-red-500 text-xl">{error}</div>
+                    </div>
+                );
+            }
+
+            // Chart data preparation
+            const zoneData = [
+                { name: 'Green Zone', value: dashboardData?.green_zone_employees || 0, color: '#22c55e' },
+                { name: 'Yellow Zone', value: dashboardData?.yellow_zone_employees || 0, color: '#eab308' },
+                { name: 'Red Zone', value: dashboardData?.red_zone_employees || 0, color: '#ef4444' }
+            ];
+
+            const rankingData = rankings.map(r => ({
+                name: r.employee_name.split(' ')[0],
+                score: r.performance_score,
+                calls: r.calls,
+                leads: r.leads
+            }));
+
+            return (
+                <div className="min-h-screen p-6">
+                    {/* Header */}
+                    <div className="mb-8">
+                        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+                        <p className="text-gray-500 mt-1">Real-time performance monitoring and analytics</p>
+                        
+                    </div>
+
+                    {/* Dashboard Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <DashboardCard 
+                            title="Total Calls Today" 
+                            value={dashboardData?.total_calls_today || 0} 
+                            icon="fas fa-phone"
+                            color="bg-blue-500"
+                        />
+                        <DashboardCard 
+                            title="Total Calls This Week" 
+                            value={dashboardData?.total_calls_this_week || 0} 
+                            icon="fas fa-phone-volume"
+                            color="bg-indigo-500"
+                        />
+                        <DashboardCard 
+                            title="Total Leads This Week" 
+                            value={dashboardData?.total_leads_this_week || 0} 
+                            icon="fas fa-users"
+                            color="bg-green-500"
+                        />
+                        <DashboardCard 
+                            title="Total Meetings This Week" 
+                            value={dashboardData?.total_meetings_this_week || 0} 
+                            icon="fas fa-calendar-check"
+                            color="bg-purple-500"
+                        />
+                    </div>
+
+                    {/* Target Management KPIs */}
+                    {targetKPIs && (
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">Target Management KPIs</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                                <DashboardCard title="Green Zone" value={targetKPIs.green_zone_employees} icon="fas fa-check-circle" color="bg-green-500" />
+                                <DashboardCard title="Yellow Zone" value={targetKPIs.yellow_zone_employees} icon="fas fa-exclamation-circle" color="bg-yellow-500" />
+                                <DashboardCard title="Red Zone" value={targetKPIs.red_zone_employees} icon="fas fa-times-circle" color="bg-red-500" />
+                                <DashboardCard title="No Activity" value={targetKPIs.gray_zone_employees} icon="fas fa-minus-circle" color="bg-gray-500" />
+                                <DashboardCard title="Pending Calls" value={targetKPIs.pending_calls} icon="fas fa-phone-slash" color="bg-orange-500" />
+                                <DashboardCard title="Pending Leads" value={targetKPIs.pending_leads} icon="fas fa-user-clock" color="bg-pink-500" />
+                                <DashboardCard title="CF Calls" value={targetKPIs.carry_forward_calls} icon="fas fa-forward" color="bg-amber-500" />
+                                <DashboardCard title="CF Leads" value={targetKPIs.carry_forward_leads} icon="fas fa-forward" color="bg-amber-600" />
+                                <DashboardCard title="Weekly %" value={`${targetKPIs.weekly_completion_pct}%`} icon="fas fa-chart-line" color="bg-indigo-500" />
+                                <DashboardCard title="Avg Calls/Emp" value={targetKPIs.avg_calls_per_employee} icon="fas fa-phone" color="bg-blue-500" />
+                                <DashboardCard title="Avg Leads/Emp" value={targetKPIs.avg_leads_per_employee} icon="fas fa-users" color="bg-teal-500" />
+                                <DashboardCard title="Productivity" value={targetKPIs.overall_productivity} icon="fas fa-bolt" color="bg-purple-500" />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Live Employee Target Grid */}
+                    {targetGrid.length > 0 && (
+                        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-lg font-semibold text-gray-800">Live Employee Target Grid</h3>
+                                <button onClick={() => { fetchTargetGrid(); fetchTargetKPIs(); }}
+                                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition text-sm">
+                                    <i className="fas fa-sync-alt mr-2"></i>Refresh
+                                </button>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm">
+                                    <thead>
+                                        <tr className="bg-gray-50">
+                                            <th className="px-3 py-2 text-left">Employee</th>
+                                            <th className="px-3 py-2 text-left">Calls</th>
+                                            <th className="px-3 py-2 text-left">Leads</th>
+                                            <th className="px-3 py-2 text-left">Rem. Calls</th>
+                                            <th className="px-3 py-2 text-left">Rem. Leads</th>
+                                            <th className="px-3 py-2 text-left">CF Calls</th>
+                                            <th className="px-3 py-2 text-left">CF Leads</th>
+                                            <th className="px-3 py-2 text-left">Daily %</th>
+                                            <th className="px-3 py-2 text-left">Weekly %</th>
+                                            <th className="px-3 py-2 text-left">Mid-Week %</th>
+                                            <th className="px-3 py-2 text-left">Status</th>
+                                            <th className="px-3 py-2 text-left">Zone</th>
+                                            <th className="px-3 py-2 text-left">Logout OK</th>
+                                            <th className="px-3 py-2 text-left">Login</th>
+                                            <th className="px-3 py-2 text-left">Est. Finish</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        {targetGrid.map((row) => (
+                                            <tr key={row.employee_id} className="hover:bg-gray-50">
+                                                <td className="px-3 py-2 font-medium">{row.employee_name}</td>
+                                                <td className="px-3 py-2">{row.today_calls}</td>
+                                                <td className="px-3 py-2">{row.today_leads}</td>
+                                                <td className="px-3 py-2 text-red-600">{row.remaining_calls}</td>
+                                                <td className="px-3 py-2 text-red-600">{row.remaining_leads}</td>
+                                                <td className="px-3 py-2">{row.carry_forward_calls}</td>
+                                                <td className="px-3 py-2">{row.carry_forward_leads}</td>
+                                                <td className="px-3 py-2">{row.daily_pct}%</td>
+                                                <td className="px-3 py-2">{row.weekly_pct}%</td>
+                                                <td className="px-3 py-2">{row.midweek_pct}%</td>
+                                                <td className="px-3 py-2">{row.status}</td>
+                                                <td className="px-3 py-2"><ZoneBadge zone={row.zone} /></td>
+                                                <td className="px-3 py-2">{row.logout_eligible ? '✅' : '❌'}</td>
+                                                <td className="px-3 py-2">{row.office_login_time || '—'}</td>
+                                                <td className="px-3 py-2">{row.expected_finish_time || '—'}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Zone Distribution and Top Performer */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                        <div className="bg-white rounded-lg shadow-md p-6">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">Zone Distribution</h3>
+                            <ResponsiveContainer width="100%" height={300}>
+                                <PieChart>
+                                    <Pie
+                                        data={zoneData}
+                                        cx="50%"
+                                        cy="50%"
+                                        labelLine={false}
+                                        label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                        outerRadius={80}
+                                        fill="#8884d8"
+                                        dataKey="value"
+                                    >
+                                        {zoneData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+
+                        <div className="bg-white rounded-lg shadow-md p-6">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Performer</h3>
+                            <TopPerformerCard performer={dashboardData?.top_performer} />
+                            
+                            {dashboardData?.lowest_performer && (
+                                <div className="mt-4">
+                                    <h4 className="text-sm font-semibold text-gray-600 mb-2">Lowest Performer</h4>
+                                    <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="font-semibold text-gray-800">{dashboardData.lowest_performer.employee_name}</p>
+                                                <p className="text-sm text-gray-500">
+                                                    Calls: {dashboardData.lowest_performer.calls} | 
+                                                    Leads: {dashboardData.lowest_performer.leads}
+                                                </p>
+                                            </div>
+                                            <ZoneBadge zone={dashboardData.lowest_performer.zone} />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Employee Rankings Chart */}
+                    <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+                        <h3 className="text-lg font-semibold text-gray-800 mb-4">Employee Performance Rankings</h3>
+                        <ResponsiveContainer width="100%" height={400}>
+                            <BarChart data={rankingData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="score" fill="#3b82f6" name="Performance Score" />
+                                <Bar dataKey="calls" fill="#22c55e" name="Calls" />
+                                <Bar dataKey="leads" fill="#eab308" name="Leads" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+
+                    {/* Employee Performance Table */}
+                    <div className="bg-white rounded-lg shadow-md p-6">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold text-gray-800">Employee Performance Table</h3>
+                            <button 
+                                onClick={fetchEmployeePerformance}
+                                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                            >
+                                <i className="fas fa-sync-alt mr-2"></i>Refresh
+                            </button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead>
+                                    <tr className="bg-gray-50">
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Employee</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Calls</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Leads</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Exploration</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Meetings</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Achievement</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zone</th>
+                                        <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Activity</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {employeePerformance.map((emp) => (
+                                        <tr key={emp.id} className="hover:bg-gray-50">
+                                            <td className="px-4 py-4 whitespace-nowrap">
+                                                <div className="font-medium text-gray-900">{emp.employee_name}</div>
+                                            </td>
+                                            <td className="px-4 py-4 whitespace-nowrap text-gray-500">{emp.calls_completed}</td>
+                                            <td className="px-4 py-4 whitespace-nowrap text-gray-500">{emp.leads_created}</td>
+                                            <td className="px-4 py-4 whitespace-nowrap text-gray-500">{emp.exploration_calls}</td>
+                                            <td className="px-4 py-4 whitespace-nowrap text-gray-500">{emp.meetings_booked}</td>
+                                            <td className="px-4 py-4 whitespace-nowrap">
+                                                <div className="flex items-center">
+                                                    <span className="text-gray-900 mr-2">{emp.achievement_percentage.toFixed(1)}%</span>
+                                                    <ProgressBar 
+                                                        value={emp.achievement_percentage} 
+                                                        target={100} 
+                                                        color={emp.achievement_percentage >= 100 ? 'bg-green-500' : emp.achievement_percentage >= 70 ? 'bg-yellow-500' : 'bg-red-500'}
+                                                    />
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-4 whitespace-nowrap">
+                                                <ZoneBadge zone={emp.zone} />
+                                            </td>
+                                            <td className="px-4 py-4 whitespace-nowrap text-gray-500 text-sm">
+                                                {emp.last_activity ? new Date(emp.last_activity).toLocaleString() : 'N/A'}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<AdminDashboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Dashboard - Funding Sathi CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.8.0/umd/Recharts.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .zone-green { background-color: #22c55e; color: white; }
+        .zone-yellow { background-color: #eab308; color: white; }
+        .zone-red { background-color: #ef4444; color: white; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .progress-bar { transition: width 0.5s ease-in-out; }
+        .notification-badge { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+    <script src="js/accessibility-init.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } = Recharts;
+
+        const API_BASE = (() => {
+          try {
+            const stored = localStorage.getItem('crm_api_base')
+            if (stored) return stored.replace(/\/$/, '')
+          } catch (e) { /* ignore */ }
+          return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://127.0.0.1:8085'
+            : window.location.origin
+        })();
+
+        const getAuthToken = () => {
+          try {
+            const session = JSON.parse(localStorage.getItem('crm_session') || '{}')
+            return session.access_token || session.token || localStorage.getItem('token')
+          } catch (e) {
+            return localStorage.getItem('token')
+          }
+        };
+
+        // Utility function for API calls
+        const apiCall = async (endpoint, options = {}) => {
+            const token = getAuthToken();
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+            
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API Error: ${response.status}`);
+            }
+            
+            return response.json();
+        };
+
+        // Zone Badge Component
+        const ZoneBadge = ({ zone }) => {
+            const zoneConfig = {
+                green: { class: 'zone-green', label: 'Target Achieved', icon: '🟢' },
+                yellow: { class: 'zone-yellow', label: 'On Track', icon: '🟡' },
+                red: { class: 'zone-red', label: 'Target Not Achieved', icon: '🔴' },
+                gray: { class: 'bg-gray-400 text-white', label: 'No Activity', icon: '⚪' }
+            };
+            
+            const config = zoneConfig[zone.toLowerCase()] || zoneConfig.red;
+            
+            return (
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${config.class}`}>
+                    {config.icon} {config.label}
+                </span>
+            );
+        };
+
+        // Progress Bar Component
+        const ProgressBar = ({ value, target, label }) => {
+            const percentage = Math.min((value / target) * 100, 100);
+            const color = percentage >= 100 ? 'bg-green-500' : percentage >= 70 ? 'bg-yellow-500' : 'bg-red-500';
+            
+            return (
+                <div className="mb-4">
+                    <div className="flex justify-between mb-1">
+                        <span className="text-sm font-medium text-gray-700">{label}</span>
+                        <span className="text-sm text-gray-500">{value} / {target}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                        <div 
+                            className={`progress-bar h-2.5 rounded-full ${color}`} 
+                            style={{ width: `${percentage}%` }}
+                        ></div>
+                    </div>
+                    <div className="text-right text-xs text-gray-500 mt-1">{percentage.toFixed(1)}%</div>
+                </div>
+            );
+        };
+
+        // Metric Card Component
+        const MetricCard = ({ title, value, icon, color, subtitle }) => (
+            <div className="bg-white rounded-lg shadow-md p-6 card-hover transition-all duration-300">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-gray-500 text-sm font-medium">{title}</p>
+                        <p className="text-3xl font-bold text-gray-800 mt-2">{value}</p>
+                        {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+                    </div>
+                    <div className={`p-4 rounded-full ${color}`}>
+                        <i className={`${icon} text-2xl text-white`}></i>
+                    </div>
+                </div>
+            </div>
+        );
+
+        // Notification Bell Component
+        const NotificationBell = ({ unreadCount, onClick }) => (
+            <button 
+                onClick={onClick}
+                className="relative p-2 text-gray-600 hover:text-gray-800 transition"
+            >
+                <i className="fas fa-bell text-xl"></i>
+                {unreadCount > 0 && (
+                    <span className="notification-badge absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
+                )}
+            </button>
+        );
+
+        // Logout Check Modal
+        const LogoutModal = ({ isOpen, onClose, onConfirm, logoutData }) => {
+            const [reason, setReason] = React.useState('');
+            const [note, setNote] = React.useState('');
+            const [requestMsg, setRequestMsg] = React.useState('');
+            const [submitting, setSubmitting] = React.useState(false);
+
+            const requestEarlyLogout = async () => {
+                if (!reason || reason.trim().length < 5) {
+                    setRequestMsg('Please provide a reason (min 5 characters).');
+                    return;
+                }
+                setSubmitting(true);
+                try {
+                    await apiCall('/targets/early-logout/request', {
+                        method: 'POST',
+                        body: JSON.stringify({ reason: reason.trim(), supporting_note: note.trim() || null })
+                    });
+                    setRequestMsg('Request submitted. Awaiting admin approval.');
+                } catch (err) {
+                    setRequestMsg('Failed to submit request. Try again.');
+                } finally {
+                    setSubmitting(false);
+                }
+            };
+
+            if (!isOpen) return null;
+
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">
+                            {logoutData?.can_logout ? 'Logout Confirmation' : 'Pending Targets'}
+                        </h3>
+                        
+                        {logoutData?.can_logout ? (
+                            <div>
+                                <p className="text-gray-600 mb-4">{logoutData?.message || 'You may logout.'}</p>
+                                <div className="flex justify-end space-x-3">
+                                    <button onClick={onClose} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">Cancel</button>
+                                    <button onClick={onConfirm} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Logout</button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                                    <p className="text-red-800 font-medium mb-2">
+                                        <i className="fas fa-exclamation-triangle mr-2"></i>
+                                        You still have pending targets
+                                    </p>
+                                    <div className="text-sm text-gray-700 grid grid-cols-2 gap-2">
+                                        <p>Remaining Calls: <strong>{logoutData?.remaining_calls ?? 0}</strong></p>
+                                        <p>Remaining Leads: <strong>{logoutData?.remaining_leads ?? 0}</strong></p>
+                                        <p>Carry Fwd Calls: <strong>{logoutData?.carry_forward_calls ?? 0}</strong></p>
+                                        <p>Carry Fwd Leads: <strong>{logoutData?.carry_forward_leads ?? 0}</strong></p>
+                                        <p>Completed Calls: {logoutData?.completed_calls}</p>
+                                        <p>Completed Leads: {logoutData?.completed_leads}</p>
+                                    </div>
+                                </div>
+                                <textarea value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Reason for early logout (required)" rows="3" className="w-full border rounded-lg p-3 text-sm mb-2" />
+                                <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Supporting note (optional)" rows="2" className="w-full border rounded-lg p-3 text-sm mb-2" />
+                                {requestMsg && <p className="text-sm text-red-600 mb-2">{requestMsg}</p>}
+                                <div className="flex justify-end space-x-3">
+                                    <button onClick={onClose} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">Return to Dashboard</button>
+                                    <button onClick={requestEarlyLogout} disabled={submitting} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition disabled:opacity-50">
+                                        {submitting ? 'Submitting...' : 'Request Early Logout'}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Notification Modal
+        const NotificationModal = ({ isOpen, onClose, notifications, onMarkRead, onMarkAllRead }) => {
+            if (!isOpen) return null;
+
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-lg w-full mx-4 max-h-[80vh] overflow-hidden flex flex-col">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold text-gray-800">Notifications</h3>
+                            <div className="flex space-x-2">
+                                <button 
+                                    onClick={onMarkAllRead}
+                                    className="text-sm text-blue-500 hover:text-blue-700"
+                                >
+                                    Mark all read
+                                </button>
+                                <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div className="overflow-y-auto flex-1">
+                            {notifications.length === 0 ? (
+                                <p className="text-gray-500 text-center py-8">No notifications</p>
+                            ) : (
+                                <div className="space-y-3">
+                                    {notifications.map((notif) => (
+                                        <div 
+                                            key={notif.id}
+                                            className={`p-4 rounded-lg ${notif.is_read ? 'bg-gray-50' : 'bg-blue-50 border-l-4 border-blue-500'}`}
+                                        >
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex-1">
+                                                    <p className="font-semibold text-gray-800">{notif.title}</p>
+                                                    <p className="text-sm text-gray-600 mt-1">{notif.message}</p>
+                                                    <p className="text-xs text-gray-400 mt-2">
+                                                        {new Date(notif.created_at).toLocaleString()}
+                                                    </p>
+                                                </div>
+                                                {!notif.is_read && (
+                                                    <button 
+                                                        onClick={() => onMarkRead(notif.id)}
+                                                        className="ml-2 text-blue-500 hover:text-blue-700"
+                                                    >
+                                                        <i className="fas fa-check"></i>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main Employee Dashboard Component
+        const EmployeeDashboard = () => {
+            const [dashboardData, setDashboardData] = useState(null);
+            const [targetData, setTargetData] = useState(null);
+            const [performance, setPerformance] = useState(null);
+            const [weeklyReport, setWeeklyReport] = useState(null);
+            const [notifications, setNotifications] = useState([]);
+            const [unreadCount, setUnreadCount] = useState(0);
+            const [leads, setLeads] = useState([]);
+            const [calls, setCalls] = useState([]);
+            const [sodReports, setSodReports] = useState([]);
+            const [eodReports, setEodReports] = useState([]);
+            const [wodReports, setWodReports] = useState([]);
+            const [overviewStats, setOverviewStats] = useState(null);
+            const [overviewError, setOverviewError] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState(null);
+            
+            const [showLogoutModal, setShowLogoutModal] = useState(false);
+            const [logoutData, setLogoutData] = useState(null);
+            const [showNotificationModal, setShowNotificationModal] = useState(false);
+
+            useEffect(() => {
+                // Parallel API calls for faster loading
+                Promise.all([
+                    fetchDashboardData(),
+                    fetchTargetData(),
+                    fetchPerformance(),
+                    fetchWeeklyReport(),
+                    fetchNotifications(),
+                    fetchUnreadCount(),
+                    fetchOverviewData()
+                ]).catch(err => {
+                    console.error('Some dashboard data failed to load:', err);
+                });
+                
+                const interval = setInterval(fetchTargetData, 30000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const fetchTargetData = async () => {
+                try {
+                    const data = await apiCall('/targets/live');
+                    setTargetData(data);
+                    setLoading(false);
+                } catch (err) {
+                    console.error('Failed to fetch target data:', err);
+                    setLoading(false);
+                }
+            };
+
+            const fetchDashboardData = async () => {
+                try {
+                    const data = await apiCall('/employee/dashboard');
+                    setDashboardData(data);
+                } catch (err) {
+                    setError('Failed to fetch dashboard data');
+                    console.error(err);
+                }
+            };
+
+            const fetchPerformance = async () => {
+                try {
+                    const data = await apiCall('/employee/performance');
+                    setPerformance(data);
+                } catch (err) {
+                    console.error('Failed to fetch performance:', err);
+                }
+            };
+
+            const fetchWeeklyReport = async () => {
+                try {
+                    const data = await apiCall('/employee/weekly-report');
+                    setWeeklyReport(data);
+                } catch (err) {
+                    console.error('Failed to fetch weekly report:', err);
+                }
+            };
+
+            const fetchNotifications = async () => {
+                try {
+                    const data = await apiCall('/employee/notifications');
+                    setNotifications(data);
+                } catch (err) {
+                    console.error('Failed to fetch notifications:', err);
+                }
+            };
+
+            const fetchOverviewData = async () => {
+                try {
+                    const [leadsRes, callsRes, sodRes, eodRes, wodRes, statsRes] = await Promise.allSettled([
+                        apiCall('/leads?limit=5'),
+                        apiCall('/calls?limit=5'),
+                        apiCall('/reports/sod'),
+                        apiCall('/reports/eod'),
+                        apiCall('/reports/wod'),
+                        apiCall('/dashboard/stats')
+                    ]);
+
+                    const leadPayload = leadsRes.status === 'fulfilled' ? leadsRes.value : null;
+                    const callPayload = callsRes.status === 'fulfilled' ? callsRes.value : null;
+                    const sodPayload = sodRes.status === 'fulfilled' ? sodRes.value : null;
+                    const eodPayload = eodRes.status === 'fulfilled' ? eodRes.value : null;
+                    const wodPayload = wodRes.status === 'fulfilled' ? wodRes.value : null;
+                    const statsPayload = statsRes.status === 'fulfilled' ? statsRes.value : null;
+
+                    setLeads(Array.isArray(leadPayload?.items) ? leadPayload.items : (Array.isArray(leadPayload) ? leadPayload : []));
+                    setCalls(Array.isArray(callPayload) ? callPayload : []);
+                    setSodReports(Array.isArray(sodPayload) ? sodPayload : []);
+                    setEodReports(Array.isArray(eodPayload) ? eodPayload : []);
+                    setWodReports(Array.isArray(wodPayload) ? wodPayload : []);
+                    setOverviewStats(statsPayload || null);
+
+                    const failures = [leadsRes, callsRes, sodRes, eodRes, wodRes, statsRes]
+                        .filter(result => result.status === 'rejected')
+                        .map(result => result.reason?.message || 'Request failed');
+                    if (failures.length > 0) {
+                        setOverviewError(failures[0]);
+                    } else {
+                        setOverviewError(null);
+                    }
+                } catch (err) {
+                    console.error('Failed to fetch CRM overview data:', err);
+                    setOverviewError('Unable to load CRM data right now.');
+                }
+            };
+
+            const fetchUnreadCount = async () => {
+                try {
+                    const data = await apiCall('/employee/notifications/unread-count');
+                    setUnreadCount(data.unread_count);
+                } catch (err) {
+                    console.error('Failed to fetch unread count:', err);
+                }
+            };
+
+            const handleLogoutCheck = async () => {
+                try {
+                    const data = await apiCall('/targets/logout-check', { method: 'POST' });
+                    setLogoutData(data);
+                    setShowLogoutModal(true);
+                } catch (err) {
+                    console.error('Logout check failed:', err);
+                }
+            };
+
+            const handleLogout = () => {
+                try { localStorage.removeItem('crm_session') } catch (e) { /* ignore */ }
+                localStorage.removeItem('token');
+                window.location.href = 'login.html';
+            };
+
+            const handleMarkNotificationRead = async (notificationId) => {
+                try {
+                    await apiCall(`/employee/notifications/${notificationId}/read`, { method: 'POST' });
+                    fetchNotifications();
+                    fetchUnreadCount();
+                } catch (err) {
+                    console.error('Failed to mark notification as read:', err);
+                }
+            };
+
+            const handleMarkAllNotificationsRead = async () => {
+                try {
+                    await apiCall('/employee/notifications/read-all', { method: 'POST' });
+                    fetchNotifications();
+                    fetchUnreadCount();
+                } catch (err) {
+                    console.error('Failed to mark all notifications as read:', err);
+                }
+            };
+
+            if (loading) {
+                return (
+                    <div className="flex items-center justify-center h-screen">
+                        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+                    </div>
+                );
+            }
+
+            if (error) {
+                return (
+                    <div className="flex items-center justify-center h-screen">
+                        <div className="text-red-500 text-xl">{error}</div>
+                    </div>
+                );
+            }
+
+            // Prepare chart data
+            const performanceData = dashboardData ? [
+                { name: 'Calls', today: dashboardData.today_calls, weekly: dashboardData.weekly_calls, target: dashboardData.daily_calls_target },
+                { name: 'Leads', today: dashboardData.today_leads, weekly: dashboardData.weekly_leads, target: dashboardData.daily_leads_target },
+                { name: 'Exploration', today: dashboardData.today_exploration_calls, weekly: dashboardData.weekly_exploration_calls, target: dashboardData.weekly_exploration_calls_target },
+                { name: 'Meetings', today: dashboardData.today_meetings, weekly: dashboardData.weekly_meetings, target: 0 }
+            ] : [];
+
+            return (
+                <div className="min-h-screen bg-gray-100">
+                    {/* Header */}
+                    <div className="bg-white shadow-md">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <h1 className="text-2xl font-bold text-gray-800">
+                                        Welcome, {dashboardData?.employee_name || 'Employee'}
+                                    </h1>
+                                    <p className="text-gray-500 text-sm">Employee Dashboard</p>
+                                </div>
+                                <div className="flex items-center space-x-4">
+                                    <NotificationBell 
+                                        unreadCount={unreadCount} 
+                                        onClick={() => setShowNotificationModal(true)}
+                                    />
+                                    <button 
+                                        onClick={handleLogoutCheck}
+                                        className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                                    >
+                                        <i className="fas fa-sign-out-alt mr-2"></i>Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        {/* Today's Target Panel */}
+                        {targetData && (
+                            <div className="mb-8 bg-white rounded-lg shadow-md p-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-bold text-gray-800">Today's Target</h2>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-semibold zone-${targetData.zone}`}>
+                                        {targetData.status}
+                                    </span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h4 className="font-semibold text-gray-700 mb-2">Calls</h4>
+                                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                            <span>Completed: {targetData.calls_completed}</span>
+                                            <span>Remaining: {targetData.calls_remaining}</span>
+                                            <span>Target: {targetData.daily_calls_target}</span>
+                                        </div>
+                                        {targetData.carry_forward_calls > 0 && (
+                                            <p className="text-xs text-amber-700 mb-1">Carry Forward: {targetData.carry_forward_calls} · Total Required: {targetData.total_required_calls}</p>
+                                        )}
+                                        <ProgressBar value={targetData.calls_completed} target={targetData.total_required_calls} label="Calls" />
+                                        <p className="text-xs text-gray-500 mt-1">Progress: {targetData.calls_progress_pct}%</p>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-semibold text-gray-700 mb-2">Leads</h4>
+                                        <div className="flex justify-between text-sm text-gray-600 mb-1">
+                                            <span>Completed: {targetData.leads_completed}</span>
+                                            <span>Remaining: {targetData.leads_remaining}</span>
+                                            <span>Target: {targetData.daily_leads_target}</span>
+                                        </div>
+                                        {targetData.carry_forward_leads > 0 && (
+                                            <p className="text-xs text-amber-700 mb-1">Carry Forward: {targetData.carry_forward_leads} · Total Required: {targetData.total_required_leads}</p>
+                                        )}
+                                        <ProgressBar value={targetData.leads_completed} target={targetData.total_required_leads} label="Leads" />
+                                        <p className="text-xs text-gray-500 mt-1">Progress: {targetData.leads_progress_pct}%</p>
+                                    </div>
+                                </div>
+                                <div className="mt-4 pt-4 border-t flex justify-between items-center">
+                                    <div>
+                                        <p className="text-sm text-gray-500">Overall Progress</p>
+                                        <p className="text-3xl font-bold text-gray-800">{targetData.overall_progress_pct}%</p>
+                                        <p className="text-xs text-gray-500">Expected finish: {targetData.expected_completion_time || '—'}</p>
+                                    </div>
+                                    <div className="text-right text-sm text-gray-600">
+                                        <p>Weekly: {targetData.weekly_progress_pct}%</p>
+                                        <p>Mid-Week: {targetData.midweek_progress_pct}% ({targetData.midweek_risk_level} risk)</p>
+                                        <p>Score: {targetData.performance_score}/100</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Zone Status */}
+                        <div className="mb-8">
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h3 className="text-lg font-semibold text-gray-800">Current Performance Zone</h3>
+                                        <p className="text-gray-500 text-sm mt-1">
+                                            Achievement: {dashboardData?.weekly_achievement_percentage.toFixed(1)}%
+                                        </p>
+                                    </div>
+                                    <ZoneBadge zone={dashboardData?.zone || 'red'} />
+                                </div>
+                                {weeklyReport && (
+                                    <div className="mt-4 pt-4 border-t">
+                                        <div className="flex items-center space-x-4 text-sm">
+                                            <span className="text-gray-500">Weekly Rank:</span>
+                                            <span className="font-semibold text-gray-800">
+                                                {weeklyReport.rank ? `#${weeklyReport.rank}` : 'N/A'}
+                                            </span>
+                                            <span className="text-gray-500">|</span>
+                                            <span className="text-gray-500">Performance Score:</span>
+                                            <span className="font-semibold text-gray-800">
+                                                {dashboardData?.performance_score.toFixed(1)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Today's Progress */}
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">Today's Progress</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <MetricCard 
+                                    title="Calls" 
+                                    value={dashboardData?.today_calls || 0} 
+                                    icon="fas fa-phone"
+                                    color="bg-blue-500"
+                                    subtitle={`Target: ${dashboardData?.daily_calls_target || 0}`}
+                                />
+                                <MetricCard 
+                                    title="Leads" 
+                                    value={dashboardData?.today_leads || 0} 
+                                    icon="fas fa-users"
+                                    color="bg-green-500"
+                                    subtitle={`Target: ${dashboardData?.daily_leads_target || 0}`}
+                                />
+                                <MetricCard 
+                                    title="Exploration Calls" 
+                                    value={dashboardData?.today_exploration_calls || 0} 
+                                    icon="fas fa-search"
+                                    color="bg-purple-500"
+                                />
+                                <MetricCard 
+                                    title="Meetings" 
+                                    value={dashboardData?.today_meetings || 0} 
+                                    icon="fas fa-calendar-check"
+                                    color="bg-orange-500"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Target Progress Bars */}
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">Target Progress</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Daily Targets</h3>
+                                    <ProgressBar 
+                                        label="Calls" 
+                                        value={dashboardData?.today_calls || 0} 
+                                        target={dashboardData?.daily_calls_target || 0}
+                                    />
+                                    <ProgressBar 
+                                        label="Leads" 
+                                        value={dashboardData?.today_leads || 0} 
+                                        target={dashboardData?.daily_leads_target || 0}
+                                    />
+                                </div>
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Weekly Targets</h3>
+                                    <ProgressBar 
+                                        label="Calls" 
+                                        value={dashboardData?.weekly_calls || 0} 
+                                        target={dashboardData?.weekly_calls_target || 0}
+                                    />
+                                    <ProgressBar 
+                                        label="Leads" 
+                                        value={dashboardData?.weekly_leads || 0} 
+                                        target={dashboardData?.weekly_leads_target || 0}
+                                    />
+                                    <ProgressBar 
+                                        label="Exploration Calls" 
+                                        value={dashboardData?.weekly_exploration_calls || 0} 
+                                        target={dashboardData?.weekly_exploration_calls_target || 0}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Performance Chart */}
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">Performance Overview</h2>
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <ResponsiveContainer width="100%" height={300}>
+                                    <BarChart data={performanceData}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Legend />
+                                        <Bar dataKey="today" fill="#3b82f6" name="Today" />
+                                        <Bar dataKey="weekly" fill="#22c55e" name="This Week" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+
+                        {/* Achievement Summary */}
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">Achievement Summary</h2>
+                            <div className="bg-white rounded-lg shadow-md p-6">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="text-center">
+                                        <p className="text-gray-500 text-sm">Daily Achievement</p>
+                                        <p className="text-3xl font-bold text-gray-800 mt-2">
+                                            {Number(dashboardData?.daily_achievement_percentage ?? 0).toFixed(1)}%
+                                        </p>
+                                        <ZoneBadge zone={dashboardData?.zone || 'red'} />
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-gray-500 text-sm">Weekly Achievement</p>
+                                        <p className="text-3xl font-bold text-gray-800 mt-2">
+                                            {Number(dashboardData?.weekly_achievement_percentage ?? 0).toFixed(1)}%
+                                        </p>
+                                        <ZoneBadge zone={dashboardData?.zone || 'red'} />
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-gray-500 text-sm">Performance Score</p>
+                                        <p className="text-3xl font-bold text-gray-800 mt-2">
+                                            {Number(dashboardData?.performance_score ?? 0).toFixed(1)}
+                                        </p>
+                                        <p className="text-sm text-gray-500 mt-2">Weighted Score</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* CRM Activity Overview */}
+                        <div className="mb-8">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold text-gray-800">CRM Activity Overview</h2>
+                                {overviewError && <p className="text-sm text-amber-600">{overviewError}</p>}
+                            </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-lg font-semibold text-gray-800">Leads</h3>
+                                        <span className="text-sm text-gray-500">{leads.length ? `${leads.length} shown` : 'No leads loaded'}</span>
+                                    </div>
+                                    {leads.length > 0 ? (
+                                        <ul className="space-y-3">
+                                            {leads.map((lead) => (
+                                                <li key={lead.id} className="border rounded-lg p-3">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="font-medium text-gray-800">{lead.company_name || lead.full_name || `Lead ${lead.id}`}</span>
+                                                        <span className="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">{lead.lead_status || 'New'}</span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-500 mt-1">{lead.email || lead.phone || lead.source || 'Lead details available'}</p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-sm text-gray-500">No leads loaded yet.</p>
+                                    )}
+                                </div>
+
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-lg font-semibold text-gray-800">Calls</h3>
+                                        <span className="text-sm text-gray-500">{calls.length ? `${calls.length} shown` : 'No calls loaded'}</span>
+                                    </div>
+                                    {calls.length > 0 ? (
+                                        <ul className="space-y-3">
+                                            {calls.map((call) => (
+                                                <li key={call.id} className="border rounded-lg p-3">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="font-medium text-gray-800">{call.caller_name || call.receiver_name || `Call ${call.id}`}</span>
+                                                        <span className="text-xs px-2 py-1 rounded-full bg-green-50 text-green-700">{call.status || 'Logged'}</span>
+                                                    </div>
+                                                    <p className="text-sm text-gray-500 mt-1">{call.purpose || call.notes || 'Call details available'}</p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-sm text-gray-500">No calls loaded yet.</p>
+                                    )}
+                                </div>
+
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-lg font-semibold text-gray-800">Daily Reports</h3>
+                                        <span className="text-sm text-gray-500">SOD / EOD / WOD</span>
+                                    </div>
+                                    <div className="space-y-3">
+                                        <div className="border rounded-lg p-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="font-medium text-gray-800">SOD</span>
+                                                <span className="text-sm text-gray-500">{sodReports.length} records</span>
+                                            </div>
+                                            {sodReports.length > 0 ? <p className="text-sm text-gray-500 mt-1">{sodReports[0]?.payload?.sales_executive || 'SOD report available'}</p> : <p className="text-sm text-gray-500 mt-1">No SOD report loaded.</p>}
+                                        </div>
+                                        <div className="border rounded-lg p-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="font-medium text-gray-800">EOD</span>
+                                                <span className="text-sm text-gray-500">{eodReports.length} records</span>
+                                            </div>
+                                            {eodReports.length > 0 ? <p className="text-sm text-gray-500 mt-1">{eodReports[0]?.payload?.sales_executive || 'EOD report available'}</p> : <p className="text-sm text-gray-500 mt-1">No EOD report loaded.</p>}
+                                        </div>
+                                        <div className="border rounded-lg p-3">
+                                            <div className="flex justify-between items-center">
+                                                <span className="font-medium text-gray-800">WOD</span>
+                                                <span className="text-sm text-gray-500">{wodReports.length} records</span>
+                                            </div>
+                                            {wodReports.length > 0 ? <p className="text-sm text-gray-500 mt-1">{wodReports[0]?.payload?.sales_executive || 'WOD report available'}</p> : <p className="text-sm text-gray-500 mt-1">No WOD report loaded.</p>}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-lg shadow-md p-6">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-lg font-semibold text-gray-800">Other CRM Metrics</h3>
+                                        <span className="text-sm text-gray-500">Live summary</span>
+                                    </div>
+                                    {overviewStats ? (
+                                        <div className="grid grid-cols-2 gap-3 text-sm">
+                                            <div className="border rounded-lg p-3"><p className="text-gray-500">Total Leads</p><p className="text-xl font-semibold text-gray-800">{overviewStats.total_leads ?? 0}</p></div>
+                                            <div className="border rounded-lg p-3"><p className="text-gray-500">Active Leads</p><p className="text-xl font-semibold text-gray-800">{overviewStats.active_leads ?? 0}</p></div>
+                                            <div className="border rounded-lg p-3"><p className="text-gray-500">Followups</p><p className="text-xl font-semibold text-gray-800">{overviewStats.total_followups ?? 0}</p></div>
+                                            <div className="border rounded-lg p-3"><p className="text-gray-500">Calls</p><p className="text-xl font-semibold text-gray-800">{overviewStats.total_calls ?? 0}</p></div>
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-gray-500">No additional metrics loaded.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Quick Actions */}
+                        <div>
+                            <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <button 
+                                    onClick={() => window.location.href = '/crm1.html'}
+                                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition text-left"
+                                >
+                                    <i className="fas fa-phone text-blue-500 text-2xl mb-2"></i>
+                                    <h3 className="font-semibold text-gray-800">Log Calls</h3>
+                                    <p className="text-sm text-gray-500">Record call activities</p>
+                                </button>
+                                <button 
+                                    onClick={() => window.location.href = '/crm1.html'}
+                                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition text-left"
+                                >
+                                    <i className="fas fa-user-plus text-green-500 text-2xl mb-2"></i>
+                                    <h3 className="font-semibold text-gray-800">Add Leads</h3>
+                                    <p className="text-sm text-gray-500">Create new leads</p>
+                                </button>
+                                <button 
+                                    onClick={() => window.location.href = '/crm1.html'}
+                                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition text-left"
+                                >
+                                    <i className="fas fa-calendar text-purple-500 text-2xl mb-2"></i>
+                                    <h3 className="font-semibold text-gray-800">Events</h3>
+                                    <p className="text-sm text-gray-500">Book meetings with leads</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Modals */}
+                    <LogoutModal 
+                        isOpen={showLogoutModal}
+                        onClose={() => setShowLogoutModal(false)}
+                        onConfirm={handleLogout}
+                        logoutData={logoutData}
+                    />
+                    
+                    <NotificationModal 
+                        isOpen={showNotificationModal}
+                        onClose={() => setShowNotificationModal(false)}
+                        notifications={notifications}
+                        onMarkRead={handleMarkNotificationRead}
+                        onMarkAllRead={handleMarkAllNotificationsRead}
+                    />
+                </div>
+            );
+        };
+
+        ReactDOM.render(<EmployeeDashboard />, document.getElementById('root'));
+        // Lender Finder integration removed to use inline pipeline modal flow
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout API Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        input, textarea { padding: 8px; margin: 5px; width: 300px; }
+    </style>
+</head>
+<body>
+    <h1>Logout API Test</h1>
+    
+    <div class="section info">
+        <h3>Configuration</h3>
+        <label>Backend URL:</label>
+        <input type="text" id="backendUrl" value="http://localhost:8085" placeholder="http://192.168.1.8:8085">
+        <br>
+        <label>Auth Token:</label>
+        <input type="text" id="authToken" placeholder="Bearer token or leave empty to login first">
+        <br>
+        <button onclick="login()">Login (if needed)</button>
+    </div>
+
+    <div class="section">
+        <h3>1. Employee: Submit Logout Request</h3>
+        <label>Work Seconds:</label>
+        <input type="number" id="workSeconds" value="28800" placeholder="28800 (8 hours)">
+        <br>
+        <label>Reason:</label>
+        <input type="text" id="reason" value="Test logout request" placeholder="Reason for early logout">
+        <br>
+        <button onclick="submitLogoutRequest()">Submit Request</button>
+        <pre id="submitResult">Result will appear here</pre>
+    </div>
+
+    <div class="section">
+        <h3>2. Admin: Get All Logout Requests</h3>
+        <button onclick="getLogoutRequests()">Get Requests</button>
+        <pre id="getRequestsResult">Result will appear here</pre>
+    </div>
+
+    <div class="section">
+        <h3>3. Admin: Approve/Reject Request</h3>
+        <label>Request ID:</label>
+        <input type="number" id="requestId" placeholder="Request ID from step 2">
+        <br>
+        <label>Decision:</label>
+        <select id="decision">
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+        </select>
+        <br>
+        <label>Comment (optional):</label>
+        <input type="text" id="comment" placeholder="Comment for rejection">
+        <br>
+        <button onclick="reviewRequest()">Review Request</button>
+        <pre id="reviewResult">Result will appear here</pre>
+    </div>
+
+    <div class="section">
+        <h3>4. Employee: Check Pending Request</h3>
+        <button onclick="checkPendingRequest()">Check Pending</button>
+        <pre id="pendingResult">Result will appear here</pre>
+    </div>
+
+    <script>
+        let currentToken = '';
+
+        function getBackendUrl() {
+            return document.getElementById('backendUrl').value;
+        }
+
+        function getHeaders() {
+            const token = document.getElementById('authToken').value || currentToken;
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            };
+            if (token) {
+                headers['Authorization'] = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+            }
+            return headers;
+        }
+
+        async function apiCall(endpoint, method = 'GET', body = null) {
+            const url = `${getBackendUrl()}${endpoint}`;
+            const options = {
+                method,
+                headers: getHeaders()
+            };
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+            
+            console.log(`[API] ${method} ${url}`);
+            console.log('[API] Headers:', options.headers);
+            if (body) console.log('[API] Body:', body);
+            
+            const response = await fetch(url, options);
+            console.log('[API] Response status:', response.status);
+            console.log('[API] Response headers:', Object.fromEntries(response.headers.entries()));
+            
+            const text = await response.text();
+            console.log('[API] Response text:', text);
+            
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                data = { raw: text };
+            }
+            console.log('[API] Parsed data:', data);
+            
+            return {
+                status: response.status,
+                ok: response.ok,
+                data
+            };
+        }
+
+        async function login() {
+            const email = prompt('Enter email:');
+            const password = prompt('Enter password:');
+            if (!email || !password) return;
+
+            try {
+                const result = await apiCall('/auth/login', 'POST', { email, password });
+                if (result.ok && result.data.access_token) {
+                    currentToken = result.data.access_token;
+                    document.getElementById('authToken').value = currentToken;
+                    showResult('submitResult', result, 'Login successful!', true);
+                } else {
+                    showResult('submitResult', result, 'Login failed', false);
+                }
+            } catch (e) {
+                showResult('submitResult', { error: e.message }, 'Login error', false);
+            }
+        }
+
+        async function submitLogoutRequest() {
+            const workSeconds = parseInt(document.getElementById('workSeconds').value);
+            const reason = document.getElementById('reason').value;
+
+            try {
+                const result = await apiCall('/timer/early-logout/request', 'POST', {
+                    work_seconds: workSeconds,
+                    request_reason: reason
+                });
+                showResult('submitResult', result, 'Logout request submitted', result.ok);
+            } catch (e) {
+                showResult('submitResult', { error: e.message }, 'Request error', false);
+            }
+        }
+
+        async function getLogoutRequests() {
+            try {
+                const result = await apiCall('/timer/early-logout/requests', 'GET');
+                showResult('getRequestsResult', result, 'Retrieved logout requests', result.ok);
+            } catch (e) {
+                showResult('getRequestsResult', { error: e.message }, 'Get requests error', false);
+            }
+        }
+
+        async function reviewRequest() {
+            const requestId = parseInt(document.getElementById('requestId').value);
+            const decision = document.getElementById('decision').value;
+            const comment = document.getElementById('comment').value || null;
+
+            try {
+                const result = await apiCall('/timer/early-logout/review', 'POST', {
+                    request_id: requestId,
+                    decision,
+                    comment
+                });
+                showResult('reviewResult', result, 'Request reviewed', result.ok);
+            } catch (e) {
+                showResult('reviewResult', { error: e.message }, 'Review error', false);
+            }
+        }
+
+        async function checkPendingRequest() {
+            try {
+                const result = await apiCall('/timer/early-logout/pending', 'GET');
+                showResult('pendingResult', result, 'Pending request checked', result.ok);
+            } catch (e) {
+                showResult('pendingResult', { error: e.message }, 'Check pending error', false);
+            }
+        }
+
+        function showResult(elementId, result, message, isSuccess) {
+            const element = document.getElementById(elementId);
+            const className = isSuccess ? 'success' : 'error';
+            element.className = className;
+            element.innerHTML = `<strong>${message}</strong>\n\nStatus: ${result.status}\n\nResponse:\n${JSON.stringify(result.data, null, 2)}`;
+        }
+    </script>
+</body>
+</html>

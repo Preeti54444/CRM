@@ -3,12 +3,15 @@
 This repository is configured as a Vercel monorepo deployment:
 
 - Static CRM frontend: `frontend/public`
+- Vercel static output: `dist` (generated during deployment)
 - FastAPI serverless API: `api/index.py`, available under `/api/*`
 - Local development remains unchanged: frontend on port `3000`, API on port `8085`
 
 ## Vercel project settings
 
 Create a Vercel project from this repository with the repository root as the project root. Do not set a separate frontend root directory.
+
+The Vercel build copies the complete `frontend/public` directory into `dist`, so the deployed root redirects to `/login.html` through the included `index.html`.
 
 Add these environment variables in Vercel for Preview and Production:
 

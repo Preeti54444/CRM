@@ -59,6 +59,14 @@
       return localBase;
     }
 
+    // Vercel routes the serverless FastAPI function under /api.
+    if (host.endsWith('.vercel.app') || window.VERCEL) {
+      const vercelBase = `${origin}/api`;
+      window.API_BASE = vercelBase;
+      window.CRM_API_BASE = vercelBase;
+      return vercelBase;
+    }
+
     // Check environment variable first for non-localhost environments
     if (window.CRM_API_BASE) {
       const normalized = normalizeApiBase(window.CRM_API_BASE);

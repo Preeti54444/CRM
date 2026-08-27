@@ -13,6 +13,8 @@ Create a Vercel project from this repository with the repository root as the pro
 
 The Vercel build copies the complete `frontend/public` directory into `dist`, so the deployed root redirects to `/login.html` through the included `index.html`.
 
+The deployment intentionally skips `npm install`: this frontend is the static HTML application in `frontend/public`, so its nested React development package is not needed by Vercel and cannot cause peer-dependency failures.
+
 Add these environment variables in Vercel for Preview and Production:
 
 ```text

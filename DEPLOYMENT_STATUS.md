@@ -78,7 +78,7 @@
 **Steps:**
 1. Go to https://vercel.com and create account (if needed)
 2. Import repository: `Preeti54444/CRM`
-3. Set Root Directory to `frontend`
+3. Set Root Directory to `frontend/public`
 4. Set Framework Preset to `Other`
 5. Leave Build Command empty
 6. Set Output Directory to `.`

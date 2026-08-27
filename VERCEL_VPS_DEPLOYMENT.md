@@ -63,7 +63,7 @@ The frontend is already configured correctly. It uses `frontend/public/` with dy
 The frontend is served directly from the `frontend/` directory in Vercel.
 
 **Verify the project is configured correctly in Vercel:**
-- Root Directory: `frontend`
+- Root Directory: `frontend/public`
 - Framework Preset: `Other`
 - Build Command: empty
 - Output Directory: `.`
@@ -283,7 +283,7 @@ Check that `.env` files are in `.gitignore` ✓
 2. Click "Add New..." → "Project"
 3. Select GitHub repository: `Preeti54444/CRM`
 4. Configure:
-   - **Root Directory**: `frontend`
+   - **Root Directory**: `frontend/public`
    - **Framework Preset**: `Other`
    - **Build Command**: empty
    - **Output Directory**: `.`

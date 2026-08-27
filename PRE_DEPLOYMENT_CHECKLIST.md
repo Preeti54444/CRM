@@ -67,7 +67,7 @@ Use this checklist to ensure everything is ready before deployment.
 - [ ] Go to https://vercel.com/dashboard
 - [ ] Click "Add New" → "Project"
 - [ ] Select `Preeti54444/CRM` repository
-- [ ] Set Root Directory to `frontend`
+- [ ] Set Root Directory to `frontend/public`
 - [ ] Set Framework Preset to `Other`
 - [ ] Set Build Command to empty
 - [ ] Set Output Directory to `.`

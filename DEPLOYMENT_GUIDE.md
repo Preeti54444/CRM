@@ -48,6 +48,7 @@ In the "Configure Project" dialog, set:
 
 | Setting | Value |
 |---------|-------|
+| **Root Directory** | `frontend/public` |
 | **Framework Preset** | Other |
 | **Build Command** | empty |
 | **Output Directory** | `.` |

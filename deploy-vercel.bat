@@ -94,7 +94,7 @@ echo Framework Preset:
 echo   Select: "Other" (or leave blank)
 echo.
 echo Root Directory:
-echo   Enter: frontend
+echo   Enter: frontend/public
 echo.
 echo Build Command:
 echo   Leave empty
@@ -146,7 +146,7 @@ echo   git push origin master
 echo.
 echo Vercel will:
 echo   1. Detect the push
-echo   2. Serve the static frontend from the frontend/ directory
+echo   2. Serve the static frontend from the frontend/public/ directory
 echo   3. Assign your Vercel URL
 echo.
 echo Press any key to continue...

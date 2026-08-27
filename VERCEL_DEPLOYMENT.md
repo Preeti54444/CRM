@@ -1,35 +1,23 @@
 # Vercel Deployment
 
-This repository is configured as a Vercel monorepo deployment:
+This repository uses Vercel for the frontend only:
 
 - Static CRM frontend: `frontend/public`
-- Vercel static output: `dist` (generated during deployment)
-- FastAPI serverless API: `api/index.py`, available under `/api/*`
-- Local development remains unchanged: frontend on port `3000`, API on port `8085`
+- FastAPI backend and PostgreSQL: VPS only
+- Local development remains unchanged: frontend files are served locally and the API runs on port `8085`
 
 ## Vercel project settings
 
-Create a Vercel project from this repository with the repository root as the project root. Do not set a separate frontend root directory.
+Create a Vercel project from this repository with these settings:
 
-The Vercel build copies the complete `frontend/public` directory into `dist`, so the deployed root redirects to `/login.html` through the included `index.html`.
+- Root Directory: `frontend`
+- Framework Preset: `Other`
+- Build Command: empty
+- Install Command: empty
+- Output Directory: `.`
 
-The deployment intentionally skips `npm install`: this frontend is the static HTML application in `frontend/public`, so its nested React development package is not needed by Vercel and cannot cause peer-dependency failures.
+The frontend-level Vercel configuration routes requests to the existing static files in `frontend/public`. No npm installation or build is required.
 
-Add these environment variables in Vercel for Preview and Production:
+Do not add backend environment variables or secrets to Vercel. Configure the VPS backend separately.
 
-```text
-DATABASE_URL=postgresql://...
-SECRET_KEY=replace-with-a-long-random-value
-ENVIRONMENT=production
-ALLOWED_HOSTS=https://your-project.vercel.app,https://your-custom-domain.example
-SCHEDULER_ENABLED=false
-```
-
-`DATABASE_URL` must point to a publicly reachable managed PostgreSQL database. Run Alembic migrations from a machine that can reach that database before using the deployed application:
-
-```powershell
-Set-Location backend
-python -m alembic upgrade head
-```
-
-After deployment, open `/login.html`. The frontend automatically uses `/api` on Vercel and `http://127.0.0.1:8085` locally.
+After deployment, open `/login.html`. The frontend uses its runtime API configuration to connect to the VPS backend.

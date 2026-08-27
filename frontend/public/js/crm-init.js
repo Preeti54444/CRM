@@ -173,7 +173,7 @@ async function initSession() {
   // One-time admin backend sync from FastAPI into localStorage (safeguarded by session flag)
   (function adminSyncReports(){
     try {
-      if (typeof S !== 'undefined' && S && S.role === 'admin' && S.backendAuth === true && !sessionStorage.getItem('crm_api_admin_synced')) {
+      if (typeof S !== 'undefined' && S && S.role === 'admin' && S.backendAuth === true) {
         const apiBase = getCRMApiBase();
         const reportEndpoints = [
           { path: '/reports/sod', save: saveSOD, getExisting: getSOD },
@@ -254,12 +254,12 @@ async function initSession() {
               : await fetch(`${apiBase}/${endpoint.path.replace(/^\//, '')}`, { credentials: 'include' })
             if (!response.ok) throw new Error(`HTTP ${response.status}`)
             const data = await response.json()
-            if (Array.isArray(data) && data.length) {
+            if (Array.isArray(data)) {
               let normalized = data
               if (String(endpoint.path).includes('/reports/')) {
                 normalized = data.map(d => transformReportToFrontend(d, endpoint.path))
               }
-              endpoint.save(mergeDatasetById(endpoint.getExisting(), normalized))
+              endpoint.save(data.length ? mergeDatasetById(endpoint.getExisting(), normalized) : [])
               console.info(`Admin ${endpoint.path.toUpperCase()} sync: saved ${normalized.length} rows`)
             }
           } catch (err) {

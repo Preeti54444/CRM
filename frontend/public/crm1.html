@@ -4246,14 +4246,14 @@
       <div class="dm-card">
         <div class="dm-section-label"><span>Step 1 — Lead Summary Info (Auto-fetched from Lead)</span><span style="color:var(--dm-text-muted);font-size:11.5px;text-transform:none;">Read Only</span></div>
         <div class="dm-read-grid">
-          <div class="dm-data-box"><div class="dm-lbl">Customer Company</div><div class="dm-val" id="dmLeadCompany">Tata Steel Ltd</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">Contact Person</div><div class="dm-val" id="dmLeadContactPerson">Rajesh Kumar</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">Contact Number</div><div class="dm-val" id="dmLeadContactNumber">9876543210</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">City / Location</div><div class="dm-val" id="dmLeadLocation">Mumbai, MH</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">Turnover</div><div class="dm-val" id="dmLeadTurnover">₹ 150 Cr</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">Vintage</div><div class="dm-val" id="dmLeadVintage">8 Years</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">Req. Amount</div><div class="dm-val" id="dmLeadAmount">₹ 10.00 Cr</div></div>
-          <div class="dm-data-box"><div class="dm-lbl">Business Vertical</div><div class="dm-val" id="dmLeadVertical">Supply Chain Finance</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Customer Company</div><div class="dm-val" id="dmLeadCompany">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Contact Person</div><div class="dm-val" id="dmLeadContactPerson">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Contact Number</div><div class="dm-val" id="dmLeadContactNumber">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">City / Location</div><div class="dm-val" id="dmLeadLocation">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Turnover</div><div class="dm-val" id="dmLeadTurnover">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Vintage</div><div class="dm-val" id="dmLeadVintage">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Req. Amount</div><div class="dm-val" id="dmLeadAmount">—</div></div>
+          <div class="dm-data-box"><div class="dm-lbl">Business Vertical</div><div class="dm-val" id="dmLeadVertical">—</div></div>
         </div>
       </div>
 
@@ -4817,8 +4817,8 @@
     var vertical = (document.getElementById('dmLeadVertical') || {}).textContent || 'Supply Chain Finance';
     var payload = {
       dealRef: 'FS-DEAL-2026-9041',
-      customer: ((document.getElementById('dmLeadCompany')||{}).textContent||'').trim() || 'Tata Steel Ltd',
-      salesExecutive: ((document.getElementById('dmLeadContactPerson')||{}).textContent||'').trim() || 'Rajesh Kumar',
+      customer: ((document.getElementById('dmLeadCompany')||{}).textContent||'').trim(),
+      salesExecutive: ((document.getElementById('dmLeadContactPerson')||{}).textContent||'').trim(),
       product: vertical.trim(),
       vertical: vertical.trim(),
       assignedLender: (function(){
@@ -5612,7 +5612,7 @@
 <script src="js/ist-clock.js"></script>
 <script src="js/crm-api-sync.js?v=20260627-v2"></script>
 <script src="js/crm-data-store.js"></script>
-<script src="js/crm-api-client.js"></script>
+<script src="js/crm-api-client.js?v=20260827"></script>
 <script src="js/crm-init.js?v=20260627-v3"></script>
 <script src="js/crm-session-timer.js"></script>
 <script src="js/crm-timer-guard.js?v=20260625-v4"></script>
@@ -5628,7 +5628,7 @@
 <script src="js/crm-admin-logout-approvals.js"></script>
 <script src="js/crm-admin-employees.js"></script>
 <script src="js/crm-activities.js?v=20260625-v1"></script>
-  <script src="js/crm-reports.js?v=20260718-v1"></script>
+  <script src="js/crm-reports.js?v=20260827-v3"></script>
   <script src="js/crm-forecast-local.js?v=20260809-v1"></script>
 <script src="js/crm-duplicate-lead-modal.js"></script>
 <script src="js/crm-form-lock.js"></script>
@@ -8696,7 +8696,6 @@ async function handleSearch(){
     modeBadge.textContent = 'Active Mode';
     modeBadge.className = 'mode-badge active';
     currentMatchedLead = null;
-    clearCallManagementDetails();
     hideProductFillNote();
     return;
   }
@@ -8722,7 +8721,6 @@ async function handleSearch(){
     modeBadge.textContent = 'New Lead';
     modeBadge.className = 'mode-badge newlead';
     currentMatchedLead = null;
-    clearCallManagementDetails();
     hideProductFillNote();
     return;
   }
@@ -9477,20 +9475,20 @@ async function submitLeadForm(mode = 'submit'){
     .slice(0, 1000);
 
   const leadData = {
-    lead_name: document.getElementById('companyInput').value.trim(),
+    lead_name: document.getElementById('contactPersonInput').value.trim(),
     company_name: document.getElementById('companyInput').value.trim(),
-    contact_person: document.getElementById('contactPersonInput').value.trim(),
     mobile: document.getElementById('mobileInput').value.trim(),
     email: document.getElementById('emailInput').value.trim() || null,
     designation: document.getElementById('designationInput').value.trim(),
     location: document.getElementById('locationInput').value.trim(),
-    lead_owner: document.getElementById('salesExecutiveInput').value.trim(),
+    sales_executive: document.getElementById('salesExecutiveInput').value.trim(),
     date_of_entry: document.getElementById('dateOfEntryInput').value,
     lead_source: document.getElementById('leadSourceSelect').value,
     annual_turnover: document.getElementById('turnoverInput').value.trim(),
     business_vintage: document.getElementById('vintageInput').value.trim(),
     funding_amount: document.getElementById('amountInput').value.trim(),
-    constitution: document.getElementById('constitutionSelect').value,
+    entity_type: document.getElementById('constitutionSelect').value,
+    product_type: vertical || subProduct || null,
     industry: document.getElementById('industryInput').value,
     credit_rating: document.getElementById('creditRatingInput').value.trim(),
     promoter_cibil_score: document.getElementById('cibilInput').value.trim(),
@@ -9506,7 +9504,6 @@ async function submitLeadForm(mode = 'submit'){
     next_followup_date: document.getElementById('expectedFollowupDate')?.value || null,
     last_activity_date: document.getElementById('lastActivityDate')?.value || null,
     remarks: combinedRemarks,
-    sales_executive: document.getElementById('salesExecutiveInput').value.trim(),
     is_draft: mode === 'draft'
   };
 
@@ -9514,9 +9511,21 @@ async function submitLeadForm(mode = 'submit'){
     if(typeof APIClient === 'function'){
       const client = window.apiClient || new APIClient();
       window.apiClient = client;
-      await client.createLead(leadData);
+      const createdLead = await client.createLead(leadData);
+      if (createdLead && createdLead.id !== undefined && createdLead.id !== null) {
+        window.lastCreatedLeadId = String(createdLead.id);
+      }
+      const refreshedLeads = await client.getLeads({ skip: 0, limit: 1000 });
+      if (refreshedLeads && Array.isArray(refreshedLeads.items) && typeof saveLeadsJourney === 'function') {
+        saveLeadsJourney(refreshedLeads.items);
+      }
       alert(mode === 'draft' ? 'Lead draft saved successfully.' : 'Lead submitted successfully.');
-      if(typeof renderLeads === 'function') await renderLeads();
+      const leadsNavButton = document.querySelector('[data-sec="leads"]');
+      if (leadsNavButton) {
+        nav(leadsNavButton);
+      } else if(typeof renderLeads === 'function') {
+        await renderLeads();
+      }
       return;
     }
     throw new Error('API client is unavailable');

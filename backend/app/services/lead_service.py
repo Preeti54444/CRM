@@ -7,7 +7,7 @@ from uuid import UUID
 from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, text
 
 from ..models.lead import Lead
 from ..models.user import User
@@ -93,21 +93,56 @@ def create_lead(db: Session, lead_in: LeadCreate, creator_id: Optional[UUID] = N
         company_email=lead_in.company_email,
         city=lead_in.city,
         state=lead_in.state,
+        location=lead_in.location,
+        sales_executive=lead_in.sales_executive,
+        date_of_entry=lead_in.date_of_entry,
         product_type=lead_in.product_type,
         vertical=lead_in.vertical,
         sub_product=lead_in.sub_product,
         funding_amount=lead_in.funding_amount,
         lead_source=lead_in.lead_source,
+        gst_number=lead_in.gst_number,
+        pan_number=lead_in.pan_number,
+        entity_type=lead_in.entity_type,
+        annual_turnover=lead_in.annual_turnover,
+        business_vintage=lead_in.business_vintage,
+        number_of_employees=lead_in.number_of_employees,
+        year_of_incorporation=lead_in.year_of_incorporation,
+        registered_office_address=lead_in.registered_office_address,
+        business_description=lead_in.business_description,
+        industry=lead_in.industry,
         credit_rating=lead_in.credit_rating,
+        promoter_cibil_score=lead_in.promoter_cibil_score,
+        npa_history=lead_in.npa_history,
+        guarantee_available=lead_in.guarantee_available,
+        current_ratio=lead_in.current_ratio,
+        interest_coverage_ratio=lead_in.interest_coverage_ratio,
+        dscr=lead_in.dscr,
         rating_date=lead_in.rating_date,
         rating_agency=lead_in.rating_agency,
         lender_related_detail=lead_in.lender_related_detail,
+        date_of_first_call=lead_in.date_of_first_call,
+        purpose_of_call=lead_in.purpose_of_call,
+        product_service_discussed=lead_in.product_service_discussed,
+        call_outcome=lead_in.call_outcome,
         lead_status=lead_in.lead_status,
+        current_status=lead_in.current_status,
+        final_outcome=lead_in.final_outcome,
+        lead_stage=lead_in.lead_stage,
         pipeline_stage=initial_pipeline_stage,
+        last_activity_date=lead_in.last_activity_date,
+        last_stage_change_date=lead_in.last_stage_change_date,
         assigned_to=lead_in.assigned_to,
         remarks=lead_in.remarks,
-        followup_date=lead_in.followup_date,
+        proposal_shared=lead_in.proposal_shared,
+        next_followup_date=lead_in.next_followup_date or lead_in.followup_date,
+        followup_time=lead_in.followup_time,
+        followup_type=lead_in.followup_type,
+        followup_note=lead_in.followup_note,
         deal_value=lead_in.deal_value,
+        ageing=lead_in.ageing,
+        action=lead_in.action,
+        learning_challenge=lead_in.learning_challenge,
         created_by=creator_id,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow(),
@@ -130,15 +165,19 @@ def create_lead(db: Session, lead_in: LeadCreate, creator_id: Optional[UUID] = N
 
     db.refresh(new_lead)
     _sync_deal_forecast_snapshot(db, new_lead)
-    add_timeline_event(
-        db,
-        TimelineEventCreate(
-            lead_id=new_lead.id,
-            event_type="Lead Created",
-            description=f"Lead '{new_lead.lead_name}' was created and placed in '{initial_pipeline_stage}' stage.",
-        ),
-        creator_id=creator_id,
-    )
+    try:
+        add_timeline_event(
+            db,
+            TimelineEventCreate(
+                lead_id=new_lead.id,
+                event_type="Lead Created",
+                description=f"Lead '{new_lead.lead_name}' was created and placed in '{initial_pipeline_stage}' stage.",
+            ),
+            creator_id=creator_id,
+        )
+    except Exception as e:
+        db.rollback()
+        logger.warning("Failed to create timeline event for lead %s: %s", new_lead.id, e)
     
     # Trigger performance recalculation for the employee
     try:
@@ -391,8 +430,29 @@ def update_lead(db: Session, lead: Lead, lead_in: LeadUpdate, updater_id: Option
 
 
 def delete_lead(db: Session, lead: Lead) -> None:
-    db.delete(lead)
-    db.commit()
+    dependent_tables = (
+        "timeline_events",
+        "contacts",
+        "call_data",
+        "customer_profiles",
+        "documents",
+        "followups",
+        "lead_interested_requests",
+        "lead_ownership_history",
+        "lead_takeover_requests",
+        "loan_applications",
+        "meetings",
+        "pipeline_transition_audits",
+        "tasks",
+    )
+    try:
+        for table_name in dependent_tables:
+            db.execute(text(f'DELETE FROM "{table_name}" WHERE lead_id = :lead_id'), {"lead_id": lead.id})
+        db.delete(lead)
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
 
 
 def assign_lead(db: Session, lead: Lead, user_id: UUID, assigner_id: Optional[UUID] = None) -> Lead:

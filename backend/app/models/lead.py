@@ -90,6 +90,8 @@ class Lead(Base):
     followup_type = Column(String(100), nullable=True)
     followup_note = Column(Text, nullable=True)
     deal_value = Column(Float, nullable=True)
+    ageing = Column(Integer, nullable=True)
+    action = Column(String(255), nullable=True)
     
     # Notes & Learning
     remarks = Column(Text, nullable=True)

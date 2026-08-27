@@ -2561,7 +2561,7 @@ async function renderLeads() {
       
       // Apply executive filter if specified
       if (execF) {
-        filtered = filtered.filter(l => l.assigned_user_name === execF)
+        filtered = filtered.filter(l => (l.assigned_user_name || l.sales_executive || l.salesExecutive) === execF)
         console.log('[renderLeads] After executive filter:', filtered.length)
       }
 
@@ -2576,7 +2576,7 @@ async function renderLeads() {
         } else {
           tbody.innerHTML = filtered.map((l, idx) => {
             const date = l.created_at ? new Date(l.created_at).toLocaleDateString('en-IN') : '—'
-            const exec = l.assigned_user_name || l.salesExecutive || '—'
+            const exec = l.assigned_user_name || l.sales_executive || l.salesExecutive || '—'
             const comp = l.company_name || l.company || '—'
             const cont = l.lead_name || l.name || l.customerName || '—'
             const phone = l.mobile || l.phone || l.contact_number || l.contactNumber || '—'
@@ -6495,7 +6495,7 @@ function openDealModal(leadId) {
     }
 
     const dealLeadIdInput = document.getElementById('dealLeadId')
-    const selectedLeadId = dealLeadIdInput?.value || window.currentCaseLeadId || window.currentLeadId || ''
+    const selectedLeadId = dealLeadIdInput?.value || window.lastCreatedLeadId || ''
     if (selectedLeadId) {
       loadDealLeadSummary(selectedLeadId)
       updateDealForecastPreview()

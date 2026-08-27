@@ -184,7 +184,7 @@ class APIClient {
     }
 
     if (response?.status >= 500) {
-      throw new Error('Server error - please try again later')
+      throw error
     }
 
     if (error instanceof TypeError && error.message === 'Failed to fetch') {

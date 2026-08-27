@@ -31,6 +31,8 @@ class LeadBase(BaseModel):
     remarks: Optional[constr(strip_whitespace=True, max_length=1000)] = None
     followup_date: Optional[date] = None
     deal_value: Optional[float] = None
+    ageing: Optional[int] = None
+    action: Optional[constr(strip_whitespace=True, max_length=255)] = None
     pipeline_stage: Optional[constr(strip_whitespace=True, max_length=100)] = None
     
     # Company registration details
@@ -113,6 +115,8 @@ class LeadUpdate(BaseModel):
     remarks: Optional[constr(strip_whitespace=True, max_length=1000)] = None
     followup_date: Optional[date] = None
     deal_value: Optional[float] = None
+    ageing: Optional[int] = None
+    action: Optional[constr(strip_whitespace=True, max_length=255)] = None
     
     # Company registration details
     gst_number: Optional[constr(strip_whitespace=True, max_length=50)] = None

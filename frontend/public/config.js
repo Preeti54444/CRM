@@ -59,12 +59,15 @@
       return localBase;
     }
 
-    // Vercel routes the serverless FastAPI function under /api.
+    // Vercel deployment - backend should be on VPS, not serverless
     if (host.endsWith('.vercel.app') || window.VERCEL) {
-      const vercelBase = `${origin}/api`;
-      window.API_BASE = vercelBase;
-      window.CRM_API_BASE = vercelBase;
-      return vercelBase;
+      // For Vercel frontend, use the VPS backend
+      // Replace YOUR-VPS-IP with your actual VPS IP address or domain
+      const vpsBackend = 'http://YOUR-VPS-IP:8085'; // e.g., 'http://187.127.149.245:8085' or 'https://api.yourdomain.com'
+      window.API_BASE = vpsBackend;
+      window.CRM_API_BASE = vpsBackend;
+      console.log('[Config] Vercel deployment detected - using VPS backend:', vpsBackend);
+      return vpsBackend;
     }
 
     // Check environment variable first for non-localhost environments

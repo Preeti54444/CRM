@@ -93,14 +93,17 @@ echo.
 echo Framework Preset:
 echo   Select: "Other" (or leave blank)
 echo.
+echo Root Directory:
+echo   Enter: frontend
+echo.
 echo Build Command:
-echo   Enter: node vercel-build.js
+echo   Leave empty
 echo.
 echo Output Directory:
-echo   Enter: dist
+echo   Enter: .
 echo.
 echo Install Command:
-echo   Enter: echo No dependencies
+echo   Leave empty
 echo.
 echo Then click "Deploy"
 echo.
@@ -143,9 +146,8 @@ echo   git push origin master
 echo.
 echo Vercel will:
 echo   1. Detect the push
-echo   2. Run: node vercel-build.js
-echo   3. Upload dist/ to CDN
-echo   4. Assign your Vercel URL
+echo   2. Serve the static frontend from the frontend/ directory
+echo   3. Assign your Vercel URL
 echo.
 echo Press any key to continue...
 pause >nul

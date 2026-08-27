@@ -67,9 +67,11 @@ Use this checklist to ensure everything is ready before deployment.
 - [ ] Go to https://vercel.com/dashboard
 - [ ] Click "Add New" → "Project"
 - [ ] Select `Preeti54444/CRM` repository
-- [ ] Set build command: `node vercel-build.js`
-- [ ] Set output directory: `dist`
-- [ ] Set install command: `echo No dependencies`
+- [ ] Set Root Directory to `frontend`
+- [ ] Set Framework Preset to `Other`
+- [ ] Set Build Command to empty
+- [ ] Set Output Directory to `.`
+- [ ] Set Install Command to empty
 - [ ] Click "Deploy"
 - [ ] Wait for deployment to complete (~2-3 minutes)
 - [ ] Note the Vercel URL (e.g., https://fundingsathi-crm.vercel.app)

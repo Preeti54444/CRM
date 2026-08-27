@@ -58,19 +58,16 @@ your-app.vercel.app    ↓
 ### Step 1: Verify Frontend Build
 The frontend is already configured correctly. It uses `frontend/public/` with dynamic API URL detection.
 
-**Build command** (already in place):
-```bash
-node vercel-build.js
-```
+**Build command**: none required for the static frontend.
 
-This copies `frontend/public/` → `dist/` for Vercel.
+The frontend is served directly from the `frontend/` directory in Vercel.
 
-**Verify it works locally:**
-```bash
-npm run build
-```
-
-Check that `dist/` folder is created with static files.
+**Verify the project is configured correctly in Vercel:**
+- Root Directory: `frontend`
+- Framework Preset: `Other`
+- Build Command: empty
+- Output Directory: `.`
+- Install Command: empty
 
 ### Step 2: API URL Configuration
 The frontend is already smart about API URLs. In `frontend/public/config.js`:
@@ -82,13 +79,15 @@ The frontend is already smart about API URLs. In `frontend/public/config.js`:
 **No code changes needed** ✓
 
 ### Step 3: Environment Variables for Vercel
-When you create the Vercel project, set this environment variable in Vercel dashboard:
+When you create the Vercel project, only set this if you explicitly decide to override the frontend’s runtime API detection. The static frontend already resolves the API URL using its own runtime config, so do not add backend secrets here.
+
+If you do override it, set this value in the Vercel dashboard:
 
 ```
 VITE_API_URL=https://api.YOUR-DOMAIN.com
 ```
 
-(You can update this later without redeploying if you use Vercel's environment variables feature)
+(Do not add DATABASE_URL, SECRET_KEY, SMTP_PASSWORD, or any backend secret.)
 
 ---
 
@@ -284,10 +283,11 @@ Check that `.env` files are in `.gitignore` ✓
 2. Click "Add New..." → "Project"
 3. Select GitHub repository: `Preeti54444/CRM`
 4. Configure:
-   - **Framework Preset**: None (static files)
-   - **Build Command**: `node vercel-build.js`
-   - **Output Directory**: `dist`
-   - **Install Command**: `echo No dependencies`
+   - **Root Directory**: `frontend`
+   - **Framework Preset**: `Other`
+   - **Build Command**: empty
+   - **Output Directory**: `.`
+   - **Install Command**: empty
 
 ### Step 2: Set Environment Variables in Vercel
 
@@ -303,7 +303,7 @@ Environments: Production, Preview, Development
 
 Click "Deploy" — Vercel will:
 1. Clone your repository
-2. Run `npm run build` (which runs `node vercel-build.js`)
+2. Run the static frontend without a custom build command
 3. Upload `dist/` folder to Vercel's CDN
 4. Assign URL like: `https://your-app.vercel.app`
 
@@ -417,7 +417,7 @@ fetch('https://api.YOUR-DOMAIN.com/health')
 ### Frontend not loading
 - **Check Vercel**: https://vercel.com/dashboard
 - **Check deployment logs** in Vercel Project → Deployments
-- **Verify build command**: Should be `node vercel-build.js`
+- **Verify build command**: Should be blank / empty
 - **Verify dist/ folder**: Should contain HTML/CSS/JS files
 
 ### API calls failing (CORS error)

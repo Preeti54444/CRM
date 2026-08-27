@@ -60,10 +60,10 @@ git push origin master
    - Click "Import"
 
 **3. Configure Vercel project**
-   - **Framework Preset**: None (it's static)
-   - **Build Command**: `node vercel-build.js`
-   - **Output Directory**: `dist`
-   - **Install Command**: `echo No dependencies`
+   - **Framework Preset**: Other
+   - **Build Command**: empty
+   - **Output Directory**: `.`
+   - **Install Command**: empty
    - Click "Deploy"
 
 **4. Set Environment Variables in Vercel**
@@ -379,7 +379,7 @@ chmod +x update-backend.sh
 # 1. Go to https://vercel.com/dashboard
 # 2. Look for deployment status
 # 3. Check "Deployments" tab for error logs
-# 4. Verify build command: node vercel-build.js
+# 4. Verify Root Directory is frontend and Build Command is empty
 ```
 
 ### API calls getting CORS error

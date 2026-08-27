@@ -78,10 +78,12 @@
 **Steps:**
 1. Go to https://vercel.com and create account (if needed)
 2. Import repository: `Preeti54444/CRM`
-3. Set build command: `node vercel-build.js`
-4. Set output directory: `dist`
-5. Add environment variable: `VITE_API_URL=https://api.YOUR-DOMAIN.com`
-6. Deploy
+3. Set Root Directory to `frontend`
+4. Set Framework Preset to `Other`
+5. Leave Build Command empty
+6. Set Output Directory to `.`
+7. Leave Install Command empty
+8. Deploy
 
 **Result**: Frontend deployed to `https://your-app.vercel.app`
 
@@ -157,8 +159,8 @@ GitHub (Preeti54444/CRM)
   │
   ├─ Webhook to Vercel
   │ └─→ Vercel (Automatic)
-  │    ├─ npm run build → node vercel-build.js
-  │    └─ dist → CDN
+  │    ├─ static frontend from frontend/ directory
+  │    └─ CDN serving
   │
   └─ Your VPS (Manual)
      ├─ git pull origin master

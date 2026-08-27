@@ -49,9 +49,9 @@ In the "Configure Project" dialog, set:
 | Setting | Value |
 |---------|-------|
 | **Framework Preset** | Other |
-| **Build Command** | `node vercel-build.js` |
-| **Output Directory** | `dist` |
-| **Install Command** | `echo No dependencies` |
+| **Build Command** | empty |
+| **Output Directory** | `.` |
+| **Install Command** | empty |
 
 Click **"Deploy"** and wait 2-3 minutes.
 

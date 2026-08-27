@@ -1,25 +1,11 @@
 {
   "version": 2,
-  "builds": [
+  "buildCommand": "node vercel-build.js",
+  "outputDirectory": "dist",
+  "rewrites": [
     {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api(?:/(.*))?",
-      "dest": "/api/index.py"
-    },
-    {
-      "handle": "filesystem"
+      "source": "/api/:path*",
+      "destination": "/api/index.py"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "build": "node vercel-build.js"
+    "build": "echo 'Deploy this project from the frontend/ directory in Vercel; no repo-root build is required.'"
   }
 }

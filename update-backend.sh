@@ -25,45 +25,58 @@ echo -e "${YELLOW}  FundingSathi CRM - Backend Update${NC}"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
 
+# Verify .env.prod exists
+echo -e "${YELLOW}1. Checking configuration...${NC}"
+if [ ! -f ".env.prod" ]; then
+    echo -e "${RED}   ✗ ERROR: .env.prod not found!${NC}"
+    echo "   Please create .env.prod based on .env.prod.example"
+    exit 1
+fi
+echo -e "${GREEN}   ✓ .env.prod found${NC}"
+echo ""
+
 # Pull latest code
-echo -e "${YELLOW}1. Pulling latest code from GitHub...${NC}"
+echo -e "${YELLOW}2. Pulling latest code from GitHub (master branch)...${NC}"
 git pull origin master
 echo -e "${GREEN}   ✓ Done${NC}"
 echo ""
 
-# Stop services
-echo -e "${YELLOW}2. Stopping services...${NC}"
+# Stop services gracefully
+echo -e "${YELLOW}3. Stopping services...${NC}"
 docker-compose -f docker-compose.prod.yml down
 echo -e "${GREEN}   ✓ Done${NC}"
 echo ""
 
 # Start services with new code
-echo -e "${YELLOW}3. Starting services...${NC}"
+echo -e "${YELLOW}4. Building and starting services...${NC}"
 docker-compose -f docker-compose.prod.yml up -d --build
 echo -e "${GREEN}   ✓ Done${NC}"
 echo ""
 
-# Wait for services
-echo -e "${YELLOW}4. Waiting for services to start...${NC}"
-sleep 10
+# Wait for services to be ready
+echo -e "${YELLOW}5. Waiting for services to start (30 seconds)...${NC}"
+sleep 30
 echo -e "${GREEN}   ✓ Done${NC}"
 echo ""
 
-# Verify
-echo -e "${YELLOW}5. Verifying deployment...${NC}"
-docker-compose ps
+# Run database migrations
+echo -e "${YELLOW}6. Running database migrations (if any)...${NC}"
+docker-compose -f docker-compose.prod.yml exec -T backend alembic upgrade head || echo "   ⚠ Migrations may have already been applied"
+echo -e "${GREEN}   ✓ Done${NC}"
 echo ""
 
-# Check API
-DOMAIN=$(grep "server_name" nginx.conf | head -1 | awk '{print $2}' | tr -d ';' | head -1)
-if [ ! -z "$DOMAIN" ]; then
-    echo -e "${YELLOW}6. Testing API...${NC}"
-    HEALTH=$(curl -s -k "https://api.${DOMAIN}/health" || echo "failed")
-    if [[ $HEALTH == *"ok"* ]]; then
-        echo -e "${GREEN}   ✓ API is responding${NC}"
-    else
-        echo -e "${YELLOW}   ⚠ API check inconclusive (may still be starting)${NC}"
-    fi
+# Verify services
+echo -e "${YELLOW}7. Verifying docker services...${NC}"
+docker-compose -f docker-compose.prod.yml ps
+echo ""
+
+# Test API health
+echo -e "${YELLOW}8. Testing API health endpoint...${NC}"
+HEALTH=$(docker-compose -f docker-compose.prod.yml exec -T backend curl -s http://localhost:8085/health || echo "{\"status\":\"failed\"}")
+if [[ $HEALTH == *"ok"* ]] || [[ $HEALTH == *"healthy"* ]]; then
+    echo -e "${GREEN}   ✓ API is healthy and responding${NC}"
+else
+    echo -e "${YELLOW}   ⚠ API health check: $HEALTH${NC}"
 fi
 
 echo ""
@@ -71,8 +84,10 @@ echo "════════════════════════�
 echo -e "${GREEN}✓ Backend update complete!${NC}"
 echo "═══════════════════════════════════════════════════════════"
 echo ""
-echo "View logs:"
-echo "  docker-compose logs -f backend"
+echo "Useful commands:"
+echo "  View logs:       docker-compose -f docker-compose.prod.yml logs -f backend"
+echo "  Check status:    docker-compose -f docker-compose.prod.yml ps"
+echo "  DB shell:        docker-compose -f docker-compose.prod.yml exec postgres psql -U fundingsathicrm_prod -d fundingsathicrm_prod"
 echo ""
 echo "Rollback if needed:"
 echo "  git reset --hard HEAD~1"

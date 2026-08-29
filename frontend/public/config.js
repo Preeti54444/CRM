@@ -10,8 +10,9 @@
   const host = window.location.hostname || 'localhost';
   const port = window.location.port ? ':' + window.location.port : '';
   const origin = window.location.protocol + '//' + host + port;
-  const defaultRemoteApiBase = 'http://187.127.149.245';
-  const remoteFrontendHosts = new Set(['srv1760511.hstgr.cloud', '187.127.149.245']);
+  // TODO: Replace with your actual VPS IP/domain (or use proxy method)
+  const defaultRemoteApiBase = 'https://YOUR-VPS-DOMAIN-OR-IP:8085';
+  const remoteFrontendHosts = new Set(['srv1760511.hstgr.cloud', 'YOUR-VPS-DOMAIN-OR-IP']);
 
   /**
    * Normalize API base URL to ensure consistent format
@@ -61,12 +62,29 @@
 
     // Vercel deployment - backend should be on VPS, not serverless
     if (host.endsWith('.vercel.app') || window.VERCEL) {
-      // For Vercel frontend, use the VPS backend
-      // Replace YOUR-VPS-IP with your actual VPS IP address or domain
-      const vpsBackend = 'http://YOUR-VPS-IP:8085'; // e.g., 'http://187.127.149.245:8085' or 'https://api.yourdomain.com'
+      // TODO: MIXED CONTENT WARNING - CRITICAL FOR PRODUCTION
+      // Vercel frontend is served over HTTPS. If you set this to http://...,
+      // the browser will BLOCK the request due to mixed content policy.
+      // 
+      // CHOOSE ONE FIX:
+      // (a) USE HTTPS BACKEND: Get a TLS certificate (Let's Encrypt free, or nip.io/sslip.io)
+      //     Example: 'https://api.yourdomain.com:8085' or 'https://187-127-149-245.nip.io:8085'
+      //     Then update nginx.prod.conf with cert paths.
+      //
+      // (b) PROXY THROUGH VERCEL: Add rewrite rules to vercel.json to proxy /api calls
+      //     to your VPS backend, so all calls go through Vercel's HTTPS.
+      //     This avoids mixed content but adds latency.
+      //
+      // Until you fix this, the frontend will not reach the backend from Vercel.
+      const vpsBackend = 'https://YOUR-VPS-DOMAIN-OR-IP:8085'; // REPLACE THIS with your actual VPS
+      // Examples:
+      //   - 'https://api.yourdomain.com:8085' (custom domain with HTTPS cert)
+      //   - 'https://187-127-149-245.nip.io:8085' (free wildcard DNS + self-signed cert)
+      //   - Or use option (b) above and proxy through Vercel
       window.API_BASE = vpsBackend;
       window.CRM_API_BASE = vpsBackend;
       console.log('[Config] Vercel deployment detected - using VPS backend:', vpsBackend);
+      console.warn('[Config] ⚠️  ENSURE backend is HTTPS and ALLOWED_HOSTS includes your frontend domain');
       return vpsBackend;
     }
 

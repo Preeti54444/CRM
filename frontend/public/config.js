@@ -10,9 +10,9 @@
   const host = window.location.hostname || 'localhost';
   const port = window.location.port ? ':' + window.location.port : '';
   const origin = window.location.protocol + '//' + host + port;
-  // TODO: Replace with your actual VPS IP/domain (or use proxy method)
-  const defaultRemoteApiBase = 'https://YOUR-VPS-DOMAIN-OR-IP:8085';
-  const remoteFrontendHosts = new Set(['srv1760511.hstgr.cloud', 'YOUR-VPS-DOMAIN-OR-IP']);
+  // Production backend URL for the current deployment
+  const defaultRemoteApiBase = 'https://srv1760511.hstgr.cloud/api';
+  const remoteFrontendHosts = new Set(['frontend-2-eta-one.vercel.app', 'srv1760511.hstgr.cloud']);
 
   /**
    * Normalize API base URL to ensure consistent format
@@ -28,7 +28,8 @@
       if (isLocalhost && (url.port === '8000' || url.port === '8001' || url.port === '8085')) {
         url.port = '8085';
       }
-      return url.origin;
+      const pathname = url.pathname && url.pathname !== '/' ? url.pathname.replace(/\/$/, '') : '';
+      return `${url.origin}${pathname}`;
     } catch {
       return null;
     }
@@ -76,7 +77,7 @@
       //     This avoids mixed content but adds latency.
       //
       // Until you fix this, the frontend will not reach the backend from Vercel.
-      const vpsBackend = 'https://YOUR-VPS-DOMAIN-OR-IP:8085'; // REPLACE THIS with your actual VPS
+      const vpsBackend = 'https://srv1760511.hstgr.cloud/api'; // Current production backend URL
       // Examples:
       //   - 'https://api.yourdomain.com:8085' (custom domain with HTTPS cert)
       //   - 'https://187-127-149-245.nip.io:8085' (free wildcard DNS + self-signed cert)

@@ -75,7 +75,8 @@ class APIClient {
     const trimmed = String(url).trim().replace(/\/$/, '')
     try {
       const urlObj = new URL(trimmed)
-      return urlObj.origin
+      const pathname = urlObj.pathname && urlObj.pathname !== '/' ? urlObj.pathname.replace(/\/$/, '') : ''
+      return `${urlObj.origin}${pathname}`
     } catch {
       return window.location.origin
     }

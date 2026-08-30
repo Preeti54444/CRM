@@ -11,8 +11,8 @@
   const port = window.location.port ? ':' + window.location.port : '';
   const origin = window.location.protocol + '//' + host + port;
   // Production backend URL for the current deployment
-  const defaultRemoteApiBase = 'https://srv1760511.hstgr.cloud/api';
-  const remoteFrontendHosts = new Set(['frontend-2-eta-one.vercel.app', 'srv1760511.hstgr.cloud']);
+  const defaultRemoteApiBase = 'https://srv1760511.hstgr.cloud';
+  const remoteFrontendHosts = new Set(['frontend-3-tan.vercel.app', 'frontend-3-ebon.vercel.app', 'frontend-3-iota.vercel.app', 'srv1760511.hstgr.cloud']);
 
   /**
    * Normalize API base URL to ensure consistent format
@@ -63,29 +63,17 @@
 
     // Vercel deployment - backend should be on VPS, not serverless
     if (host.endsWith('.vercel.app') || window.VERCEL) {
-      // TODO: MIXED CONTENT WARNING - CRITICAL FOR PRODUCTION
-      // Vercel frontend is served over HTTPS. If you set this to http://...,
-      // the browser will BLOCK the request due to mixed content policy.
-      // 
-      // CHOOSE ONE FIX:
-      // (a) USE HTTPS BACKEND: Get a TLS certificate (Let's Encrypt free, or nip.io/sslip.io)
-      //     Example: 'https://api.yourdomain.com:8085' or 'https://187-127-149-245.nip.io:8085'
-      //     Then update nginx.prod.conf with cert paths.
-      //
-      // (b) PROXY THROUGH VERCEL: Add rewrite rules to vercel.json to proxy /api calls
-      //     to your VPS backend, so all calls go through Vercel's HTTPS.
-      //     This avoids mixed content but adds latency.
-      //
-      // Until you fix this, the frontend will not reach the backend from Vercel.
-      const vpsBackend = 'https://srv1760511.hstgr.cloud/api'; // Current production backend URL
-      // Examples:
-      //   - 'https://api.yourdomain.com:8085' (custom domain with HTTPS cert)
-      //   - 'https://187-127-149-245.nip.io:8085' (free wildcard DNS + self-signed cert)
-      //   - Or use option (b) above and proxy through Vercel
+      const vpsBackend = 'https://srv1760511.hstgr.cloud'; // Current production backend URL
+      const isSecureBackend = vpsBackend.startsWith('https://');
+      const isAllowedFrontend = remoteFrontendHosts.has(host);
+
+      if (!isSecureBackend || !isAllowedFrontend) {
+        console.warn('[Config] ⚠️  ENSURE backend is HTTPS and ALLOWED_HOSTS includes your frontend domain');
+      }
+
       window.API_BASE = vpsBackend;
       window.CRM_API_BASE = vpsBackend;
       console.log('[Config] Vercel deployment detected - using VPS backend:', vpsBackend);
-      console.warn('[Config] ⚠️  ENSURE backend is HTTPS and ALLOWED_HOSTS includes your frontend domain');
       return vpsBackend;
     }
 
